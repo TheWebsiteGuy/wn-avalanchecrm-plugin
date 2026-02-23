@@ -1,0 +1,19 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    name:
+        label: Name
+        span: left
+        required: true
+    email:
+        label: Email
+        span: right
+        type: email
+    phone:
+        label: Phone
+        span: left
+    company:
+        label: Company
+        span: right

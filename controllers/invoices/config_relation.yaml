@@ -1,0 +1,10 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+items:
+    label: Line Items
+    list: $/thewebsiteguy/nexuscrm/models/invoiceitem/columns.yaml
+    form: $/thewebsiteguy/nexuscrm/models/invoiceitem/fields.yaml
+    view:
+        toolbarButtons: create|delete

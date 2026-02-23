@@ -1,0 +1,127 @@
+<?php
+
+namespace TheWebsiteGuy\NexusCRM\Models;
+
+use Winter\Storm\Database\Model;
+
+/**
+ * Invoice Model
+ */
+class Invoice extends Model
+{
+    use \Winter\Storm\Database\Traits\Validation;
+
+    /**
+     * @var string The database table used by the model.
+     */
+    public $table = 'thewebsiteguy_nexuscrm_invoices';
+
+    /**
+     * @var array Guarded fields
+     */
+    protected $guarded = [];
+
+    /**
+     * @var array Fillable fields
+     */
+    protected $fillable = [];
+
+    /**
+     * @var array Validation rules for attributes
+     */
+    public $rules = [];
+
+    /**
+     * @var array Attributes to be cast to native types
+     */
+    protected $casts = [
+        'amount' => 'float',
+    ];
+
+    /**
+     * @var array Attributes to be cast to JSON
+     */
+    protected $jsonable = [];
+
+    /**
+     * @var array Attributes to be appended to the API representation of the model (ex. toArray())
+     */
+    protected $appends = [];
+
+    /**
+     * @var array Attributes to be removed from the API representation of the model (ex. toArray())
+     */
+    protected $hidden = [];
+
+    /**
+     * @var array Attributes to be cast to Argon (Carbon) instances
+     */
+    protected $dates = [
+        'issue_date',
+        'due_date',
+        'paid_at',
+        'created_at',
+        'updated_at',
+    ];
+
+    /**
+     * @var array Relations
+     */
+    public $hasOne = [];
+    public $hasMany = [
+        'items' => [\TheWebsiteGuy\NexusCRM\Models\InvoiceItem::class],
+    ];
+    public $hasOneThrough = [];
+    public $hasManyThrough = [];
+    public $belongsTo = [
+        'client' => [\TheWebsiteGuy\NexusCRM\Models\Client::class],
+        'project' => [\TheWebsiteGuy\NexusCRM\Models\Project::class],
+    ];
+    public $belongsToMany = [];
+    public $morphTo = [];
+    public $morphOne = [];
+    public $morphMany = [];
+    public $attachOne = [];
+    public $attachMany = [];
+
+    /**
+     * Generate the next invoice number based on Settings configuration.
+     *
+     * Reads prefix, format, padding, and next number from the settings,
+     * then auto-increments the stored next number.
+     */
+    public static function generateInvoiceNumber(): string
+    {
+        $settings = \TheWebsiteGuy\NexusCRM\Models\Settings::instance();
+
+        $prefix  = trim($settings->invoice_prefix ?: 'INV');
+        $format  = $settings->invoice_number_format ?: 'prefix-date-seq';
+        $padding = (int) ($settings->invoice_number_padding ?: 4);
+        $nextNum = (int) ($settings->invoice_next_number ?: 1);
+
+        $seq  = str_pad($nextNum, $padding, '0', STR_PAD_LEFT);
+        $date = date('Ymd');
+
+        switch ($format) {
+            case 'prefix-seq':
+                $number = "{$prefix}-{$seq}";
+                break;
+            case 'date-seq':
+                $number = "{$date}-{$seq}";
+                break;
+            case 'seq-only':
+                $number = $seq;
+                break;
+            case 'prefix-date-seq':
+            default:
+                $number = "{$prefix}-{$date}-{$seq}";
+                break;
+        }
+
+        // Increment the stored next number
+        $settings->invoice_next_number = $nextNum + 1;
+        $settings->save();
+
+        return $number;
+    }
+}

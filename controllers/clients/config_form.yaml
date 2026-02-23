@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: 'thewebsiteguy.nexuscrm::lang.models.client.label'
+
+# Model Form Field configuration
+form: $/thewebsiteguy/nexuscrm/models/client/fields.yaml
+
+# Model Class name
+modelClass: TheWebsiteGuy\NexusCRM\Models\Client
+
+# Default redirect location
+defaultRedirect: thewebsiteguy/nexuscrm/clients
+
+# Create page
+create:
+    title: backend::lang.form.create_title
+    redirect: thewebsiteguy/nexuscrm/clients/update/:id
+    redirectClose: thewebsiteguy/nexuscrm/clients
+
+# Update page
+update:
+    title: backend::lang.form.update_title
+    redirect: thewebsiteguy/nexuscrm/clients
+    redirectClose: thewebsiteguy/nexuscrm/clients
+
+# Preview page
+preview:
+    title: backend::lang.form.preview_title

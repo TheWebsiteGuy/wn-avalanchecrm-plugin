@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: 'thewebsiteguy.nexuscrm::lang.models.subscription.label'
+
+# Model Form Field configuration
+form: $/thewebsiteguy/nexuscrm/models/subscription/fields.yaml
+
+# Model Class name
+modelClass: TheWebsiteGuy\NexusCRM\Models\Subscription
+
+# Default redirect location
+defaultRedirect: thewebsiteguy/nexuscrm/subscriptions
+
+# Create page
+create:
+    title: backend::lang.form.create_title
+    redirect: thewebsiteguy/nexuscrm/subscriptions/update/:id
+    redirectClose: thewebsiteguy/nexuscrm/subscriptions
+
+# Update page
+update:
+    title: backend::lang.form.update_title
+    redirect: thewebsiteguy/nexuscrm/subscriptions
+    redirectClose: thewebsiteguy/nexuscrm/subscriptions
+
+# Preview page
+preview:
+    title: backend::lang.form.preview_title

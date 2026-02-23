@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Task
+
+# Model Form Field configuration
+form: $/thewebsiteguy/nexuscrm/models/task/fields.yaml
+
+# Model Class name
+modelClass: TheWebsiteGuy\NexusCRM\Models\Task
+
+# Default redirect location
+defaultRedirect: thewebsiteguy/nexuscrm/tasks
+
+# Create page
+create:
+  title: Create Task
+  redirect: thewebsiteguy/nexuscrm/tasks/update/:id
+  redirectClose: thewebsiteguy/nexuscrm/tasks
+
+# Update page
+update:
+  title: Edit Task
+  redirect: thewebsiteguy/nexuscrm/tasks
+  redirectClose: thewebsiteguy/nexuscrm/tasks
+
+# Preview page
+preview:
+  title: Preview Task

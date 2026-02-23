@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: 'thewebsiteguy.nexuscrm::lang.models.invoice.label'
+
+# Model Form Field configuration
+form: $/thewebsiteguy/nexuscrm/models/invoice/fields.yaml
+
+# Model Class name
+modelClass: TheWebsiteGuy\NexusCRM\Models\Invoice
+
+# Default redirect location
+defaultRedirect: thewebsiteguy/nexuscrm/invoices
+
+# Create page
+create:
+    title: backend::lang.form.create_title
+    redirect: thewebsiteguy/nexuscrm/invoices/update/:id
+    redirectClose: thewebsiteguy/nexuscrm/invoices
+
+# Update page
+update:
+    title: backend::lang.form.update_title
+    redirect: thewebsiteguy/nexuscrm/invoices
+    redirectClose: thewebsiteguy/nexuscrm/invoices
+
+# Preview page
+preview:
+    title: backend::lang.form.preview_title

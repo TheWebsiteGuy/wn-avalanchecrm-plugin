@@ -1,0 +1,11 @@
+title: Ticket Categories
+list: $/thewebsiteguy/nexuscrm/models/ticketcategory/columns.yaml
+modelClass: TheWebsiteGuy\NexusCRM\Models\TicketCategory
+recordUrl: thewebsiteguy/nexuscrm/ticketcategories/update/:id
+noRecordsMessage: "No categories found"
+recordsPerPage: 20
+showCheckboxes: true
+toolbar:
+  buttons: list_toolbar
+  search:
+    prompt: "Search categories..."

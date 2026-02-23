@@ -1,0 +1,765 @@
+/* ==========================================================================
+   Client Projects Component Styles
+   ========================================================================== */
+
+.client-projects-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1rem;
+    font-family: inherit;
+}
+
+/* Alerts
+   ========================================================================== */
+
+.client-projects-alert {
+    padding: 1rem 1.25rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.client-projects-alert--warning {
+    background-color: #fff8e1;
+    border: 1px solid #ffe082;
+    color: #8d6e00;
+}
+
+.client-projects-alert--success {
+    background-color: #e8f5e9;
+    border: 1px solid #a5d6a7;
+    color: #2e7d32;
+}
+
+.client-projects-alert--error {
+    background-color: #fbe9e7;
+    border: 1px solid #ef9a9a;
+    color: #c62828;
+}
+
+.client-projects-alert--info {
+    background-color: #e3f2fd;
+    border: 1px solid #90caf9;
+    color: #1565c0;
+}
+
+/* Heading & Filters
+   ========================================================================== */
+
+.client-projects-heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    color: #1a1a2e;
+}
+
+.client-projects-filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.client-projects-filter-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.client-projects-filter-controls label {
+    font-size: 0.875rem;
+    color: #666;
+    white-space: nowrap;
+}
+
+.client-projects-select {
+    padding: 0.4rem 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.client-projects-select:focus {
+    outline: none;
+    border-color: #4a6cf7;
+    box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
+}
+
+/* Project Cards Grid
+   ========================================================================== */
+
+.client-projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.25rem;
+}
+
+.client-projects-card {
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 10px;
+    padding: 1.25rem;
+    transition: box-shadow 0.2s, transform 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.client-projects-card:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.client-projects-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.client-projects-card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+    color: #1a1a2e;
+    line-height: 1.3;
+}
+
+.client-projects-card-description {
+    font-size: 0.875rem;
+    color: #666;
+    margin: 0 0 0.75rem 0;
+    line-height: 1.5;
+    flex: 1;
+}
+
+.client-projects-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.client-projects-meta-item {
+    font-size: 0.8rem;
+    color: #888;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.client-projects-card-stats {
+    display: flex;
+    gap: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #f0f0f0;
+    margin-bottom: 0.75rem;
+}
+
+.client-projects-stat {
+    font-size: 0.8rem;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.client-projects-card-actions {
+    margin-top: auto;
+    padding-top: 0.75rem;
+}
+
+/* Status Badges
+   ========================================================================== */
+
+.client-projects-status {
+    display: inline-block;
+    padding: 0.25rem 0.65rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.client-projects-status--pending {
+    background-color: #fff3e0;
+    color: #e65100;
+}
+
+.client-projects-status--in_progress {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.client-projects-status--on_hold {
+    background-color: #fce4ec;
+    color: #ad1457;
+}
+
+.client-projects-status--completed {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.client-projects-status--cancelled {
+    background-color: #f5f5f5;
+    color: #757575;
+}
+
+/* Buttons
+   ========================================================================== */
+
+.client-projects-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    line-height: 1.4;
+}
+
+.client-projects-btn--primary {
+    background-color: #4a6cf7;
+    color: #fff;
+}
+
+.client-projects-btn--primary:hover {
+    background-color: #3a56d4;
+}
+
+.client-projects-btn--outline {
+    background-color: transparent;
+    color: #4a6cf7;
+    border: 1px solid #4a6cf7;
+}
+
+.client-projects-btn--outline:hover {
+    background-color: #4a6cf7;
+    color: #fff;
+}
+
+/* Back Button
+   ========================================================================== */
+
+.client-projects-back-btn {
+    margin-bottom: 1.5rem;
+}
+
+/* Detail View
+   ========================================================================== */
+
+.client-projects-detail-header {
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.client-projects-detail-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.client-projects-detail-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    color: #1a1a2e;
+}
+
+.client-projects-detail-description {
+    color: #555;
+    line-height: 1.6;
+    margin: 0 0 1rem 0;
+}
+
+.client-projects-detail-meta {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+/* Sections (Tasks, Tickets, Invoices)
+   ========================================================================== */
+
+.client-projects-section {
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 10px;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.client-projects-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.client-projects-section-count {
+    background: #f0f0f0;
+    color: #555;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 12px;
+    margin-left: 0.25rem;
+}
+
+/* Progress Bar
+   ========================================================================== */
+
+.client-projects-progress {
+    position: relative;
+    height: 24px;
+    background: #f0f0f0;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+.client-projects-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #4a6cf7, #45b649);
+    border-radius: 12px;
+    transition: width 0.4s ease;
+    min-width: 0;
+}
+
+.client-projects-progress-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+}
+
+/* Tables
+   ========================================================================== */
+
+.client-projects-table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.client-projects-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.client-projects-table th {
+    text-align: left;
+    padding: 0.6rem 0.75rem;
+    border-bottom: 2px solid #e8e8e8;
+    font-weight: 600;
+    color: #555;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.client-projects-table td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid #f0f0f0;
+    color: #333;
+    vertical-align: top;
+}
+
+.client-projects-table tbody tr:hover {
+    background-color: #fafafa;
+}
+
+.client-projects-task-desc {
+    color: #888;
+}
+
+.client-projects-task-row--done td {
+    opacity: 0.6;
+}
+
+.client-projects-task-row--done td strong {
+    text-decoration: line-through;
+}
+
+/* Badges (task/ticket status)
+   ========================================================================== */
+
+.client-projects-badge {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.client-projects-badge--todo {
+    background-color: #f5f5f5;
+    color: #757575;
+}
+
+.client-projects-badge--in_progress,
+.client-projects-badge--in-progress {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.client-projects-badge--review {
+    background-color: #fff3e0;
+    color: #e65100;
+}
+
+.client-projects-badge--done,
+.client-projects-badge--completed {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.client-projects-badge--open {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.client-projects-badge--closed {
+    background-color: #f5f5f5;
+    color: #757575;
+}
+
+.client-projects-badge--pending {
+    background-color: #fff3e0;
+    color: #e65100;
+}
+
+.client-projects-badge--paid {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.client-projects-badge--overdue {
+    background-color: #fbe9e7;
+    color: #c62828;
+}
+
+.client-projects-badge--cancelled {
+    background-color: #f5f5f5;
+    color: #757575;
+}
+
+/* Priority Indicators
+   ========================================================================== */
+
+.client-projects-priority {
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.client-projects-priority--low {
+    color: #4caf50;
+}
+
+.client-projects-priority--medium {
+    color: #ff9800;
+}
+
+.client-projects-priority--high {
+    color: #f44336;
+}
+
+.client-projects-priority--urgent {
+    color: #b71c1c;
+    font-weight: 700;
+}
+
+/* Empty States
+   ========================================================================== */
+
+.client-projects-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #999;
+}
+
+.client-projects-empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+    opacity: 0.4;
+}
+
+.client-projects-empty-section {
+    color: #999;
+    font-size: 0.875rem;
+    font-style: italic;
+    margin: 0;
+}
+
+.client-projects-muted {
+    color: #ccc;
+}
+
+/* Pagination
+   ========================================================================== */
+
+.client-projects-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e8e8e8;
+}
+
+.client-projects-pagination-info {
+    font-size: 0.875rem;
+    color: #666;
+}
+
+/* Responsive
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .client-projects-filter {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .client-projects-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .client-projects-detail-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .client-projects-card-stats {
+        flex-wrap: wrap;
+    }
+
+    .client-projects-detail-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .client-projects-edit-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Assigned To
+   ========================================================================== */
+
+.client-projects-assigned {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.85rem;
+    color: #444;
+}
+
+.client-projects-assigned i {
+    color: #888;
+}
+
+/* Inline Edit Form
+   ========================================================================== */
+
+.client-projects-edit-row td {
+    background: #f8f9fb;
+    padding: 1rem !important;
+}
+
+.client-projects-edit-form {
+    max-width: 100%;
+}
+
+.client-projects-edit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.client-projects-edit-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.client-projects-edit-field--full {
+    grid-column: 1 / -1;
+}
+
+.client-projects-edit-field label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.client-projects-input {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    background: #fff;
+    transition: border-color 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.client-projects-input:focus {
+    outline: none;
+    border-color: #4a6cf7;
+    box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
+}
+
+.client-projects-textarea {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    background: #fff;
+    resize: vertical;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+    font-family: inherit;
+}
+
+.client-projects-textarea:focus {
+    outline: none;
+    border-color: #4a6cf7;
+    box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
+}
+
+.client-projects-edit-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+/* Small Button Variant
+   ========================================================================== */
+
+.client-projects-btn--small {
+    padding: 0.3rem 0.7rem;
+    font-size: 0.8rem;
+}
+
+.client-projects-task-actions {
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* Rich Text Editor
+   ========================================================================== */
+
+.client-projects-richtext-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0.35rem 0.5rem;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    flex-wrap: wrap;
+}
+
+.client-projects-richtext-toolbar button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: #444;
+    transition: background 0.15s, color 0.15s;
+    padding: 0;
+    line-height: 1;
+}
+
+.client-projects-richtext-toolbar button:hover {
+    background: #e0e0e0;
+    color: #111;
+}
+
+.client-projects-richtext-toolbar button:active {
+    background: #d0d0d0;
+}
+
+.client-projects-richtext-sep {
+    width: 1px;
+    height: 18px;
+    background: #d0d0d0;
+    margin: 0 4px;
+}
+
+.client-projects-richtext-content {
+    border: 1px solid #ddd;
+    border-radius: 0 0 6px 6px;
+    padding: 0.6rem 0.75rem;
+    min-height: 100px;
+    max-height: 300px;
+    overflow-y: auto;
+    background: #fff;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: inherit;
+}
+
+.client-projects-richtext-content:focus {
+    border-color: #4a6cf7;
+    box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
+}
+
+.client-projects-richtext-content p {
+    margin: 0 0 0.5rem 0;
+}
+
+.client-projects-richtext-content ul,
+.client-projects-richtext-content ol {
+    margin: 0 0 0.5rem 1.5rem;
+    padding: 0;
+}
+
+.client-projects-richtext-content a {
+    color: #4a6cf7;
+    text-decoration: underline;
+}

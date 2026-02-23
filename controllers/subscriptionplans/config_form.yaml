@@ -1,0 +1,24 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+name: "Subscription Plan"
+
+form: $/thewebsiteguy/nexuscrm/models/subscriptionplan/fields.yaml
+
+modelClass: TheWebsiteGuy\NexusCRM\Models\SubscriptionPlan
+
+defaultRedirect: thewebsiteguy/nexuscrm/subscriptionplans
+
+create:
+  title: "New Subscription Plan"
+  redirect: thewebsiteguy/nexuscrm/subscriptionplans/update/:id
+  redirectClose: thewebsiteguy/nexuscrm/subscriptionplans
+
+update:
+  title: "Edit Subscription Plan"
+  redirect: thewebsiteguy/nexuscrm/subscriptionplans
+  redirectClose: thewebsiteguy/nexuscrm/subscriptionplans
+
+preview:
+  title: "Preview Subscription Plan"

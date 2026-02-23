@@ -1,0 +1,31 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    client:
+        label: Client
+        relation: client
+        select: name
+        searchable: true
+    payment_method:
+        label: Payment Method
+        searchable: true
+    plan_name:
+        label: Plan Name
+        searchable: true
+    amount:
+        label: Amount
+        type: number
+    billing_cycle:
+        label: Billing Cycle
+        searchable: true
+    next_billing_date:
+        label: Next Billing Date
+        type: date
+    status:
+        label: Status
+        searchable: true
+    created_at:
+        label: Created
+        type: date

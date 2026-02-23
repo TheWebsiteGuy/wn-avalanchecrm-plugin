@@ -1,0 +1,10 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+tasks:
+  label: Task
+  list: $/thewebsiteguy/nexuscrm/models/task/columns.yaml
+  form: $/thewebsiteguy/nexuscrm/models/task/fields.yaml
+  view:
+    toolbarButtons: create|delete

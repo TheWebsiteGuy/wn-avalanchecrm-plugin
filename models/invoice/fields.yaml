@@ -1,0 +1,62 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    _download_pdf:
+        label: Download PDF
+        type: partial
+        path: $/thewebsiteguy/nexuscrm/controllers/invoices/_download_pdf_button.php
+        span: full
+        context: update
+
+    invoice_number:
+        label: Invoice Number
+        span: left
+        required: true
+    amount:
+        label: Amount
+        span: right
+        type: number
+        required: true
+    client:
+        label: Client
+        type: relation
+        span: left
+        nameFrom: name
+    project:
+        label: Project
+        type: relation
+        span: right
+        nameFrom: name
+    status:
+        label: Status
+        type: dropdown
+        span: left
+        options:
+            draft: Draft
+            sent: Sent
+            paid: Paid
+            cancelled: Cancelled
+        default: draft
+    issue_date:
+        label: Issue Date
+        type: datepicker
+        span: right
+    due_date:
+        label: Due Date
+        type: datepicker
+        span: left
+    notes:
+        label: Notes
+        type: textarea
+        span: full
+        comment: Optional notes or payment instructions to include on the invoice.
+
+tabs:
+    fields:
+        items:
+            label: Line Items
+            tab: Line Items
+            type: partial
+            path: $/thewebsiteguy/nexuscrm/controllers/invoices/_items_relation.php

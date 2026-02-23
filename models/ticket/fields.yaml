@@ -1,0 +1,59 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    subject:
+        label: Subject
+        span: full
+        required: true
+    client:
+        label: Client
+        type: relation
+        span: left
+        nameFrom: name
+    project:
+        label: Project
+        type: relation
+        span: right
+        nameFrom: name
+    category:
+        label: Category
+        type: relation
+        span: left
+        nameFrom: name
+    status:
+        label: Status
+        type: dropdown
+        span: left
+        options:
+            open: Open
+            in_progress: In Progress
+            resolved: Resolved
+            closed: Closed
+        default: open
+    priority:
+        label: Priority
+        type: dropdown
+        span: right
+        options:
+            low: Low
+            medium: Medium
+            high: High
+        default: medium
+    description:
+        label: Description
+        type: richeditor
+        span: full
+
+tabs:
+    fields:
+        staff:
+            label: Staff Assignments
+            tab: Assignments
+            type: taglist
+            mode: relation
+            nameFrom: name
+            select: concat(name, ' ', surname)
+            span: left
+            comment: Type to search and select staff members assigned to this ticket.

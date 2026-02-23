@@ -1,0 +1,11 @@
+name: Ticket Categories
+form: $/thewebsiteguy/nexuscrm/models/ticketcategory/fields.yaml
+modelClass: TheWebsiteGuy\NexusCRM\Models\TicketCategory
+defaultRedirect: thewebsiteguy/nexuscrm/ticketcategories
+create:
+  redirect: thewebsiteguy/nexuscrm/ticketcategories/update/:id
+  redirectClose: thewebsiteguy/nexuscrm/ticketcategories
+update:
+  redirect: thewebsiteguy/nexuscrm/ticketcategories
+  redirectClose: thewebsiteguy/nexuscrm/ticketcategories
+confirmDelete: "Do you really want to delete this category?"

@@ -1,0 +1,48 @@
+{# Invoices Tab #}
+<div class="client-projects-section">
+    <h3 class="client-projects-section-title">
+        <i class="icon-file-text-o"></i> Invoices
+        <span class="client-projects-section-count">{{ activeProject.invoices|length }}</span>
+    </h3>
+
+    {% if activeProject.invoices is not empty %}
+        <div class="client-projects-table-responsive">
+            <table class="client-projects-table">
+                <thead>
+                    <tr>
+                        <th>Invoice #</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Due Date</th>
+                        <th>Issued</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for invoice in activeProject.invoices %}
+                        <tr>
+                            <td>
+                                <strong>{{ invoice.invoice_number|default('#' ~ invoice.id) }}</strong>
+                            </td>
+                            <td>{{ invoice.amount|currency }}</td>
+                            <td>
+                                <span class="client-projects-badge client-projects-badge--{{ invoice.status|default('pending') }}">
+                                    {{ invoice.status|default('pending')|replace({'_': ' '})|title }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if invoice.due_date %}
+                                    {{ invoice.due_date|date('M d, Y') }}
+                                {% else %}
+                                    <span class="client-projects-muted">—</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ invoice.created_at|date('M d, Y') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="client-projects-empty-section">No invoices have been issued for this project.</p>
+    {% endif %}
+</div>

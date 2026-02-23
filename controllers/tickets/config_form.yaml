@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: 'thewebsiteguy.nexuscrm::lang.models.ticket.label'
+
+# Model Form Field configuration
+form: $/thewebsiteguy/nexuscrm/models/ticket/fields.yaml
+
+# Model Class name
+modelClass: TheWebsiteGuy\NexusCRM\Models\Ticket
+
+# Default redirect location
+defaultRedirect: thewebsiteguy/nexuscrm/tickets
+
+# Create page
+create:
+    title: backend::lang.form.create_title
+    redirect: thewebsiteguy/nexuscrm/tickets/update/:id
+    redirectClose: thewebsiteguy/nexuscrm/tickets
+
+# Update page
+update:
+    title: backend::lang.form.update_title
+    redirect: thewebsiteguy/nexuscrm/tickets
+    redirectClose: thewebsiteguy/nexuscrm/tickets
+
+# Preview page
+preview:
+    title: backend::lang.form.preview_title

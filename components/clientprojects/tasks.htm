@@ -1,0 +1,312 @@
+{# Tasks Tab #}
+<div class="client-projects-section" id="client-projects-tasks">
+    <h3 class="client-projects-section-title">
+        <i class="icon-check-square-o"></i> Tasks
+        <span class="client-projects-section-count">{{ activeProject.tasks|length }}</span>
+    </h3>
+
+    {% if activeProject.tasks is not empty %}
+
+        {# Task Progress Bar #}
+        {% set totalTasks = activeProject.tasks|length %}
+        {% set doneTasks = activeProject.tasks|filter(t => t.status == 'done')|length %}
+        {% set progressPercent = totalTasks > 0 ? ((doneTasks / totalTasks) * 100)|round : 0 %}
+
+        <div class="client-projects-progress">
+            <div class="client-projects-progress-bar" style="width: {{ progressPercent }}%"></div>
+            <span class="client-projects-progress-label">{{ progressPercent }}% complete ({{ doneTasks }}/{{ totalTasks }})</span>
+        </div>
+
+        <div class="client-projects-table-responsive">
+            <table class="client-projects-table">
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Assigned To</th>
+                        <th>Status</th>
+                        <th>Priority</th>
+                        <th>Time</th>
+                        <th>Due Date</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in activeProject.tasks %}
+                        <tr class="client-projects-task-row client-projects-task-row--{{ task.status }} {{ task.timer_running ? 'client-projects-task-row--timing' : '' }}" id="task-row-{{ task.id }}">
+                            <td>
+                                <strong>{{ task.title }}</strong>
+                                {% if task.description %}
+                                    {% set plainDesc = task.description|striptags %}
+                                    <br><small class="client-projects-task-desc">{{ plainDesc|length > 80 ? plainDesc|slice(0, 80) ~ '...' : plainDesc }}</small>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if taskAssignees[task.id] is defined %}
+                                    <span class="client-projects-assigned">
+                                        <i class="icon-user"></i> {{ taskAssignees[task.id] }}
+                                    </span>
+                                {% else %}
+                                    <span class="client-projects-muted">Unassigned</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="client-projects-badge client-projects-badge--{{ task.status }}">
+                                    {{ task.status|replace({'_': ' '})|title }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="client-projects-priority client-projects-priority--{{ task.priority }}">
+                                    {{ task.priority|title }}
+                                </span>
+                            </td>
+                            <td class="client-projects-task-time">
+                                {% if task.timer_running %}
+                                    <span class="client-projects-timer client-projects-timer--running"
+                                          data-task-timer
+                                          data-elapsed="{{ task.timer_elapsed_seconds }}">
+                                        <i class="icon-clock-o"></i>
+                                        <span class="client-projects-timer-clock">00:00:00</span>
+                                    </span>
+                                    <button type="button"
+                                        class="client-projects-btn client-projects-btn--tiny client-projects-btn--danger"
+                                        data-request="{{ __SELF__ }}::onStopTaskTimer"
+                                        data-request-data="task_id: {{ task.id }}, project_id: {{ activeProject.id }}"
+                                        data-request-flash
+                                        title="Stop Timer">
+                                        <i class="icon-stop"></i>
+                                    </button>
+                                {% elseif task.hours > 0 %}
+                                    <span class="client-projects-timer">
+                                        <i class="icon-hourglass-half"></i> {{ task.formatted_hours }}
+                                    </span>
+                                    <button type="button"
+                                        class="client-projects-btn client-projects-btn--tiny client-projects-btn--success"
+                                        data-request="{{ __SELF__ }}::onStartTaskTimer"
+                                        data-request-data="task_id: {{ task.id }}, project_id: {{ activeProject.id }}"
+                                        data-request-flash
+                                        title="Start Timer">
+                                        <i class="icon-play"></i>
+                                    </button>
+                                {% else %}
+                                    <button type="button"
+                                        class="client-projects-btn client-projects-btn--tiny client-projects-btn--outline"
+                                        data-request="{{ __SELF__ }}::onStartTaskTimer"
+                                        data-request-data="task_id: {{ task.id }}, project_id: {{ activeProject.id }}"
+                                        data-request-flash
+                                        title="Start Timer">
+                                        <i class="icon-play"></i> Start
+                                    </button>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if task.due_date %}
+                                    {{ task.due_date|date('M d, Y') }}
+                                {% else %}
+                                    <span class="client-projects-muted">—</span>
+                                {% endif %}
+                            </td>
+                            <td class="client-projects-task-actions">
+                                <button class="client-projects-btn client-projects-btn--small client-projects-btn--outline"
+                                    onclick="toggleTaskEdit({{ task.id }})">
+                                    <i class="icon-pencil"></i> Edit
+                                </button>
+                            </td>
+                        </tr>
+
+                        {# Inline Edit Row #}
+                        <tr class="client-projects-edit-row" id="task-edit-{{ task.id }}" style="display: none;">
+                            <td colspan="7">
+                                <form class="client-projects-edit-form"
+                                    data-request="{{ __SELF__ }}::onUpdateTask"
+                                    data-request-data="task_id: {{ task.id }}, project_id: {{ activeProject.id }}"
+                                    data-request-flash>
+
+                                    <div class="client-projects-edit-grid">
+                                        <div class="client-projects-edit-field">
+                                            <label>Title</label>
+                                            <input type="text" name="task[title]" value="{{ task.title }}" class="client-projects-input" required />
+                                        </div>
+
+                                        <div class="client-projects-edit-field">
+                                            <label>Assigned To</label>
+                                            <select name="task[assigned_to_id]" class="client-projects-select">
+                                                <option value="">Unassigned</option>
+                                                {% for staff in projectStaff %}
+                                                    <option value="{{ staff.id }}" {{ task.assigned_to_id == staff.id ? 'selected' }}>{{ staff.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <div class="client-projects-edit-field">
+                                            <label>Status</label>
+                                            <select name="task[status]" class="client-projects-select">
+                                                <option value="todo" {{ task.status == 'todo' ? 'selected' }}>To Do</option>
+                                                <option value="in_progress" {{ task.status == 'in_progress' ? 'selected' }}>In Progress</option>
+                                                <option value="review" {{ task.status == 'review' ? 'selected' }}>Review</option>
+                                                <option value="done" {{ task.status == 'done' ? 'selected' }}>Done</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="client-projects-edit-field">
+                                            <label>Priority</label>
+                                            <select name="task[priority]" class="client-projects-select">
+                                                <option value="low" {{ task.priority == 'low' ? 'selected' }}>Low</option>
+                                                <option value="medium" {{ task.priority == 'medium' ? 'selected' }}>Medium</option>
+                                                <option value="high" {{ task.priority == 'high' ? 'selected' }}>High</option>
+                                                <option value="urgent" {{ task.priority == 'urgent' ? 'selected' }}>Urgent</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="client-projects-edit-field">
+                                            <label>Due Date</label>
+                                            <input type="date" name="task[due_date]" value="{{ task.due_date ? task.due_date|date('Y-m-d') : '' }}" class="client-projects-input" />
+                                        </div>
+
+                                        <div class="client-projects-edit-field client-projects-edit-field--full">
+                                            <label>Description</label>
+                                            <div class="client-projects-richtext-toolbar">
+                                                <button type="button" onclick="document.execCommand('bold')" title="Bold"><b>B</b></button>
+                                                <button type="button" onclick="document.execCommand('italic')" title="Italic"><i>I</i></button>
+                                                <button type="button" onclick="document.execCommand('underline')" title="Underline"><u>U</u></button>
+                                                <span class="client-projects-richtext-sep"></span>
+                                                <button type="button" onclick="document.execCommand('insertUnorderedList')" title="Bullet List"><i class="icon-list-ul"></i></button>
+                                                <button type="button" onclick="document.execCommand('insertOrderedList')" title="Numbered List"><i class="icon-list-ol"></i></button>
+                                                <span class="client-projects-richtext-sep"></span>
+                                                <button type="button" onclick="insertLink()" title="Insert Link"><i class="icon-link"></i></button>
+                                                <button type="button" onclick="document.execCommand('removeFormat')" title="Clear Formatting"><i class="icon-eraser"></i></button>
+                                            </div>
+                                            <div class="client-projects-richtext-content"
+                                                contenteditable="true"
+                                                id="task-desc-editor-{{ task.id }}"
+                                                oninput="document.getElementById('task-desc-input-{{ task.id }}').value = this.innerHTML">{{ task.description|raw }}</div>
+                                            <input type="hidden" name="task[description]" id="task-desc-input-{{ task.id }}" value="{{ task.description }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="client-projects-edit-actions">
+                                        <button type="submit" class="client-projects-btn client-projects-btn--primary client-projects-btn--small">
+                                            <i class="icon-check"></i> Save
+                                        </button>
+                                        <button type="button" class="client-projects-btn client-projects-btn--outline client-projects-btn--small"
+                                            onclick="toggleTaskEdit({{ task.id }})">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="client-projects-empty-section">No tasks have been created for this project yet.</p>
+    {% endif %}
+</div>
+
+<style>
+.client-projects-task-row--timing {
+    background: rgba(39, 174, 96, 0.04);
+}
+.client-projects-task-time {
+    white-space: nowrap;
+}
+.client-projects-timer {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: #666;
+}
+.client-projects-timer--running {
+    color: #27ae60;
+    font-weight: 600;
+}
+.client-projects-timer--running .client-projects-timer-clock {
+    font-family: 'Courier New', Courier, monospace;
+    animation: clientTimerPulse 1.5s ease-in-out infinite;
+}
+@keyframes clientTimerPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+.client-projects-btn--tiny {
+    padding: 2px 6px;
+    font-size: 11px;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    margin-left: 4px;
+}
+.client-projects-btn--success {
+    background: #27ae60;
+    color: #fff;
+}
+.client-projects-btn--success:hover {
+    background: #219a52;
+}
+.client-projects-btn--danger {
+    background: #e74c3c;
+    color: #fff;
+}
+.client-projects-btn--danger:hover {
+    background: #c0392b;
+}
+</style>
+
+<script>
+function toggleTaskEdit(taskId) {
+    var editRow = document.getElementById('task-edit-' + taskId);
+    if (editRow) {
+        editRow.style.display = editRow.style.display === 'none' ? 'table-row' : 'none';
+    }
+}
+
+function insertLink() {
+    var url = prompt('Enter URL:', 'https://');
+    if (url) {
+        document.execCommand('createLink', false, url);
+    }
+}
+
+// Ensure richtext content is synced before AJAX requests
+document.addEventListener('ajaxSetup', function(event) {
+    var form = event.target;
+    if (form && form.classList && form.classList.contains('client-projects-edit-form')) {
+        var editor = form.querySelector('.client-projects-richtext-content');
+        var hidden = form.querySelector('input[name="task[description]"]');
+        if (editor && hidden) {
+            hidden.value = editor.innerHTML;
+        }
+    }
+});
+
+// Live timer countdown for running task timers
+(function() {
+    var timerEls = document.querySelectorAll('[data-task-timer]');
+    timerEls.forEach(function(el) {
+        var elapsed = parseInt(el.getAttribute('data-elapsed') || '0', 10);
+        var clockEl = el.querySelector('.client-projects-timer-clock');
+        if (!clockEl) return;
+
+        function formatTime(totalSeconds) {
+            var h = Math.floor(totalSeconds / 3600);
+            var m = Math.floor((totalSeconds % 3600) / 60);
+            var s = totalSeconds % 60;
+            return (h < 10 ? '0' : '') + h + ':' +
+                   (m < 10 ? '0' : '') + m + ':' +
+                   (s < 10 ? '0' : '') + s;
+        }
+
+        clockEl.textContent = formatTime(elapsed);
+
+        setInterval(function() {
+            elapsed++;
+            clockEl.textContent = formatTime(elapsed);
+        }, 1000);
+    });
+})();
+</script>

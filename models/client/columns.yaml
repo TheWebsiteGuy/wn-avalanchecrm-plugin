@@ -1,0 +1,19 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    name:
+        label: Name
+        searchable: true
+    email:
+        label: Email
+        searchable: true
+    phone:
+        label: Phone
+    company:
+        label: Company
+        searchable: true
+    created_at:
+        label: Created
+        type: datetime

@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: 'thewebsiteguy.nexuscrm::lang.models.project.label'
+
+# Model Form Field configuration
+form: $/thewebsiteguy/nexuscrm/models/project/fields.yaml
+
+# Model Class name
+modelClass: TheWebsiteGuy\NexusCRM\Models\Project
+
+# Default redirect location
+defaultRedirect: thewebsiteguy/nexuscrm/projects
+
+# Create page
+create:
+    title: backend::lang.form.create_title
+    redirect: thewebsiteguy/nexuscrm/projects/update/:id
+    redirectClose: thewebsiteguy/nexuscrm/projects
+
+# Update page
+update:
+    title: backend::lang.form.update_title
+    redirect: thewebsiteguy/nexuscrm/projects
+    redirectClose: thewebsiteguy/nexuscrm/projects
+
+# Preview page
+preview:
+    title: backend::lang.form.preview_title
