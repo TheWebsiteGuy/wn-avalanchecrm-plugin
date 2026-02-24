@@ -1,12 +1,13 @@
 <?php
 
 use Winter\Storm\Database\Updates\Migration;
+use Winter\Storm\Support\Facades\Schema;
 use Winter\User\Models\UserGroup;
 
 return new class extends Migration {
     public function up()
     {
-        if (!class_exists(UserGroup::class)) {
+        if (!class_exists(UserGroup::class) || !Schema::hasTable('user_groups')) {
             return;
         }
 
@@ -21,7 +22,7 @@ return new class extends Migration {
 
     public function down()
     {
-        if (!class_exists(UserGroup::class)) {
+        if (!class_exists(UserGroup::class) || !Schema::hasTable('user_groups')) {
             return;
         }
 

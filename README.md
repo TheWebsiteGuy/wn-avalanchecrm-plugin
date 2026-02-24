@@ -49,12 +49,11 @@ Nexus CRM provides a settings area in the Winter CMS backend to configure:
 
 ## Installation
 
-1.  Clone this repository into `plugins/thewebsiteguy/nexuscrm`.
-2.  Install dependencies and required plugins:
+1.  Install plugin with composer:
     ```bash
-    composer require thewebsiteguy/nexuscrm winter/wn-user-plugin winter/wn-userplus-plugin winter/wn-location-plugin stripe/stripe-php gocardless/gocardless-pro barryvdh/laravel-dompdf
+    composer require thewebsiteguy/wn-nexuscrm-plugin
     ```
-3.  Execute migrations:
+2.  Execute migrations:
     ```bash
     php artisan winter:up
     ```

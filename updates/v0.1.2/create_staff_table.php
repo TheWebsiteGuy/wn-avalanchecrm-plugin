@@ -20,7 +20,7 @@ return new class extends Migration {
             });
         }
 
-        if (class_exists(UserGroup::class)) {
+        if (class_exists(UserGroup::class) && Schema::hasTable('user_groups')) {
             if (!UserGroup::where('code', 'staff')->exists()) {
                 UserGroup::create([
                     'name' => 'Staff',
@@ -35,7 +35,7 @@ return new class extends Migration {
     {
         Schema::dropIfExists('thewebsiteguy_nexuscrm_staff');
 
-        if (class_exists(UserGroup::class)) {
+        if (class_exists(UserGroup::class) && Schema::hasTable('user_groups')) {
             $group = UserGroup::where('code', 'staff')->first();
             if ($group) {
                 $group->delete();
