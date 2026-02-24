@@ -25,11 +25,14 @@ class InvoicePdf
         $settings = Settings::instance();
 
         $data = [
-            'invoice'        => $invoice,
+            'invoice' => $invoice,
             'currencySymbol' => $settings->currency_symbol ?: '$',
-            'currencyCode'   => $settings->currency_code ?: 'USD',
-            'companyName'    => $settings->company_name ?? '',
-            'companyDetails' => $settings->company_details ?? '',
+            'currencyCode' => $settings->currency_code ?: 'USD',
+            'companyName' => $settings->company_name ?? '',
+            'companyAddress' => $settings->company_address ?? '',
+            'companyEmail' => $settings->company_email ?? '',
+            'companyPhone' => $settings->company_phone ?? '',
+            'companyLogo' => $settings->company_logo ? $settings->company_logo->getLocalPath() : null,
         ];
 
         // Render the Twig template to HTML

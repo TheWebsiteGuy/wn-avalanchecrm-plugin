@@ -10,7 +10,7 @@ use Winter\User\Controllers\Users as UsersController;
 use Event;
 
 /**
- * NexusCRM Plugin Information File
+ * Nexus CRM Plugin Information File
  */
 class Plugin extends PluginBase
 {
@@ -176,15 +176,15 @@ class Plugin extends PluginBase
     {
         return [
             'thewebsiteguy.nexuscrm.*' => [
-                'tab' => 'NexusCRM',
+                'tab' => 'Nexus CRM',
                 'label' => 'Manage all CRM features',
             ],
             'thewebsiteguy.nexuscrm.manage_settings' => [
-                'tab' => 'NexusCRM',
+                'tab' => 'Nexus CRM',
                 'label' => 'Manage CRM Settings',
             ],
             'thewebsiteguy.nexuscrm.tickets.*' => [
-                'tab' => 'NexusCRM',
+                'tab' => 'Nexus CRM',
                 'label' => 'Access Tickets section',
             ],
         ];
@@ -198,11 +198,17 @@ class Plugin extends PluginBase
         return [
             'nexuscrm' => [
                 'label' => 'thewebsiteguy.nexuscrm::lang.navigation.crm',
-                'url' => Backend::url('thewebsiteguy/nexuscrm/clients'),
-                'icon' => 'icon-users',
+                'url' => Backend::url('thewebsiteguy/nexuscrm/dashboard'),
+                'icon' => 'icon-dashboard',
                 'permissions' => ['thewebsiteguy.nexuscrm.*'],
                 'order' => 500,
                 'sideMenu' => [
+                    'dashboard' => [
+                        'label' => 'thewebsiteguy.nexuscrm::lang.navigation.dashboard',
+                        'icon' => 'icon-dashboard',
+                        'url' => Backend::url('thewebsiteguy/nexuscrm/dashboard'),
+                        'permissions' => ['thewebsiteguy.nexuscrm.*'],
+                    ],
                     'clients' => [
                         'label' => 'thewebsiteguy.nexuscrm::lang.navigation.clients',
                         'icon' => 'icon-users',
@@ -253,7 +259,7 @@ class Plugin extends PluginBase
             'settings' => [
                 'label' => 'thewebsiteguy.nexuscrm::lang.models.settings.label',
                 'description' => 'thewebsiteguy.nexuscrm::lang.models.settings.description',
-                'category' => 'NexusCRM',
+                'category' => 'Nexus CRM',
                 'icon' => 'icon-cog',
                 'class' => \TheWebsiteGuy\NexusCRM\Models\Settings::class,
                 'order' => 500,

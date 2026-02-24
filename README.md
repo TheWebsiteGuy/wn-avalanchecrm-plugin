@@ -1,6 +1,10 @@
 # Nexus CRM
 
+![Nexus CRM](assets/images/dashboard.png)
+
 A powerful, comprehensive Customer Relationship Management (CRM) and Billing system for Winter CMS. Streamline your client management, project tracking, invoicing, support tickets, and recurring subscriptions directly within your CMS.
+
+![Nexus CRM](assets/images/dashboard.png)
 
 > [!WARNING]
 > **Work In Progress**: This plugin is currently in early development. Features, database structures, and components are subject to significant changes without prior notice. Use in production at your own risk.
@@ -22,23 +26,35 @@ A powerful, comprehensive Customer Relationship Management (CRM) and Billing sys
 *   **🎨 Dynamic Theming**: Built-in CSS variables for brand-specific dashboard customisation.
 *   **🇬🇧 UK English Localisation**: Full support for UK English conventions (e.g., "Cancelled", "Synchronise").
 
+## Settings
+
+Nexus CRM provides a settings area in the Winter CMS backend to configure:
+
+*   **Company Details**: Set your business name, address, contact information, and logo for use on generated PDFs.
+*   **Billing & Currency**: Define your default currency symbol, tax percentage, and invoice numbering formats.
+*   **Payment Gateways**: Configure API credentials for Stripe, PayPal, and GoCardless to enable automated payment processing.
+*   **Support & Tickets**: Manage ticket categories, priority levels, and automated status transitions.
+*   **Custom Branding**: Adjust dashboard accent colours and UI elements via built-in CSS variable controls.
+
+
+![Nexus CRM](assets/images/settings.png)
+
 ## Requirements
 
 *   Winter CMS 1.1.x or higher
 *   Winter.User Plugin
 *   Winter.UserPlus Plugin
 *   Winter.Location Plugin
-*   GoCardless Plugin
-*   Stripe Plugin
-*   PayPal Plugin
-*   PHP `dompdf` extension (managed via Composer)
+*   Stripe PHP SDK
+*   GoCardless Pro PHP SDK
+*   PHP `dompdf` extension
 
 ## Installation
 
 1.  Clone this repository into `plugins/thewebsiteguy/nexuscrm`.
-2.  Install dependencies:
+2.  Install dependencies and required plugins:
     ```bash
-    composer require barryvdh/laravel-dompdf
+    composer require thewebsiteguy/nexuscrm winter/wn-user-plugin winter/wn-userplus-plugin winter/wn-location-plugin stripe/stripe-php gocardless/gocardless-pro barryvdh/laravel-dompdf
     ```
 3.  Execute migrations:
     ```bash

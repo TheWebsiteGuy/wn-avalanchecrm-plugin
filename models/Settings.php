@@ -16,4 +16,8 @@ class Settings extends Model
 
     // Reference to field configuration
     public $settingsFields = 'fields.yaml';
+
+    public $attachOne = [
+        'company_logo' => [\System\Models\File::class]
+    ];
 }

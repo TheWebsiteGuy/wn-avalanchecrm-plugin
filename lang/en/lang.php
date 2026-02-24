@@ -68,6 +68,16 @@ return [
         'settings' => [
             'label' => 'Settings',
             'description' => 'Configure Nexus CRM settings.',
+            'company_name' => 'Business Name',
+            'company_name_comment' => 'Official name of your business.',
+            'company_logo' => 'Company Logo',
+            'company_logo_comment' => 'Used on generated invoices and the client portal.',
+            'company_address' => 'Business Address',
+            'company_address_comment' => 'Your mailing/billing address as it should appear on invoices.',
+            'company_email' => 'Contact Email',
+            'company_email_comment' => 'Public contact email address.',
+            'company_phone' => 'Contact Phone',
+            'company_phone_comment' => 'Public contact phone number.',
         ],
     ],
     'statuses' => [
@@ -85,6 +95,7 @@ return [
         'paid' => 'Paid',
     ],
     'navigation' => [
+        'dashboard' => 'Dashboard',
         'crm' => 'CRM',
         'staff' => 'Staff',
         'clients' => 'Clients',

@@ -4,6 +4,46 @@
 
 tabs:
     fields:
+        # ── Company Details ───────────────────────────────────────
+        company_name:
+            label: thewebsiteguy.nexuscrm::lang.models.settings.company_name
+            tab: Company
+            type: text
+            span: left
+            comment: thewebsiteguy.nexuscrm::lang.models.settings.company_name_comment
+
+        company_logo:
+            label: thewebsiteguy.nexuscrm::lang.models.settings.company_logo
+            tab: Company
+            type: fileupload
+            mode: image
+            imageHeight: 100
+            imageWidth: 100
+            span: right
+            comment: thewebsiteguy.nexuscrm::lang.models.settings.company_logo_comment
+
+        company_address:
+            label: thewebsiteguy.nexuscrm::lang.models.settings.company_address
+            tab: Company
+            type: textarea
+            size: small
+            span: full
+            comment: thewebsiteguy.nexuscrm::lang.models.settings.company_address_comment
+
+        company_email:
+            label: thewebsiteguy.nexuscrm::lang.models.settings.company_email
+            tab: Company
+            type: text
+            span: left
+            comment: thewebsiteguy.nexuscrm::lang.models.settings.company_email_comment
+
+        company_phone:
+            label: thewebsiteguy.nexuscrm::lang.models.settings.company_phone
+            tab: Company
+            type: text
+            span: right
+            comment: thewebsiteguy.nexuscrm::lang.models.settings.company_phone_comment
+
         # ── Theme Colors ──────────────────────────────────────────
         theme_color_primary:
             label: Primary

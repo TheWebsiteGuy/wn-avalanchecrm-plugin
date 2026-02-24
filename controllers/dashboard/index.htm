@@ -1,0 +1,198 @@
+<div class="layout-row min-height-0">
+    <div class="layout-cell">
+        <div class="padded-container">
+            <h3 class="m-b-lg">Nexus CRM Dashboard</h3>
+
+            <div class="dashboard-grid">
+                <!-- Clients Card -->
+                <div class="dashboard-card border-success">
+                    <div class="card-header">
+                        <i class="icon-users"></i>
+                        <h4>Clients</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>Manage your client database and relationships.</p>
+                        <div class="card-actions">
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/clients') ?>"
+                                class="btn btn-sm btn-primary">Manage Clients</a>
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/clients/create') ?>"
+                                class="btn btn-sm btn-secondary">Add Client</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Staff Card -->
+                <div class="dashboard-card border-info">
+                    <div class="card-header">
+                        <i class="icon-user-tie"></i>
+                        <h4>Staff</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>Track team members, departments and job titles.</p>
+                        <div class="card-actions">
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/staff') ?>"
+                                class="btn btn-sm btn-primary">Manage Staff</a>
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/staff/create') ?>"
+                                class="btn btn-sm btn-secondary">Add Staff</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projects Card -->
+                <div class="dashboard-card border-warning">
+                    <div class="card-header">
+                        <i class="icon-briefcase"></i>
+                        <h4>Projects</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>Track project progress, tasks and deliverables.</p>
+                        <div class="card-actions">
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/projects') ?>"
+                                class="btn btn-sm btn-primary">Manage Projects</a>
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/projects/create') ?>"
+                                class="btn btn-sm btn-secondary">New Project</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tickets Card -->
+                <div class="dashboard-card border-danger">
+                    <div class="card-header">
+                        <i class="icon-ticket"></i>
+                        <h4>Tickets</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>Monitor and respond to client support requests.</p>
+                        <div class="card-actions">
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/tickets') ?>"
+                                class="btn btn-sm btn-primary">All Tickets</a>
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/tickets/create') ?>"
+                                class="btn btn-sm btn-secondary">New Ticket</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoices Card -->
+                <div class="dashboard-card border-primary">
+                    <div class="card-header">
+                        <i class="icon-file-text-o"></i>
+                        <h4>Invoices</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>Generate and manage billing and payments.</p>
+                        <div class="card-actions">
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/invoices') ?>"
+                                class="btn btn-sm btn-primary">All Invoices</a>
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/invoices/create') ?>"
+                                class="btn btn-sm btn-secondary">New Invoice</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subscriptions Card -->
+                <div class="dashboard-card border-secondary">
+                    <div class="card-header">
+                        <i class="icon-refresh"></i>
+                        <h4>Subscriptions</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>Recurring billing plans and client subscriptions.</p>
+                        <div class="card-actions">
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/subscriptions') ?>"
+                                class="btn btn-sm btn-primary">Active Subscriptions</a>
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/subscriptionplans') ?>"
+                                class="btn btn-sm btn-secondary">Manage Plans</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .dashboard-card {
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        border-top: 4px solid #ddd;
+        transition: transform 0.2s;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .dashboard-card.border-success {
+        border-top-color: #5fb4ef;
+    }
+
+    .dashboard-card.border-info {
+        border-top-color: #3498db;
+    }
+
+    .dashboard-card.border-warning {
+        border-top-color: #f1c40f;
+    }
+
+    .dashboard-card.border-danger {
+        border-top-color: #e74c3c;
+    }
+
+    .dashboard-card.border-primary {
+        border-top-color: #2b3e50;
+    }
+
+    .dashboard-card.border-secondary {
+        border-top-color: #95a5a6;
+    }
+
+    .card-header {
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+    }
+
+    .card-header i {
+        font-size: 24px;
+        margin-right: 15px;
+        color: #555;
+    }
+
+    .card-header h4 {
+        margin: 0;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .card-body {
+        padding: 20px;
+        flex-grow: 1;
+    }
+
+    .card-body p {
+        color: #666;
+        margin-bottom: 20px;
+        min-height: 40px;
+    }
+
+    .card-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .m-b-lg {
+        margin-bottom: 30px;
+    }
+</style>
