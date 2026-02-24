@@ -5,7 +5,9 @@ namespace TheWebsiteGuy\NexusCRM;
 use Backend\Facades\Backend;
 use Backend\Models\UserRole;
 use System\Classes\PluginBase;
+use Winter\Storm\Support\Facades\Schema;
 use Winter\User\Models\User as UserModel;
+use Winter\User\Models\UserGroup;
 use Winter\User\Controllers\Users as UsersController;
 use Event;
 
@@ -61,6 +63,8 @@ class Plugin extends PluginBase
      */
     public function boot(): void
     {
+        $this->ensureUserGroupsExist();
+
         UserModel::extend(function ($model) {
             $model->hasOne['client'] = [\TheWebsiteGuy\NexusCRM\Models\Client::class];
             $model->hasOne['staff'] = [\TheWebsiteGuy\NexusCRM\Models\Staff::class];
@@ -106,7 +110,7 @@ class Plugin extends PluginBase
 
             // Pre-select 'Client' group if redirecting from CRM
             if ($widget->getContext() === 'create' && request()->input('is_client')) {
-                $clientGroup = \Winter\User\Models\UserGroup::where('code', 'client')->first();
+                $clientGroup = UserGroup::where('code', 'client')->first();
                 if ($clientGroup) {
                     if (isset($widget->tabs['fields']['groups'])) {
                         $widget->tabs['fields']['groups']['default'] = [$clientGroup->id];
@@ -116,7 +120,7 @@ class Plugin extends PluginBase
 
             // Pre-select 'Staff' group if redirecting from CRM
             if ($widget->getContext() === 'create' && request()->input('is_staff')) {
-                $staffGroup = \Winter\User\Models\UserGroup::where('code', 'staff')->first();
+                $staffGroup = UserGroup::where('code', 'staff')->first();
                 if ($staffGroup) {
                     if (isset($widget->tabs['fields']['groups'])) {
                         $widget->tabs['fields']['groups']['default'] = [$staffGroup->id];
@@ -153,6 +157,35 @@ class Plugin extends PluginBase
             }
         });
 
+    }
+
+    /**
+     * Ensure required user groups exist for the CRM.
+     */
+    protected function ensureUserGroupsExist(): void
+    {
+        if (!class_exists(UserGroup::class) || !Schema::hasTable('user_groups')) {
+            return;
+        }
+
+        $groups = [
+            [
+                'name' => 'Client',
+                'code' => 'client',
+                'description' => 'CRM Clients Group',
+            ],
+            [
+                'name' => 'Staff',
+                'code' => 'staff',
+                'description' => 'CRM Staff Group',
+            ],
+        ];
+
+        foreach ($groups as $group) {
+            if (!UserGroup::where('code', $group['code'])->exists()) {
+                UserGroup::create($group);
+            }
+        }
     }
 
     /**
