@@ -1,7 +1,5 @@
 # Nexus CRM
 
-![Nexus CRM](assets/images/dashboard.png)
-
 A powerful, comprehensive Customer Relationship Management (CRM) and Billing system for Winter CMS. Streamline your client management, project tracking, invoicing, support tickets, and recurring subscriptions directly within your CMS.
 
 ![Nexus CRM](assets/images/dashboard.png)
