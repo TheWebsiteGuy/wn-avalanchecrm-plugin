@@ -96,7 +96,7 @@ return [
     ],
     'navigation' => [
         'dashboard' => 'Dashboard',
-        'crm' => 'CRM',
+        'crm' => 'Nexus CRM',
         'staff' => 'Staff',
         'clients' => 'Clients',
         'projects' => 'Projects',
