@@ -162,9 +162,10 @@ class Plugin extends PluginBase
     {
         return [
             \TheWebsiteGuy\NexusCRM\Components\Subscriptions::class => 'subscriptions',
-            \TheWebsiteGuy\NexusCRM\Components\ClientProjects::class => 'projects',
-            \TheWebsiteGuy\NexusCRM\Components\ClientTickets::class => 'tickets',
-            \TheWebsiteGuy\NexusCRM\Components\ClientInvoices::class => 'invoices',
+            \TheWebsiteGuy\NexusCRM\Components\Projects::class => 'projects',
+            \TheWebsiteGuy\NexusCRM\Components\Tickets::class => 'tickets',
+            \TheWebsiteGuy\NexusCRM\Components\Invoices::class => 'invoices',
+            \TheWebsiteGuy\NexusCRM\Components\Account::class => 'account',
         ];
     }
 
@@ -173,13 +174,18 @@ class Plugin extends PluginBase
      */
     public function registerPermissions(): array
     {
-        return []; // Remove this line to activate
-
         return [
-            'thewebsiteguy.nexuscrm.some_permission' => [
-                'tab' => 'thewebsiteguy.nexuscrm::lang.plugin.name',
-                'label' => 'thewebsiteguy.nexuscrm::lang.permissions.some_permission',
-                'roles' => [UserRole::CODE_DEVELOPER, UserRole::CODE_PUBLISHER],
+            'thewebsiteguy.nexuscrm.*' => [
+                'tab' => 'NexusCRM',
+                'label' => 'Manage all CRM features',
+            ],
+            'thewebsiteguy.nexuscrm.manage_settings' => [
+                'tab' => 'NexusCRM',
+                'label' => 'Manage CRM Settings',
+            ],
+            'thewebsiteguy.nexuscrm.tickets.*' => [
+                'tab' => 'NexusCRM',
+                'label' => 'Access Tickets section',
             ],
         ];
     }
@@ -191,52 +197,46 @@ class Plugin extends PluginBase
     {
         return [
             'nexuscrm' => [
-                'label' => 'CRM',
+                'label' => 'thewebsiteguy.nexuscrm::lang.navigation.crm',
                 'url' => Backend::url('thewebsiteguy/nexuscrm/clients'),
                 'icon' => 'icon-users',
                 'permissions' => ['thewebsiteguy.nexuscrm.*'],
                 'order' => 500,
                 'sideMenu' => [
                     'clients' => [
-                        'label' => 'Clients',
+                        'label' => 'thewebsiteguy.nexuscrm::lang.navigation.clients',
                         'icon' => 'icon-users',
                         'url' => Backend::url('thewebsiteguy/nexuscrm/clients'),
                         'permissions' => ['thewebsiteguy.nexuscrm.*'],
                     ],
                     'staff' => [
-                        'label' => 'Staff',
+                        'label' => 'thewebsiteguy.nexuscrm::lang.navigation.staff',
                         'icon' => 'icon-user-tie',
                         'url' => Backend::url('thewebsiteguy/nexuscrm/staff'),
                         'permissions' => ['thewebsiteguy.nexuscrm.*'],
                     ],
                     'projects' => [
-                        'label' => 'Projects',
+                        'label' => 'thewebsiteguy.nexuscrm::lang.navigation.projects',
                         'icon' => 'icon-briefcase',
                         'url' => Backend::url('thewebsiteguy/nexuscrm/projects'),
                         'permissions' => ['thewebsiteguy.nexuscrm.*'],
                     ],
                     'tickets' => [
-                        'label' => 'Tickets',
+                        'label' => 'thewebsiteguy.nexuscrm::lang.navigation.tickets',
                         'icon' => 'icon-ticket',
                         'url' => Backend::url('thewebsiteguy/nexuscrm/tickets'),
                         'permissions' => ['thewebsiteguy.nexuscrm.*'],
                     ],
                     'invoices' => [
-                        'label' => 'Invoices',
+                        'label' => 'thewebsiteguy.nexuscrm::lang.navigation.invoices',
                         'icon' => 'icon-file-text-o',
                         'url' => Backend::url('thewebsiteguy/nexuscrm/invoices'),
                         'permissions' => ['thewebsiteguy.nexuscrm.*'],
                     ],
                     'subscriptions' => [
-                        'label' => 'Subscriptions',
+                        'label' => 'thewebsiteguy.nexuscrm::lang.navigation.subscriptions',
                         'icon' => 'icon-refresh',
                         'url' => Backend::url('thewebsiteguy/nexuscrm/subscriptions'),
-                        'permissions' => ['thewebsiteguy.nexuscrm.*'],
-                    ],
-                    'tasks' => [
-                        'label' => 'Tasks',
-                        'icon' => 'icon-check-square-o',
-                        'url' => Backend::url('thewebsiteguy/nexuscrm/tasks'),
                         'permissions' => ['thewebsiteguy.nexuscrm.*'],
                     ],
                 ]
@@ -251,8 +251,8 @@ class Plugin extends PluginBase
     {
         return [
             'settings' => [
-                'label' => 'CRM Settings',
-                'description' => 'Configure theme colours, currency, invoices and payment gateways.',
+                'label' => 'thewebsiteguy.nexuscrm::lang.models.settings.label',
+                'description' => 'thewebsiteguy.nexuscrm::lang.models.settings.description',
                 'category' => 'NexusCRM',
                 'icon' => 'icon-cog',
                 'class' => \TheWebsiteGuy\NexusCRM\Models\Settings::class,

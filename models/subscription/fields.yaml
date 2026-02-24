@@ -33,10 +33,10 @@ fields:
         type: dropdown
         span: right
         options:
-            active: Active
-            pending: Pending
-            past_due: Past Due
-            canceled: Canceled
+            active: thewebsiteguy.nexuscrm::lang.statuses.active
+            pending: thewebsiteguy.nexuscrm::lang.statuses.pending
+            past_due: thewebsiteguy.nexuscrm::lang.statuses.past_due
+            canceled: thewebsiteguy.nexuscrm::lang.statuses.canceled
         default: active
 
     plan_name:

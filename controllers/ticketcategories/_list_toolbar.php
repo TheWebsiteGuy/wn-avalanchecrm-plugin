@@ -1,7 +1,5 @@
 <div class="control-toolbar">
     <div class="toolbar-item toolbar-primary">
-        <a href="<?= Backend::url('thewebsiteguy/nexuscrm/tickets') ?>" class="btn btn-default oc-icon-arrow-left">Back
-            to Tickets</a>
         <a href="<?= Backend::url('thewebsiteguy/nexuscrm/ticketcategories/create') ?>"
             class="btn btn-primary oc-icon-plus">New Category</a>
     </div>

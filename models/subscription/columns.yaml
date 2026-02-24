@@ -25,6 +25,8 @@ columns:
         type: date
     status:
         label: Status
+        type: partial
+        path: $/thewebsiteguy/nexuscrm/models/subscription/_status_column.htm
         searchable: true
     created_at:
         label: Created

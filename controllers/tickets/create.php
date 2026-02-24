@@ -9,6 +9,8 @@
 
 <?php if (!$this->fatalError): ?>
 
+    <?= $this->makePartial('submenu') ?>
+
     <?= Form::open(['class' => 'layout']) ?>
 
     <div class="layout-row">

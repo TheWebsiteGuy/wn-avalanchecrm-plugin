@@ -2,12 +2,12 @@
 
 namespace TheWebsiteGuy\NexusCRM\Components;
 
-use Auth;
-use Flash;
-use Input;
-use Redirect;
-use Request;
-use Log;
+use Winter\User\Facades\Auth;
+use Winter\Storm\Support\Facades\Flash;
+use Winter\Storm\Support\Facades\Input;
+use Winter\Storm\Support\Facades\Redirect;
+use Winter\Storm\Support\Facades\Request;
+use Winter\Storm\Support\Facades\Log;
 use Cms\Classes\ComponentBase;
 use TheWebsiteGuy\NexusCRM\Models\Client;
 use TheWebsiteGuy\NexusCRM\Models\Subscription;
@@ -49,7 +49,7 @@ class Subscriptions extends ComponentBase
     public function componentDetails(): array
     {
         return [
-            'name'        => 'Subscriptions',
+            'name' => 'Subscriptions',
             'description' => 'Allows clients to view and manage their subscriptions and payment methods.',
         ];
     }
@@ -61,16 +61,16 @@ class Subscriptions extends ComponentBase
     {
         return [
             'showPlans' => [
-                'title'       => 'Show Available Plans',
+                'title' => 'Show Available Plans',
                 'description' => 'Display available subscription plans to the user.',
-                'type'        => 'checkbox',
-                'default'     => true,
+                'type' => 'checkbox',
+                'default' => true,
             ],
             'showPaymentMethods' => [
-                'title'       => 'Show Payment Methods',
+                'title' => 'Show Payment Methods',
                 'description' => 'Allow users to manage their payment methods.',
-                'type'        => 'checkbox',
-                'default'     => true,
+                'type' => 'checkbox',
+                'default' => true,
             ],
         ];
     }
@@ -91,7 +91,7 @@ class Subscriptions extends ComponentBase
         }
 
         if (Input::get('stripe_cancel')) {
-            Flash::warning('Payment was cancelled. You can try again when you\'re ready.');
+            Flash::warning(e(trans('thewebsiteguy.nexuscrm::lang.messages.payment_cancelled')));
         }
 
         // Handle GoCardless Redirect Flow return
@@ -100,7 +100,7 @@ class Subscriptions extends ComponentBase
         }
 
         if (Input::get('gc_cancel')) {
-            Flash::warning('Direct debit setup was cancelled. You can try again when you\'re ready.');
+            Flash::warning(e(trans('thewebsiteguy.nexuscrm::lang.messages.setup_cancelled')));
         }
 
         // Handle PayPal Subscription return
@@ -109,7 +109,7 @@ class Subscriptions extends ComponentBase
         }
 
         if (Input::get('paypal_cancel')) {
-            Flash::warning('PayPal payment was cancelled. You can try again when you\'re ready.');
+            Flash::warning(e(trans('thewebsiteguy.nexuscrm::lang.messages.payment_cancelled')));
         }
 
         $this->prepareVars();
@@ -174,11 +174,11 @@ class Subscriptions extends ComponentBase
         $user = $client->user;
 
         $customer = $stripe->customers->create([
-            'email'    => $user->email ?? $client->email,
-            'name'     => $client->name,
+            'email' => $user->email ?? $client->email,
+            'name' => $client->name,
             'metadata' => [
                 'client_id' => $client->id,
-                'user_id'   => $user->id ?? null,
+                'user_id' => $user->id ?? null,
             ],
         ]);
 
@@ -232,12 +232,12 @@ class Subscriptions extends ComponentBase
     {
         $user = Auth::getUser();
         if (!$user) {
-            throw new ApplicationException('You must be logged in.');
+            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.must_be_logged_in'));
         }
 
         $client = Client::where('user_id', $user->id)->first();
         if (!$client) {
-            throw new ApplicationException('No client profile found.');
+            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
         }
 
         $planId = post('plan_id');
@@ -256,7 +256,7 @@ class Subscriptions extends ComponentBase
             ->first();
 
         if ($existing) {
-            throw new ApplicationException('You already have an active subscription to this plan.');
+            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.already_subscribed'));
         }
 
         // ── Card (Stripe Checkout) ──────────────────────────────────
@@ -286,13 +286,13 @@ class Subscriptions extends ComponentBase
         $subscription->next_billing_date = $this->calculateNextBillingDate($plan->billing_cycle);
         $subscription->save();
 
-        Flash::success('You have successfully subscribed to ' . $plan->name . '!');
+        Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.payment_successful', ['name' => $plan->name]));
 
         $this->prepareVars();
 
         return [
             '#subscriptions-active' => $this->renderPartial('@active'),
-            '#subscriptions-plans'  => $this->renderPartial('@plans'),
+            '#subscriptions-plans' => $this->renderPartial('@plans'),
         ];
     }
 
@@ -309,43 +309,47 @@ class Subscriptions extends ComponentBase
         // If the plan has a Stripe Price ID, use recurring subscription mode
         if (!empty($plan->stripe_price_id)) {
             $sessionParams = [
-                'customer'   => $customerId,
-                'mode'       => 'subscription',
-                'line_items' => [[
-                    'price'    => $plan->stripe_price_id,
-                    'quantity' => 1,
-                ]],
+                'customer' => $customerId,
+                'mode' => 'subscription',
+                'line_items' => [
+                    [
+                        'price' => $plan->stripe_price_id,
+                        'quantity' => 1,
+                    ]
+                ],
                 'success_url' => $currentUrl . '?stripe_success=1&session_id={CHECKOUT_SESSION_ID}',
-                'cancel_url'  => $currentUrl . '?stripe_cancel=1',
-                'metadata'    => [
+                'cancel_url' => $currentUrl . '?stripe_cancel=1',
+                'metadata' => [
                     'client_id' => $client->id,
-                    'plan_id'   => $plan->id,
-                    'flow'      => $flow,
+                    'plan_id' => $plan->id,
+                    'flow' => $flow,
                 ],
             ];
         } else {
             // No Stripe Price ID configured — create a one-off payment session with inline price
             $currencyCode = strtolower($settings->currency_code ?: 'usd');
             $sessionParams = [
-                'customer'   => $customerId,
-                'mode'       => 'payment',
-                'line_items' => [[
-                    'price_data' => [
-                        'currency'    => $currencyCode,
-                        'unit_amount' => (int)($plan->price * 100),
-                        'product_data' => [
-                            'name'        => $plan->name,
-                            'description' => $plan->description ?: 'Subscription: ' . $plan->name,
+                'customer' => $customerId,
+                'mode' => 'payment',
+                'line_items' => [
+                    [
+                        'price_data' => [
+                            'currency' => $currencyCode,
+                            'unit_amount' => (int) ($plan->price * 100),
+                            'product_data' => [
+                                'name' => $plan->name,
+                                'description' => $plan->description ?: 'Subscription: ' . $plan->name,
+                            ],
                         ],
-                    ],
-                    'quantity' => 1,
-                ]],
+                        'quantity' => 1,
+                    ]
+                ],
                 'success_url' => $currentUrl . '?stripe_success=1&session_id={CHECKOUT_SESSION_ID}',
-                'cancel_url'  => $currentUrl . '?stripe_cancel=1',
-                'metadata'    => [
+                'cancel_url' => $currentUrl . '?stripe_cancel=1',
+                'metadata' => [
                     'client_id' => $client->id,
-                    'plan_id'   => $plan->id,
-                    'flow'      => $flow,
+                    'plan_id' => $plan->id,
+                    'flow' => $flow,
                 ],
             ];
         }
@@ -416,9 +420,9 @@ class Subscriptions extends ComponentBase
 
                 $subscription->save();
 
-                Flash::success('Payment successful! Your subscription to ' . $subscription->plan_name . ' is now active.');
+                Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.payment_successful', ['name' => $subscription->plan_name]));
             } else {
-                Flash::warning('Payment is still processing. Your subscription will activate once payment is confirmed.');
+                Flash::warning(trans('thewebsiteguy.nexuscrm::lang.messages.payment_processing'));
             }
         } catch (\Exception $e) {
             Log::error('Stripe return handling failed: ' . $e->getMessage());
@@ -440,12 +444,12 @@ class Subscriptions extends ComponentBase
     {
         $user = Auth::getUser();
         if (!$user) {
-            throw new ApplicationException('You must be logged in.');
+            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.must_be_logged_in'));
         }
 
         $client = Client::where('user_id', $user->id)->first();
         if (!$client) {
-            throw new ApplicationException('No client profile found.');
+            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
         }
 
         $subscriptionId = post('subscription_id');
@@ -478,42 +482,46 @@ class Subscriptions extends ComponentBase
             // Build a fresh Stripe Checkout Session
             if (!empty($plan->stripe_price_id)) {
                 $sessionParams = [
-                    'customer'   => $customerId,
-                    'mode'       => 'subscription',
-                    'line_items' => [[
-                        'price'    => $plan->stripe_price_id,
-                        'quantity' => 1,
-                    ]],
+                    'customer' => $customerId,
+                    'mode' => 'subscription',
+                    'line_items' => [
+                        [
+                            'price' => $plan->stripe_price_id,
+                            'quantity' => 1,
+                        ]
+                    ],
                     'success_url' => $currentUrl . '?stripe_success=1&session_id={CHECKOUT_SESSION_ID}',
-                    'cancel_url'  => $currentUrl . '?stripe_cancel=1',
-                    'metadata'    => [
+                    'cancel_url' => $currentUrl . '?stripe_cancel=1',
+                    'metadata' => [
                         'client_id' => $client->id,
-                        'plan_id'   => $plan->id,
-                        'flow'      => 'subscribe',
+                        'plan_id' => $plan->id,
+                        'flow' => 'subscribe',
                     ],
                 ];
             } else {
                 $currencyCode = strtolower($settings->currency_code ?: 'usd');
                 $sessionParams = [
-                    'customer'   => $customerId,
-                    'mode'       => 'payment',
-                    'line_items' => [[
-                        'price_data' => [
-                            'currency'    => $currencyCode,
-                            'unit_amount' => (int)($plan->price * 100),
-                            'product_data' => [
-                                'name'        => $plan->name,
-                                'description' => $plan->description ?: 'Subscription: ' . $plan->name,
+                    'customer' => $customerId,
+                    'mode' => 'payment',
+                    'line_items' => [
+                        [
+                            'price_data' => [
+                                'currency' => $currencyCode,
+                                'unit_amount' => (int) ($plan->price * 100),
+                                'product_data' => [
+                                    'name' => $plan->name,
+                                    'description' => $plan->description ?: 'Subscription: ' . $plan->name,
+                                ],
                             ],
-                        ],
-                        'quantity' => 1,
-                    ]],
+                            'quantity' => 1,
+                        ]
+                    ],
                     'success_url' => $currentUrl . '?stripe_success=1&session_id={CHECKOUT_SESSION_ID}',
-                    'cancel_url'  => $currentUrl . '?stripe_cancel=1',
-                    'metadata'    => [
+                    'cancel_url' => $currentUrl . '?stripe_cancel=1',
+                    'metadata' => [
                         'client_id' => $client->id,
-                        'plan_id'   => $plan->id,
-                        'flow'      => 'subscribe',
+                        'plan_id' => $plan->id,
+                        'flow' => 'subscribe',
                     ],
                 ];
             }
@@ -559,12 +567,12 @@ class Subscriptions extends ComponentBase
     {
         $user = Auth::getUser();
         if (!$user) {
-            throw new ApplicationException('You must be logged in.');
+            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.must_be_logged_in'));
         }
 
         $client = Client::where('user_id', $user->id)->first();
         if (!$client) {
-            throw new ApplicationException('No client profile found.');
+            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
         }
 
         $subscriptionId = post('subscription_id');
@@ -607,13 +615,13 @@ class Subscriptions extends ComponentBase
         $subscription->status = 'canceled';
         $subscription->save();
 
-        Flash::success('Subscription canceled successfully.');
+        Flash::success(e(trans('thewebsiteguy.nexuscrm::lang.messages.subscription_cancelled')));
 
         $this->prepareVars();
 
         return [
             '#subscriptions-active' => $this->renderPartial('@active'),
-            '#subscriptions-plans'  => $this->renderPartial('@plans'),
+            '#subscriptions-plans' => $this->renderPartial('@plans'),
         ];
     }
 
@@ -631,12 +639,12 @@ class Subscriptions extends ComponentBase
     {
         $user = Auth::getUser();
         if (!$user) {
-            throw new ApplicationException('You must be logged in.');
+            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.must_be_logged_in'));
         }
 
         $client = Client::where('user_id', $user->id)->first();
         if (!$client) {
-            throw new ApplicationException('No client profile found.');
+            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
         }
 
         $subscriptionId = post('subscription_id');
@@ -656,7 +664,7 @@ class Subscriptions extends ComponentBase
                 $currentUrl = $this->getCurrentPageUrl();
 
                 $portalSession = $stripe->billingPortal->sessions->create([
-                    'customer'   => $customerId,
+                    'customer' => $customerId,
                     'return_url' => $currentUrl,
                 ]);
 
@@ -701,7 +709,7 @@ class Subscriptions extends ComponentBase
         $subscription->payment_method = $paymentMethod;
         $subscription->save();
 
-        Flash::success('Payment method updated successfully.');
+        Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.payment_method_updated'));
 
         $this->prepareVars();
 
@@ -718,12 +726,12 @@ class Subscriptions extends ComponentBase
     {
         $user = Auth::getUser();
         if (!$user) {
-            throw new ApplicationException('You must be logged in.');
+            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.must_be_logged_in'));
         }
 
         $client = Client::where('user_id', $user->id)->first();
         if (!$client) {
-            throw new ApplicationException('No client profile found.');
+            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
         }
 
         $subscriptionId = post('subscription_id');
@@ -746,10 +754,12 @@ class Subscriptions extends ComponentBase
                 $stripeSub = $stripe->subscriptions->retrieve($subscription->stripe_subscription_id);
 
                 $stripe->subscriptions->update($subscription->stripe_subscription_id, [
-                    'items' => [[
-                        'id'    => $stripeSub->items->data[0]->id,
-                        'price' => $newPlan->stripe_price_id,
-                    ]],
+                    'items' => [
+                        [
+                            'id' => $stripeSub->items->data[0]->id,
+                            'price' => $newPlan->stripe_price_id,
+                        ]
+                    ],
                     'proration_behavior' => 'create_prorations',
                 ]);
             } catch (\Exception $e) {
@@ -765,13 +775,13 @@ class Subscriptions extends ComponentBase
         $subscription->next_billing_date = $this->calculateNextBillingDate($newPlan->billing_cycle);
         $subscription->save();
 
-        Flash::success('Subscription plan changed to ' . $newPlan->name . '.');
+        Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.plan_changed', ['name' => $newPlan->name]));
 
         $this->prepareVars();
 
         return [
             '#subscriptions-active' => $this->renderPartial('@active'),
-            '#subscriptions-plans'  => $this->renderPartial('@plans'),
+            '#subscriptions-plans' => $this->renderPartial('@plans'),
         ];
     }
 
@@ -786,12 +796,12 @@ class Subscriptions extends ComponentBase
     {
         $user = Auth::getUser();
         if (!$user) {
-            throw new ApplicationException('You must be logged in.');
+            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.must_be_logged_in'));
         }
 
         $client = Client::where('user_id', $user->id)->first();
         if (!$client) {
-            throw new ApplicationException('No client profile found.');
+            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
         }
 
         if (empty($client->stripe_customer_id)) {
@@ -803,7 +813,7 @@ class Subscriptions extends ComponentBase
             $currentUrl = $this->getCurrentPageUrl();
 
             $portalSession = $stripe->billingPortal->sessions->create([
-                'customer'   => $client->stripe_customer_id,
+                'customer' => $client->stripe_customer_id,
                 'return_url' => $currentUrl,
             ]);
 
@@ -841,7 +851,7 @@ class Subscriptions extends ComponentBase
 
         return new \GoCardlessPro\Client([
             'access_token' => $accessToken,
-            'environment'  => $environment,
+            'environment' => $environment,
         ]);
     }
 
@@ -866,10 +876,10 @@ class Subscriptions extends ComponentBase
         try {
             $redirectFlow = $gc->redirectFlows()->create([
                 'params' => [
-                    'description'          => 'Subscription: ' . $plan->name,
-                    'session_token'        => $sessionToken,
+                    'description' => 'Subscription: ' . $plan->name,
+                    'session_token' => $sessionToken,
                     'success_redirect_url' => $currentUrl . '?gc_success=1&redirect_flow_id=placeholder',
-                    'scheme'               => null, // GoCardless will auto-detect based on customer's country
+                    'scheme' => null, // GoCardless will auto-detect based on customer's country
                 ],
             ]);
 
@@ -941,7 +951,7 @@ class Subscriptions extends ComponentBase
 
             $client = Client::where('user_id', $user->id)->first();
             if (!$client) {
-                Flash::error('No client profile found.');
+                Flash::error(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
                 return;
             }
 
@@ -975,7 +985,7 @@ class Subscriptions extends ComponentBase
                 $subscription->gocardless_redirect_flow_id = $redirectFlowId;
                 $subscription->save();
 
-                Flash::success('Direct debit set up successfully! Your payment method has been updated.');
+                Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.payment_method_updated'));
             } else {
                 // New subscription flow
                 $subscription = Subscription::where('gocardless_redirect_flow_id', $redirectFlowId)->first();
@@ -999,7 +1009,7 @@ class Subscriptions extends ComponentBase
                 $subscription->next_billing_date = $this->calculateNextBillingDate($subscription->billing_cycle);
                 $subscription->save();
 
-                Flash::success('Direct debit set up successfully! Your subscription to ' . $subscription->plan_name . ' is now active.');
+                Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.payment_successful', ['name' => $subscription->plan_name]));
             }
 
             // Clear session data
@@ -1026,17 +1036,17 @@ class Subscriptions extends ComponentBase
 
         // Convert billing cycle to GoCardless interval
         $intervalUnit = match ($subscription->billing_cycle) {
-            'monthly'   => 'monthly',
+            'monthly' => 'monthly',
             'quarterly' => 'monthly',
-            'annual'    => 'yearly',
-            default     => 'monthly',
+            'annual' => 'yearly',
+            default => 'monthly',
         };
 
         $interval = match ($subscription->billing_cycle) {
-            'monthly'   => 1,
+            'monthly' => 1,
             'quarterly' => 3,
-            'annual'    => 1,
-            default     => 1,
+            'annual' => 1,
+            default => 1,
         };
 
         // Amount in pence/cents (integer)
@@ -1044,17 +1054,17 @@ class Subscriptions extends ComponentBase
 
         return $gc->subscriptions()->create([
             'params' => [
-                'amount'        => $amountInMinorUnits,
-                'currency'      => $currencyCode,
-                'name'          => $subscription->plan_name,
+                'amount' => $amountInMinorUnits,
+                'currency' => $currencyCode,
+                'name' => $subscription->plan_name,
                 'interval_unit' => $intervalUnit,
-                'interval'      => $interval,
-                'links'         => [
+                'interval' => $interval,
+                'links' => [
                     'mandate' => $mandateId,
                 ],
-                'metadata'      => [
+                'metadata' => [
                     'subscription_id' => (string) $subscription->id,
-                    'plan_id'         => (string) $subscription->plan_id,
+                    'plan_id' => (string) $subscription->plan_id,
                 ],
             ],
         ]);
@@ -1087,9 +1097,9 @@ class Subscriptions extends ComponentBase
         try {
             $client = new \GuzzleHttp\Client();
             $response = $client->post($baseUrl . '/v1/oauth2/token', [
-                'auth'        => [$clientId, $secret],
+                'auth' => [$clientId, $secret],
                 'form_params' => ['grant_type' => 'client_credentials'],
-                'headers'     => ['Accept' => 'application/json'],
+                'headers' => ['Accept' => 'application/json'],
             ]);
 
             $data = json_decode($response->getBody()->getContents(), true);
@@ -1138,12 +1148,12 @@ class Subscriptions extends ComponentBase
                 $subscriptionPayload = [
                     'plan_id' => $plan->paypal_plan_id,
                     'application_context' => [
-                        'brand_name'          => config('app.name', 'NexusCRM'),
-                        'locale'              => 'en-GB',
+                        'brand_name' => config('app.name', 'NexusCRM'),
+                        'locale' => 'en-GB',
                         'shipping_preference' => 'NO_SHIPPING',
-                        'user_action'         => 'SUBSCRIBE_NOW',
-                        'return_url'          => $currentUrl . '?paypal_success=1&subscription_id={subscriptionId}',
-                        'cancel_url'          => $currentUrl . '?paypal_cancel=1',
+                        'user_action' => 'SUBSCRIBE_NOW',
+                        'return_url' => $currentUrl . '?paypal_success=1&subscription_id={subscriptionId}',
+                        'cancel_url' => $currentUrl . '?paypal_cancel=1',
                     ],
                 ];
 
@@ -1160,8 +1170,8 @@ class Subscriptions extends ComponentBase
                 $response = $httpClient->post($baseUrl . '/v1/billing/subscriptions', [
                     'headers' => [
                         'Authorization' => 'Bearer ' . $accessToken,
-                        'Content-Type'  => 'application/json',
-                        'Accept'        => 'application/json',
+                        'Content-Type' => 'application/json',
+                        'Accept' => 'application/json',
                     ],
                     'json' => $subscriptionPayload,
                 ]);
@@ -1187,27 +1197,29 @@ class Subscriptions extends ComponentBase
 
                 $orderPayload = [
                     'intent' => 'CAPTURE',
-                    'purchase_units' => [[
-                        'amount' => [
-                            'currency_code' => $currencyCode,
-                            'value'         => number_format($plan->price, 2, '.', ''),
-                        ],
-                        'description' => 'Subscription: ' . $plan->name,
-                    ]],
+                    'purchase_units' => [
+                        [
+                            'amount' => [
+                                'currency_code' => $currencyCode,
+                                'value' => number_format($plan->price, 2, '.', ''),
+                            ],
+                            'description' => 'Subscription: ' . $plan->name,
+                        ]
+                    ],
                     'application_context' => [
-                        'brand_name'          => config('app.name', 'NexusCRM'),
+                        'brand_name' => config('app.name', 'NexusCRM'),
                         'shipping_preference' => 'NO_SHIPPING',
-                        'user_action'         => 'PAY_NOW',
-                        'return_url'          => $currentUrl . '?paypal_success=1&order=1',
-                        'cancel_url'          => $currentUrl . '?paypal_cancel=1',
+                        'user_action' => 'PAY_NOW',
+                        'return_url' => $currentUrl . '?paypal_success=1&order=1',
+                        'cancel_url' => $currentUrl . '?paypal_cancel=1',
                     ],
                 ];
 
                 $response = $httpClient->post($baseUrl . '/v2/checkout/orders', [
                     'headers' => [
                         'Authorization' => 'Bearer ' . $accessToken,
-                        'Content-Type'  => 'application/json',
-                        'Accept'        => 'application/json',
+                        'Content-Type' => 'application/json',
+                        'Accept' => 'application/json',
                     ],
                     'json' => $orderPayload,
                 ]);
@@ -1278,7 +1290,7 @@ class Subscriptions extends ComponentBase
 
             $client = Client::where('user_id', $user->id)->first();
             if (!$client) {
-                Flash::error('No client profile found.');
+                Flash::error(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
                 return;
             }
 
@@ -1295,7 +1307,7 @@ class Subscriptions extends ComponentBase
                 $response = $httpClient->get($baseUrl . '/v1/billing/subscriptions/' . $subscriptionId, [
                     'headers' => [
                         'Authorization' => 'Bearer ' . $accessToken,
-                        'Accept'        => 'application/json',
+                        'Accept' => 'application/json',
                     ],
                 ]);
 
@@ -1308,8 +1320,8 @@ class Subscriptions extends ComponentBase
                 $response = $httpClient->post($baseUrl . '/v2/checkout/orders/' . $subscriptionId . '/capture', [
                     'headers' => [
                         'Authorization' => 'Bearer ' . $accessToken,
-                        'Content-Type'  => 'application/json',
-                        'Accept'        => 'application/json',
+                        'Content-Type' => 'application/json',
+                        'Accept' => 'application/json',
                     ],
                 ]);
 
@@ -1330,9 +1342,9 @@ class Subscriptions extends ComponentBase
                     $subscription->paypal_subscription_id = $subscriptionId;
                     $subscription->save();
 
-                    Flash::success('PayPal payment set up successfully! Your payment method has been updated.');
+                    Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.payment_method_updated'));
                 } else {
-                    Flash::warning('PayPal payment is still being processed. Your subscription will update once confirmed.');
+                    Flash::warning(trans('thewebsiteguy.nexuscrm::lang.messages.payment_processing'));
                 }
             } else {
                 // New subscription flow
@@ -1354,9 +1366,9 @@ class Subscriptions extends ComponentBase
                     $subscription->next_billing_date = $this->calculateNextBillingDate($subscription->billing_cycle);
                     $subscription->save();
 
-                    Flash::success('PayPal payment successful! Your subscription to ' . $subscription->plan_name . ' is now active.');
+                    Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.payment_successful', ['name' => $subscription->plan_name]));
                 } else {
-                    Flash::warning('PayPal payment is still processing. Your subscription will activate once payment is confirmed.');
+                    Flash::warning(trans('thewebsiteguy.nexuscrm::lang.messages.payment_processing'));
                 }
             }
 
@@ -1381,8 +1393,8 @@ class Subscriptions extends ComponentBase
         $httpClient->post($baseUrl . '/v1/billing/subscriptions/' . $ppSubscriptionId . '/cancel', [
             'headers' => [
                 'Authorization' => 'Bearer ' . $accessToken,
-                'Content-Type'  => 'application/json',
-                'Accept'        => 'application/json',
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
             ],
             'json' => [
                 'reason' => 'Customer requested cancellation',
@@ -1400,9 +1412,9 @@ class Subscriptions extends ComponentBase
     protected function validatePaymentMethod(string $method, Settings $settings): void
     {
         $allowed = [
-            'card'         => $settings->stripe_enabled,
+            'card' => $settings->stripe_enabled,
             'direct_debit' => $settings->gocardless_enabled,
-            'paypal'       => $settings->paypal_enabled,
+            'paypal' => $settings->paypal_enabled,
         ];
 
         if (!isset($allowed[$method]) || !$allowed[$method]) {
@@ -1418,10 +1430,10 @@ class Subscriptions extends ComponentBase
         $now = now();
 
         return match ($cycle) {
-            'monthly'   => $now->addMonth(),
+            'monthly' => $now->addMonth(),
             'quarterly' => $now->addMonths(3),
-            'annual'    => $now->addYear(),
-            default     => $now->addMonth(),
+            'annual' => $now->addYear(),
+            default => $now->addMonth(),
         };
     }
 }

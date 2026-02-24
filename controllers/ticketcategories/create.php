@@ -9,6 +9,8 @@
 
 <?php if (!$this->fatalError): ?>
 
+    <?= $this->makePartial('$/thewebsiteguy/nexuscrm/controllers/tickets/_submenu.php') ?>
+
     <?= Form::open(['class' => 'layout']) ?>
 
     <div class="layout-row">

@@ -1,82 +1,116 @@
 # Nexus CRM Plugin
 
-A comprehensive Customer Relationship Management (CRM) plugin for Winter CMS, designed to streamline client management, project tracking, invoicing, support tickets, and subscription handling directly within your CMS backend and frontend.
+A powerful, comprehensive Customer Relationship Management (CRM) and Billing system for Winter CMS. Streamline your client management, project tracking, invoicing, support tickets, and recurring subscriptions directly within your CMS.
 
-## Features
+> [!WARNING]
+> **Work In Progress**: This plugin is currently in early development. Features, database structures, and components are subject to significant changes without prior notice. Use in production at your own risk.
 
-*   **Client Management**: Keep track of client details and associate them with users.
-*   **Projects & Tasks**: Create projects for clients, assign staff, and track tasks using a Kanban board.
-*   **Invoicing**: Generate professional PDF invoices for clients.
-    *   Automatic PDF generation using DomPDF.
-    *   Support for invoice items, tax calculation, and currency settings.
-*   **Support Tickets**: Integrated ticket system for client support requests. Features categories and status tracking.
-*   **Subscriptions**: Manage recurring billing plans and subscriptions for clients.
-    *   Tracks active subscriptions, payment methods, and plans.
-*   **Staff Management**: Manage internal staff members and their roles.
-*   **Payment Gateway Integration**: Built-in webhook controllers for major payment gateways:
-    *   Stripe
-    *   PayPal
-    *   GoCardless
-*   **Frontend Components**: Ready-to-use components for client portals:
-    *   `clientInvoices`: Display a list of invoices and details.
-    *   `clientProjects`: Show project lists and details.
-    *   `clientTickets`: Allow clients to view and create support tickets.
-    *   `subscriptions`: Manage subscription plans and active subscriptions.
+## Key Features
+
+*   **👥 Client Management**: Centralised tracking of client details, associated user profiles, and activity.
+*   **🏗️ Projects & Tasks**: Robust project management with assignable tasks, staff roles, and Kanban-style management.
+*   **🧾 Professional Invoicing**:
+    *   Automatic PDF generation via DomPDF.
+    *   Curated tax calculations and customisable currency symbols.
+    *   Managed invoice status (Outstanding, Paid, etc.).
+*   **🎫 Support Tickets**: Integrated client-facing ticket system with categories, priority levels, and status tracking.
+*   **🔄 Subscriptions & Billing**: 
+    *   Recurring billing management for various plans.
+    *   Support for multiple payment gateways (Stripe, PayPal, GoCardless).
+    *   Managed billing cycles and payment methods.
+*   **🛠️ Staff Management**: Manage internal team members, job titles, and departments.
+*   **🎨 Dynamic Theming**: Built-in CSS variables for brand-specific dashboard customisation.
+*   **🇬🇧 UK English Localisation**: Full support for UK English conventions (e.g., "Cancelled", "Synchronise").
 
 ## Requirements
 
-*   Winter CMS (or October CMS)
+*   Winter CMS 1.1.x or higher
 *   Winter.User Plugin
-*   PHP `dompdf` extension (usually handled via composer)
+*   Winter.UserPlus Plugin
+*   Winter.Location Plugin
+*   GoCardless Plugin
+*   Stripe Plugin
+*   PayPal Plugin
+*   PHP `dompdf` extension (managed via Composer)
 
 ## Installation
 
 1.  Clone this repository into `plugins/thewebsiteguy/nexuscrm`.
-2.  Run `php artisan plugin:refresh TheWebsiteGuy.NexusCRM` to migrate the database tables.
+2.  Install dependencies:
+    ```bash
+    composer require barryvdh/laravel-dompdf
+    ```
+3.  Execute migrations:
+    ```bash
+    php artisan winter:up
+    ```
+
+## Frontend Components
+
+This plugin provides several components to build a fully functional client portal:
+
+### 🎫 tickets
+Allows clients to view, create, and manage their support tickets.
+```ini
+[tickets]
+ticketsPerPage = 10
+allowCreate = 1
+allowClose = 1
+```
+
+### 🏗️ projects
+Displays projects assigned to the client, including tasks, tickets, and invoices.
+```ini
+[projects]
+projectsPerPage = 10
+showTasks = 1
+```
+
+### 📑 invoices
+Provides a list of sent invoices with PDF download capability.
+```ini
+[invoices]
+invoicesPerPage = 10
+```
+
+### 🔄 subscriptions
+Comprehensive subscription management including plan switching and payment method updates.
+```ini
+[subscriptions]
+showPlans = 1
+showPaymentMethods = 1
+```
+
+### 👤 account
+Allows users to manage their profile details and contact information.
+```ini
+[account]
+```
 
 ## Configuration
 
-To configure the plugin settings, go to **Settings > CRM > Nexus CRM** in the backend.
-*   **Currency Symbol**: Set the currency symbol for invoices (default: $).
-*   **Invoice Settings**: Configure invoice templates and details.
+Navigate to **Settings > CRM > Nexus CRM Settings** to configure:
+*   **Currency Settings**: Custom symbols and codes (e.g., £ GBP).
+*   **Brand Styling**: Primary and secondary colours for the client portal.
+*   **Invoicing**: Set your company details and invoice prefixes.
+*   **Payment Gateways**: API credentials for Stripe, PayPal, and GoCardless.
 
-## Components
+## Localisation
 
-This plugin provides several components to build a client portal on the frontend:
-
-### Client Invoices
-Displays a list of invoices for the logged-in user.
-```ini
-[clientInvoices]
-perPage = 10
-```
-
-### Client Projects
-Displays projects associated with the client.
-```ini
-[clientProjects]
-perPage = 10
-```
-
-### Client Tickets
-A system for clients to open and track support tickets.
-```ini
-[clientTickets]
-perPage = 10
-```
-
-### Subscriptions
-Manages user subscriptions and plans.
+The plugin is fully internationalised. To change the language, set your Winter CMS locale. UK English is supported out-of-the-box via the `en-gb` locale.
 
 ## Permissions
 
-The plugin registers several permissions for backend access:
-*   Manage Clients
-*   Manage Projects
-*   Manage Invoices
-*   Manage Tickets
-*   Manage Settings
+Registers granular permissions for:
+*   `access_clients` - Manage client database.
+*   `access_projects` - Manage projects and tasks.
+*   `access_tickets` - Manage support desk.
+*   `access_invoices` - Generate and manage billing.
+*   `access_settings` - System-wide configuration.
 
 ## Support
 
-For issues and feature requests, please contact TheWebsiteGuy.
+For technical support or feature requests, please contact [TheWebsiteGuy](mailto:support@thewebsiteguy.com).
+
+---
+*Built with ❤️ for the Winter CMS Community.*

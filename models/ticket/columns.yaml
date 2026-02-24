@@ -24,8 +24,15 @@ columns:
         relation: category
         select: name
         searchable: true
-    status:
+    status_relation:
         label: Status
+        relation: status_relation
+        select: name
+        searchable: true
+    ticket_type:
+        label: Type
+        relation: ticket_type
+        select: name
         searchable: true
     priority:
         label: Priority

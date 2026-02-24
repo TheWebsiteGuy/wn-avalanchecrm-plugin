@@ -1,0 +1,32 @@
+# ===================================
+#  List Behavior Config
+# ===================================
+
+# Model List Configuration
+list: $/thewebsiteguy/nexuscrm/models/ticketstatus/columns.yaml
+
+# Model Class name
+modelClass: TheWebsiteGuy\NexusCRM\Models\TicketStatus
+
+# List Title
+title: Manage Ticket Statuses
+
+# Link URL for each record
+recordUrl: thewebsiteguy/nexuscrm/ticketstatuses/update/:id
+
+# Message to display if the list is empty
+noRecordsMessage: No ticket statuses found.
+
+# Records to display per page
+recordsPerPage: 20
+
+# Display checkboxes next to each record
+showCheckboxes: true
+
+# Toolbar widget configuration
+toolbar:
+  # Partial for toolbar buttons
+  buttons: list_toolbar
+  # Search widget configuration
+  search:
+    prompt: backend::lang.list.search_prompt

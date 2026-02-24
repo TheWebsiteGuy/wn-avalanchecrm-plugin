@@ -2,8 +2,6 @@
     <div class="toolbar-item toolbar-primary">
         <a href="<?= Backend::url('thewebsiteguy/nexuscrm/tickets/create') ?>" class="btn btn-primary oc-icon-plus">New
             Ticket</a>
-        <a href="<?= Backend::url('thewebsiteguy/nexuscrm/ticketcategories') ?>"
-            class="btn btn-default oc-icon-tags">Manage Categories</a>
     </div>
     <div class="toolbar-item">
         <button class="btn btn-default oc-icon-trash-o" disabled="disabled"

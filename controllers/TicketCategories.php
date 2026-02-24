@@ -32,6 +32,6 @@ class TicketCategories extends Controller
     {
         parent::__construct();
 
-        BackendMenu::setContext('TheWebsiteGuy.NexusCRM', 'nexuscrm', 'ticketcategories');
+        BackendMenu::setContext('TheWebsiteGuy.NexusCRM', 'nexuscrm', 'tickets');
     }
 }

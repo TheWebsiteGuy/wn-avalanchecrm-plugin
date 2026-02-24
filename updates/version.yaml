@@ -74,4 +74,9 @@
 0.2.5:
     - "Separate invoice statuses: internal workflow stage (draft/sent) and client-facing payment status (outstanding/due/overdue/cancelled/paid)"
     - v0.2.5/add_internal_status_to_invoices.php
-
+0.2.6:
+    - "Create Ticket Statuses and Ticket Types tables"
+    - v0.2.6/create_ticket_statuses_and_types.php
+0.2.7:
+    - "Seed default ticket statuses"
+    - v0.2.6/seed_ticket_defaults.php

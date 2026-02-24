@@ -22,16 +22,23 @@ fields:
         type: relation
         span: left
         nameFrom: name
-    status:
+    ticket_type:
+        label: Ticket Type
+        type: relation
+        span: right
+        nameFrom: name
+        comment: Select the type of ticket to see additional fields.
+
+    custom_fields_section:
+        label: Custom Fields
+        type: section
+        dependsOn: ticket_type
+        span: full
+    status_relation:
         label: Status
-        type: dropdown
+        type: relation
         span: left
-        options:
-            open: Open
-            in_progress: In Progress
-            resolved: Resolved
-            closed: Closed
-        default: open
+        nameFrom: name
     priority:
         label: Priority
         type: dropdown
