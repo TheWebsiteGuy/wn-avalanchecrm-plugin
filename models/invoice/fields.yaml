@@ -29,16 +29,18 @@ fields:
         type: relation
         span: right
         nameFrom: name
-    status:
-        label: Status
+    internal_status:
+        label: Workflow Stage
         type: dropdown
         span: left
-        options:
-            draft: Draft
-            sent: Sent
-            paid: Paid
-            cancelled: Cancelled
         default: draft
+        comment: Internal workflow stage — clients only see invoices marked as Sent.
+    status:
+        label: Payment Status
+        type: dropdown
+        span: right
+        default: outstanding
+        comment: Client-facing payment status.
     issue_date:
         label: Issue Date
         type: datepicker

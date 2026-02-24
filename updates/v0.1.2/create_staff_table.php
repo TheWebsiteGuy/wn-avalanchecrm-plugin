@@ -8,15 +8,17 @@ use Winter\User\Models\UserGroup;
 return new class extends Migration {
     public function up()
     {
-        Schema::create('thewebsiteguy_nexuscrm_staff', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id')->unsigned()->nullable()->index();
-            $table->string('name');
-            $table->string('email')->index();
-            $table->string('phone')->nullable();
-            $table->string('job_title')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('thewebsiteguy_nexuscrm_staff')) {
+            Schema::create('thewebsiteguy_nexuscrm_staff', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('user_id')->unsigned()->nullable()->index();
+                $table->string('name');
+                $table->string('email')->index();
+                $table->string('phone')->nullable();
+                $table->string('job_title')->nullable();
+                $table->timestamps();
+            });
+        }
 
         if (class_exists(UserGroup::class)) {
             if (!UserGroup::where('code', 'staff')->exists()) {

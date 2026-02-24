@@ -6,10 +6,25 @@ use Winter\Storm\Database\Model;
 
 /**
  * Invoice Model
+ *
+ * Two separate status fields:
+ *  - internal_status : admin workflow stage (draft, sent)
+ *  - status          : client-facing payment status (outstanding, due, overdue, cancelled, paid)
  */
 class Invoice extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
+
+    // ── Internal (admin) status constants ─────────────────────
+    const INTERNAL_DRAFT = 'draft';
+    const INTERNAL_SENT  = 'sent';
+
+    // ── Client-facing payment status constants ────────────────
+    const STATUS_OUTSTANDING = 'outstanding';
+    const STATUS_DUE         = 'due';
+    const STATUS_OVERDUE     = 'overdue';
+    const STATUS_CANCELLED   = 'cancelled';
+    const STATUS_PAID        = 'paid';
 
     /**
      * @var string The database table used by the model.
@@ -123,5 +138,54 @@ class Invoice extends Model
         $settings->save();
 
         return $number;
+    }
+
+    // ────────────────────────────────────────────────────────────
+    //  Dropdown Options
+    // ────────────────────────────────────────────────────────────
+
+    /**
+     * Options for the internal_status dropdown (backend form).
+     */
+    public function getInternalStatusOptions(): array
+    {
+        return [
+            self::INTERNAL_DRAFT => 'Draft',
+            self::INTERNAL_SENT  => 'Sent',
+        ];
+    }
+
+    /**
+     * Options for the client-facing status dropdown (backend form).
+     */
+    public function getStatusOptions(): array
+    {
+        return [
+            self::STATUS_OUTSTANDING => 'Outstanding',
+            self::STATUS_DUE         => 'Due',
+            self::STATUS_OVERDUE     => 'Overdue',
+            self::STATUS_CANCELLED   => 'Cancelled',
+            self::STATUS_PAID        => 'Paid',
+        ];
+    }
+
+    // ────────────────────────────────────────────────────────────
+    //  Scopes
+    // ────────────────────────────────────────────────────────────
+
+    /**
+     * Scope to only include invoices visible to clients (sent, not draft).
+     */
+    public function scopeClientVisible($query)
+    {
+        return $query->where('internal_status', self::INTERNAL_SENT);
+    }
+
+    /**
+     * Scope to only include draft invoices.
+     */
+    public function scopeDraft($query)
+    {
+        return $query->where('internal_status', self::INTERNAL_DRAFT);
     }
 }

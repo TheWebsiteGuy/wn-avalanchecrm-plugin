@@ -12,6 +12,10 @@ return new class extends Migration {
      */
     public function up()
     {
+        if (Schema::hasColumn('thewebsiteguy_nexuscrm_subscriptions', 'payment_method')) {
+            return;
+        }
+
         Schema::table('thewebsiteguy_nexuscrm_subscriptions', function (Blueprint $table) {
             $table->string('payment_method')->nullable()->after('provider');
             $table->decimal('amount', 10, 2)->nullable()->after('payment_method');

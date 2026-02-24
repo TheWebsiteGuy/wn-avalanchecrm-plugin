@@ -8,12 +8,15 @@ return new class extends Migration {
     public function up()
     {
         // Add timer state columns to tasks
-        Schema::table('thewebsiteguy_nexuscrm_tasks', function (Blueprint $table) {
-            $table->boolean('timer_running')->default(false)->after('is_invoiced');
-            $table->timestamp('timer_started_at')->nullable()->after('timer_running');
-        });
+        if (!Schema::hasColumn('thewebsiteguy_nexuscrm_tasks', 'timer_running')) {
+            Schema::table('thewebsiteguy_nexuscrm_tasks', function (Blueprint $table) {
+                $table->boolean('timer_running')->default(false)->after('is_invoiced');
+                $table->timestamp('timer_started_at')->nullable()->after('timer_running');
+            });
+        }
 
         // Create time entries table for start/stop log
+        if (!Schema::hasTable('thewebsiteguy_nexuscrm_time_entries')) {
         Schema::create('thewebsiteguy_nexuscrm_time_entries', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('task_id')->unsigned();
@@ -27,6 +30,7 @@ return new class extends Migration {
             $table->index('task_id');
             $table->index('user_id');
         });
+        }
     }
 
     public function down()

@@ -12,6 +12,10 @@ return new class extends Migration {
      */
     public function up()
     {
+        if (Schema::hasTable('thewebsiteguy_nexuscrm_tasks')) {
+            return;
+        }
+
         Schema::create('thewebsiteguy_nexuscrm_tasks', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('project_id')->unsigned()->nullable();

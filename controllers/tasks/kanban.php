@@ -101,6 +101,73 @@
         background: #c8ebfb;
     }
 
+    .kanban-task--timing {
+        border-left: 3px solid #27ae60;
+    }
+
+    .task-time-badge {
+        font-size: 11px;
+        color: #888;
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+    }
+
+    .task-time-badge--running {
+        color: #27ae60;
+        font-weight: 600;
+        animation: timerPulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes timerPulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    .task-card-actions {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 6px;
+    }
+
+    .task-timer-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        font-size: 11px;
+        text-decoration: none;
+        opacity: 0.6;
+        transition: opacity 0.2s;
+    }
+
+    .task-timer-toggle:hover {
+        opacity: 1;
+        text-decoration: none;
+    }
+
+    .task-timer-toggle--start {
+        color: #27ae60;
+    }
+
+    .task-timer-toggle--start:hover {
+        color: #27ae60;
+        background: rgba(39, 174, 96, 0.1);
+    }
+
+    .task-timer-toggle--stop {
+        color: #e74c3c;
+        opacity: 1;
+    }
+
+    .task-timer-toggle--stop:hover {
+        color: #e74c3c;
+        background: rgba(231, 76, 60, 0.1);
+    }
+
     .task-priority.priority-low {
         border-left-color: #5bc0de;
     }

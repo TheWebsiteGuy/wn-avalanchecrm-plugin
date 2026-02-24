@@ -9,14 +9,18 @@ return new class extends Migration {
     public function up()
     {
         // 1. Rename column in projects_staff
-        Schema::table('thewebsiteguy_nexuscrm_projects_staff', function (Blueprint $table) {
-            $table->renameColumn('user_id', 'staff_id');
-        });
+        if (Schema::hasColumn('thewebsiteguy_nexuscrm_projects_staff', 'user_id')) {
+            Schema::table('thewebsiteguy_nexuscrm_projects_staff', function (Blueprint $table) {
+                $table->renameColumn('user_id', 'staff_id');
+            });
+        }
 
         // 2. Rename column in tickets_staff
-        Schema::table('thewebsiteguy_nexuscrm_tickets_staff', function (Blueprint $table) {
-            $table->renameColumn('user_id', 'staff_id');
-        });
+        if (Schema::hasColumn('thewebsiteguy_nexuscrm_tickets_staff', 'user_id')) {
+            Schema::table('thewebsiteguy_nexuscrm_tickets_staff', function (Blueprint $table) {
+                $table->renameColumn('user_id', 'staff_id');
+            });
+        }
 
         // 3. Migrate data: replace User IDs with Staff IDs
         // This is tricky if data exists. Let's try to map them.

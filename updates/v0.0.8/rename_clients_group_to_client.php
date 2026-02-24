@@ -10,6 +10,11 @@ return new class extends Migration {
             return;
         }
 
+        // Skip if already renamed or target already exists
+        if (UserGroup::where('code', 'client')->exists()) {
+            return;
+        }
+
         $group = UserGroup::where('code', 'clients')->first();
         if ($group) {
             $group->code = 'client';

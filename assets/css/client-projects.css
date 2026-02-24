@@ -20,27 +20,27 @@
 }
 
 .client-projects-alert--warning {
-    background-color: #fff8e1;
-    border: 1px solid #ffe082;
-    color: #8d6e00;
+    background-color: var(--crm-warning-light, #fff8e1);
+    border: 1px solid var(--crm-warning-border, #ffe082);
+    color: var(--crm-warning-text, #8d6e00);
 }
 
 .client-projects-alert--success {
-    background-color: #e8f5e9;
-    border: 1px solid #a5d6a7;
-    color: #2e7d32;
+    background-color: var(--crm-success-light, #e8f5e9);
+    border: 1px solid var(--crm-success-border, #a5d6a7);
+    color: var(--crm-success-text, #2e7d32);
 }
 
 .client-projects-alert--error {
-    background-color: #fbe9e7;
-    border: 1px solid #ef9a9a;
-    color: #c62828;
+    background-color: var(--crm-danger-light, #fbe9e7);
+    border: 1px solid var(--crm-danger-border, #ef9a9a);
+    color: var(--crm-danger-text, #c62828);
 }
 
 .client-projects-alert--info {
-    background-color: #e3f2fd;
-    border: 1px solid #90caf9;
-    color: #1565c0;
+    background-color: var(--crm-info-light, #e3f2fd);
+    border: 1px solid var(--crm-info-border, #90caf9);
+    color: var(--crm-info-text, #1565c0);
 }
 
 /* Heading & Filters
@@ -86,8 +86,8 @@
 
 .client-projects-select:focus {
     outline: none;
-    border-color: #4a6cf7;
-    box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
+    border-color: var(--crm-primary, #4a6cf7);
+    box-shadow: 0 0 0 3px var(--crm-primary-ring, rgba(74, 108, 247, 0.1));
 }
 
 /* Project Cards Grid
@@ -190,23 +190,23 @@
 }
 
 .client-projects-status--pending {
-    background-color: #fff3e0;
-    color: #e65100;
+    background-color: var(--crm-warning-light, #fff3e0);
+    color: var(--crm-warning-text, #e65100);
 }
 
 .client-projects-status--in_progress {
-    background-color: #e3f2fd;
-    color: #1565c0;
+    background-color: var(--crm-info-light, #e3f2fd);
+    color: var(--crm-info-text, #1565c0);
 }
 
 .client-projects-status--on_hold {
-    background-color: #fce4ec;
-    color: #ad1457;
+    background-color: var(--crm-danger-light, #fce4ec);
+    color: var(--crm-danger-text, #ad1457);
 }
 
 .client-projects-status--completed {
-    background-color: #e8f5e9;
-    color: #2e7d32;
+    background-color: var(--crm-success-light, #e8f5e9);
+    color: var(--crm-success-text, #2e7d32);
 }
 
 .client-projects-status--cancelled {
@@ -233,22 +233,22 @@
 }
 
 .client-projects-btn--primary {
-    background-color: #4a6cf7;
+    background-color: var(--crm-primary, #4a6cf7);
     color: #fff;
 }
 
 .client-projects-btn--primary:hover {
-    background-color: #3a56d4;
+    background-color: var(--crm-primary-hover, #3a56d4);
 }
 
 .client-projects-btn--outline {
     background-color: transparent;
-    color: #4a6cf7;
-    border: 1px solid #4a6cf7;
+    color: var(--crm-primary, #4a6cf7);
+    border: 1px solid var(--crm-primary, #4a6cf7);
 }
 
 .client-projects-btn--outline:hover {
-    background-color: #4a6cf7;
+    background-color: var(--crm-primary, #4a6cf7);
     color: #fff;
 }
 
@@ -343,7 +343,7 @@
 
 .client-projects-progress-bar {
     height: 100%;
-    background: linear-gradient(90deg, #4a6cf7, #45b649);
+    background: linear-gradient(90deg, var(--crm-primary, #4a6cf7), var(--crm-success, #45b649));
     border-radius: 12px;
     transition: width 0.4s ease;
     min-width: 0;
@@ -427,24 +427,24 @@
 
 .client-projects-badge--in_progress,
 .client-projects-badge--in-progress {
-    background-color: #e3f2fd;
-    color: #1565c0;
+    background-color: var(--crm-info-light, #e3f2fd);
+    color: var(--crm-info-text, #1565c0);
 }
 
 .client-projects-badge--review {
-    background-color: #fff3e0;
-    color: #e65100;
+    background-color: var(--crm-warning-light, #fff3e0);
+    color: var(--crm-warning-text, #e65100);
 }
 
 .client-projects-badge--done,
 .client-projects-badge--completed {
-    background-color: #e8f5e9;
-    color: #2e7d32;
+    background-color: var(--crm-success-light, #e8f5e9);
+    color: var(--crm-success-text, #2e7d32);
 }
 
 .client-projects-badge--open {
-    background-color: #e3f2fd;
-    color: #1565c0;
+    background-color: var(--crm-info-light, #e3f2fd);
+    color: var(--crm-info-text, #1565c0);
 }
 
 .client-projects-badge--closed {
@@ -453,18 +453,28 @@
 }
 
 .client-projects-badge--pending {
-    background-color: #fff3e0;
-    color: #e65100;
+    background-color: var(--crm-warning-light, #fff3e0);
+    color: var(--crm-warning-text, #e65100);
+}
+
+.client-projects-badge--outstanding {
+    background-color: var(--crm-info-light, #e3f2fd);
+    color: var(--crm-info-text, #1565c0);
+}
+
+.client-projects-badge--due {
+    background-color: var(--crm-warning-light, #fff3e0);
+    color: var(--crm-warning-text, #e65100);
 }
 
 .client-projects-badge--paid {
-    background-color: #e8f5e9;
-    color: #2e7d32;
+    background-color: var(--crm-success-light, #e8f5e9);
+    color: var(--crm-success-text, #2e7d32);
 }
 
 .client-projects-badge--overdue {
-    background-color: #fbe9e7;
-    color: #c62828;
+    background-color: var(--crm-danger-light, #fbe9e7);
+    color: var(--crm-danger-text, #c62828);
 }
 
 .client-projects-badge--cancelled {
@@ -481,19 +491,19 @@
 }
 
 .client-projects-priority--low {
-    color: #4caf50;
+    color: var(--crm-success, #4caf50);
 }
 
 .client-projects-priority--medium {
-    color: #ff9800;
+    color: var(--crm-warning, #ff9800);
 }
 
 .client-projects-priority--high {
-    color: #f44336;
+    color: var(--crm-danger, #f44336);
 }
 
 .client-projects-priority--urgent {
-    color: #b71c1c;
+    color: var(--crm-danger-text, #b71c1c);
     font-weight: 700;
 }
 
@@ -639,8 +649,8 @@
 
 .client-projects-input:focus {
     outline: none;
-    border-color: #4a6cf7;
-    box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
+    border-color: var(--crm-primary, #4a6cf7);
+    box-shadow: 0 0 0 3px var(--crm-primary-ring, rgba(74, 108, 247, 0.1));
 }
 
 .client-projects-textarea {
@@ -658,8 +668,8 @@
 
 .client-projects-textarea:focus {
     outline: none;
-    border-color: #4a6cf7;
-    box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
+    border-color: var(--crm-primary, #4a6cf7);
+    box-shadow: 0 0 0 3px var(--crm-primary-ring, rgba(74, 108, 247, 0.1));
 }
 
 .client-projects-edit-actions {
@@ -745,8 +755,8 @@
 }
 
 .client-projects-richtext-content:focus {
-    border-color: #4a6cf7;
-    box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
+    border-color: var(--crm-primary, #4a6cf7);
+    box-shadow: 0 0 0 3px var(--crm-primary-ring, rgba(74, 108, 247, 0.1));
 }
 
 .client-projects-richtext-content p {
@@ -760,6 +770,6 @@
 }
 
 .client-projects-richtext-content a {
-    color: #4a6cf7;
+    color: var(--crm-primary, #4a6cf7);
     text-decoration: underline;
 }

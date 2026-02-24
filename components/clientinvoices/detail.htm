@@ -21,8 +21,8 @@
         <div class="client-invoices-detail-main">
             <div class="client-invoices-detail-card">
                 <div class="client-invoices-detail-header">
-                    <span class="client-invoices-badge client-invoices-badge--{{ activeInvoice.status|default('draft') }}">
-                        {{ activeInvoice.status|default('draft')|replace({'_': ' '})|title }}
+                    <span class="client-invoices-badge client-invoices-badge--{{ activeInvoice.status|default('outstanding') }}">
+                        {{ activeInvoice.status|default('outstanding')|replace({'_': ' '})|title }}
                     </span>
                     <h2 class="client-invoices-detail-title">
                         Invoice {{ activeInvoice.invoice_number|default('#' ~ activeInvoice.id) }}
@@ -89,8 +89,8 @@
             {# Status #}
             <div class="client-invoices-sidebar-section">
                 <h4 class="client-invoices-sidebar-label">Status</h4>
-                <span class="client-invoices-badge client-invoices-badge--{{ activeInvoice.status|default('draft') }}">
-                    {{ activeInvoice.status|default('draft')|replace({'_': ' '})|title }}
+                <span class="client-invoices-badge client-invoices-badge--{{ activeInvoice.status|default('outstanding') }}">
+                    {{ activeInvoice.status|default('outstanding')|replace({'_': ' '})|title }}
                 </span>
             </div>
 

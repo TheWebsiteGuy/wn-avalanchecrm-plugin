@@ -94,6 +94,8 @@ class ClientTickets extends ComponentBase
     {
         $this->addCss('/plugins/thewebsiteguy/nexuscrm/assets/css/client-tickets.css');
 
+        $this->page['themeStyles'] = \TheWebsiteGuy\NexusCRM\Classes\ThemeStyles::render();
+
         $this->prepareVars();
     }
 

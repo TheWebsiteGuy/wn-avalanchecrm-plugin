@@ -12,16 +12,20 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('thewebsiteguy_nexuscrm_ticket_categories', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('color')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('thewebsiteguy_nexuscrm_ticket_categories')) {
+            Schema::create('thewebsiteguy_nexuscrm_ticket_categories', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('name');
+                $table->string('color')->nullable();
+                $table->timestamps();
+            });
+        }
 
-        Schema::table('thewebsiteguy_nexuscrm_tickets', function (Blueprint $table) {
-            $table->integer('category_id')->unsigned()->nullable()->after('project_id');
-        });
+        if (!Schema::hasColumn('thewebsiteguy_nexuscrm_tickets', 'category_id')) {
+            Schema::table('thewebsiteguy_nexuscrm_tickets', function (Blueprint $table) {
+                $table->integer('category_id')->unsigned()->nullable()->after('project_id');
+            });
+        }
     }
 
     /**

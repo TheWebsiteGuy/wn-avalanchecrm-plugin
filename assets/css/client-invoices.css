@@ -21,27 +21,27 @@
 }
 
 .client-invoices-alert--warning {
-    background-color: #fffbeb;
-    border: 1px solid #fde68a;
-    color: #92400e;
+    background-color: var(--crm-warning-light, #fffbeb);
+    border: 1px solid var(--crm-warning-border, #fde68a);
+    color: var(--crm-warning-text, #92400e);
 }
 
 .client-invoices-alert--success {
-    background-color: #ecfdf5;
-    border: 1px solid #a7f3d0;
-    color: #065f46;
+    background-color: var(--crm-success-light, #ecfdf5);
+    border: 1px solid var(--crm-success-border, #a7f3d0);
+    color: var(--crm-success-text, #065f46);
 }
 
 .client-invoices-alert--error {
-    background-color: #fef2f2;
-    border: 1px solid #fecaca;
-    color: #991b1b;
+    background-color: var(--crm-danger-light, #fef2f2);
+    border: 1px solid var(--crm-danger-border, #fecaca);
+    color: var(--crm-danger-text, #991b1b);
 }
 
 .client-invoices-alert--info {
-    background-color: #eff6ff;
-    border: 1px solid #bfdbfe;
-    color: #1e40af;
+    background-color: var(--crm-info-light, #eff6ff);
+    border: 1px solid var(--crm-info-border, #bfdbfe);
+    color: var(--crm-info-text, #1e40af);
 }
 
 /* Toolbar (heading + filter)
@@ -87,8 +87,8 @@
 
 .client-invoices-select:focus {
     outline: none;
-    border-color: #4a6cf7;
-    box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.12);
+    border-color: var(--crm-primary, #4a6cf7);
+    box-shadow: 0 0 0 3px var(--crm-primary-ring, rgba(74, 108, 247, 0.12));
 }
 
 /* Buttons
@@ -110,14 +110,14 @@
 }
 
 .client-invoices-btn--primary {
-    background: #4a6cf7;
+    background: var(--crm-primary, #4a6cf7);
     color: #fff;
-    border-color: #4a6cf7;
+    border-color: var(--crm-primary, #4a6cf7);
 }
 
 .client-invoices-btn--primary:hover {
-    background: #3b5de7;
-    border-color: #3b5de7;
+    background: var(--crm-primary-hover, #3b5de7);
+    border-color: var(--crm-primary-hover, #3b5de7);
 }
 
 .client-invoices-btn--outline {
@@ -216,27 +216,45 @@
 }
 
 .client-invoices-badge--sent {
-    background-color: #eff6ff;
-    color: #2563eb;
-    border: 1px solid #bfdbfe;
+    background-color: var(--crm-info-light, #eff6ff);
+    color: var(--crm-info, #2563eb);
+    border: 1px solid var(--crm-info-border, #bfdbfe);
+}
+
+.client-invoices-badge--outstanding {
+    background-color: var(--crm-info-light, #eff6ff);
+    color: var(--crm-info, #2563eb);
+    border: 1px solid var(--crm-info-border, #bfdbfe);
+}
+
+.client-invoices-badge--due {
+    background-color: var(--crm-warning-light, #fffbeb);
+    color: var(--crm-warning, #d97706);
+    border: 1px solid var(--crm-warning-border, #fde68a);
+}
+
+.client-invoices-badge--overdue {
+    background-color: var(--crm-danger-light, #fef2f2);
+    color: var(--crm-danger, #dc2626);
+    border: 1px solid var(--crm-danger-border, #fecaca);
 }
 
 .client-invoices-badge--paid {
-    background-color: #ecfdf5;
-    color: #059669;
-    border: 1px solid #a7f3d0;
+    background-color: var(--crm-success-light, #ecfdf5);
+    color: var(--crm-success, #059669);
+    border: 1px solid var(--crm-success-border, #a7f3d0);
 }
 
 .client-invoices-badge--cancelled {
-    background-color: #fef2f2;
-    color: #dc2626;
-    border: 1px solid #fecaca;
+    background-color: var(--crm-danger-light, #fef2f2);
+    color: var(--crm-danger, #dc2626);
+    border: 1px solid var(--crm-danger-border, #fecaca);
 }
 
 .client-invoices-badge--pending {
-    background-color: #fffbeb;
-    color: #d97706;
-    border: 1px solid #fde68a;
+    background-color: var(--crm-warning-light, #fffbeb);
+    color: var(--crm-warning, #d97706);
+    border: 1px solid var(--crm-warning-border, #fde68a);
 }
 
 /* Empty state

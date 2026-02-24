@@ -40,7 +40,7 @@
                             data-request="onStopTimer"
                             data-request-data="task_id: <?= $task->id ?>, project_id: <?= $projectId ?>"
                             data-request-flash
-                            data-request-success="$(this).closest('[data-control=popup]').trigger('close.oc.popup')"
+                            data-request-success="toggleTaskTimerUI(false)"
                             data-load-indicator="Stopping...">
                             <i class="icon-stop"></i> Stop Timer
                         </button>
@@ -49,7 +49,7 @@
                             data-request="onStartTimer"
                             data-request-data="task_id: <?= $task->id ?>, project_id: <?= $projectId ?>"
                             data-request-flash
-                            data-request-success="$(this).closest('[data-control=popup]').trigger('close.oc.popup')"
+                            data-request-success="toggleTaskTimerUI(true)"
                             data-load-indicator="Starting...">
                             <i class="icon-play"></i> Start Timer
                         </button>
@@ -148,13 +148,7 @@
 
 <script>
 (function() {
-    var clockEl = document.getElementById('taskTimerClock');
-    if (!clockEl) return;
-
-    var running = clockEl.getAttribute('data-running') === '1';
-    var elapsed = parseInt(clockEl.getAttribute('data-elapsed') || '0', 10);
-
-    function formatTime(totalSeconds) {
+    function formatTaskTimerTime(totalSeconds) {
         var h = Math.floor(totalSeconds / 3600);
         var m = Math.floor((totalSeconds % 3600) / 60);
         var s = totalSeconds % 60;
@@ -163,18 +157,86 @@
                (s < 10 ? '0' : '') + s;
     }
 
-    clockEl.textContent = formatTime(elapsed);
+    window.initTaskTimerClock = function() {
+        var clockEl = document.getElementById('taskTimerClock');
+        if (!clockEl) return;
 
-    if (running) {
-        var interval = setInterval(function() {
-            elapsed++;
-            clockEl.textContent = formatTime(elapsed);
-        }, 1000);
+        var running = clockEl.getAttribute('data-running') === '1';
+        var elapsed = parseInt(clockEl.getAttribute('data-elapsed') || '0', 10);
 
-        // Clear when popup closes
-        $(clockEl).closest('.control-popup').on('close.oc.popup', function() {
-            clearInterval(interval);
-        });
-    }
+        clockEl.textContent = formatTaskTimerTime(elapsed);
+
+        // Clear any existing interval stored on the element
+        if (clockEl._timerInterval) {
+            clearInterval(clockEl._timerInterval);
+            clockEl._timerInterval = null;
+        }
+
+        if (running) {
+            var interval = setInterval(function() {
+                elapsed++;
+                clockEl.textContent = formatTaskTimerTime(elapsed);
+                clockEl.setAttribute('data-elapsed', elapsed);
+            }, 1000);
+
+            clockEl._timerInterval = interval;
+
+            // Clear when popup closes
+            $(clockEl).closest('.control-popup').one('close.oc.popup', function() {
+                clearInterval(interval);
+                clockEl._timerInterval = null;
+            });
+        }
+    };
+
+    window.toggleTaskTimerUI = function(isRunning) {
+        var $section = $('#taskTimerSection');
+        var $clock = $('#taskTimerClock');
+        if (!$section.length || !$clock.length) {
+            return;
+        }
+
+        // Update running flag on clock
+        $clock.attr('data-running', isRunning ? '1' : '0');
+
+        // Update icon
+        var $iconSpan = $section.find('.task-timer-icon');
+        if (isRunning) {
+            $iconSpan.html('<i class="icon-stop-circle text-danger"></i>');
+        } else {
+            $iconSpan.html('<i class="icon-clock-o"></i>');
+        }
+
+        // Update button appearance and behavior
+        var $btn = $section.find('.task-timer-actions button');
+        if ($btn.length) {
+            if (isRunning) {
+                // Switch to Stop state
+                $btn
+                    .removeClass('btn-success').addClass('btn-danger')
+                    .attr('data-request', 'onStopTimer')
+                    .attr('data-load-indicator', 'Stopping...')
+                    .attr('data-request-success', 'toggleTaskTimerUI(false)')
+                    .html('<i class="icon-stop"></i> Stop Timer');
+
+                // Reset elapsed to 0 for the new running session
+                $clock.attr('data-elapsed', '0');
+            } else {
+                // Switch to Start state
+                $btn
+                    .removeClass('btn-danger').addClass('btn-success')
+                    .attr('data-request', 'onStartTimer')
+                    .attr('data-load-indicator', 'Starting...')
+                    .attr('data-request-success', 'toggleTaskTimerUI(true)')
+                    .html('<i class="icon-play"></i> Start Timer');
+            }
+        }
+
+        // Re-init the live clock based on the new state
+        initTaskTimerClock();
+    };
+
+    // Initialise clock when the modal loads
+    initTaskTimerClock();
 })();
 </script>

@@ -12,6 +12,10 @@ return new class extends Migration {
      */
     public function up()
     {
+        if (Schema::hasTable('thewebsiteguy_nexuscrm_projects_clients')) {
+            return;
+        }
+
         Schema::create('thewebsiteguy_nexuscrm_projects_clients', function (Blueprint $table) {
             $table->integer('project_id')->unsigned();
             $table->integer('client_id')->unsigned();

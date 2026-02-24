@@ -12,6 +12,10 @@ return new class extends Migration {
      */
     public function up()
     {
+        if (Schema::hasColumn('thewebsiteguy_nexuscrm_clients', 'user_id')) {
+            return;
+        }
+
         Schema::table('thewebsiteguy_nexuscrm_clients', function (Blueprint $table) {
             $table->integer('user_id')->unsigned()->nullable()->after('id');
         });

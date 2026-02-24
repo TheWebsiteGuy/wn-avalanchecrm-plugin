@@ -334,7 +334,7 @@ class InvoicePaymentController extends Controller
 
         $invoice = Invoice::where('id', $invoiceId)
             ->where('client_id', $client->id)
-            ->where('status', '!=', 'draft')
+            ->where('internal_status', 'sent')
             ->firstOrFail();
 
         if ($invoice->status === 'paid') {

@@ -13,6 +13,10 @@ class AddPaypalFields extends Migration
 {
     public function up()
     {
+        if (Schema::hasColumn('thewebsiteguy_nexuscrm_subscriptions', 'paypal_subscription_id')) {
+            return;
+        }
+
         Schema::table('thewebsiteguy_nexuscrm_subscriptions', function (Blueprint $table) {
             $table->string('paypal_subscription_id')->nullable()->after('gocardless_redirect_flow_id');
         });

@@ -39,7 +39,27 @@ trait HasTaskModal
         }
 
         $task = $taskId ? Task::find($taskId) : new Task();
+
+        // Preserve timer state and tracked hours when saving from the edit modal.
+        // Otherwise the stale form values can overwrite changes made by the
+        // start/stop timer buttons (which update the model immediately).
+        $existingTimerRunning   = $task->timer_running;
+        $existingTimerStartedAt = $task->timer_started_at;
+        $existingHours          = $task->hours;
+        $hasTimeEntries         = $task->exists ? $task->time_entries()->exists() : false;
+
         $task->fill($data);
+
+        if ($taskId) {
+            $task->timer_running   = $existingTimerRunning;
+            $task->timer_started_at = $existingTimerStartedAt;
+
+            // If time entries exist, hours are derived from them and should
+            // not be overwritten by the (stale) manual input in the form.
+            if ($hasTimeEntries) {
+                $task->hours = $existingHours;
+            }
+        }
 
         if (!$taskId && $projectId) {
             $task->project_id = $projectId;

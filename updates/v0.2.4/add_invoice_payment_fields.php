@@ -7,6 +7,10 @@ use Winter\Storm\Support\Facades\Schema;
 return new class extends Migration {
     public function up()
     {
+        if (Schema::hasColumn('thewebsiteguy_nexuscrm_invoices', 'payment_method')) {
+            return;
+        }
+
         Schema::table('thewebsiteguy_nexuscrm_invoices', function (Blueprint $table) {
             $table->string('payment_method')->nullable()->after('status');
             $table->string('payment_reference')->nullable()->after('payment_method');

@@ -7,18 +7,24 @@ use Winter\Storm\Support\Facades\Schema;
 return new class extends Migration {
     public function up()
     {
-        Schema::table('thewebsiteguy_nexuscrm_subscription_plans', function (Blueprint $table) {
-            $table->string('stripe_price_id')->nullable()->after('paypal_plan_id');
-        });
+        if (!Schema::hasColumn('thewebsiteguy_nexuscrm_subscription_plans', 'stripe_price_id')) {
+            Schema::table('thewebsiteguy_nexuscrm_subscription_plans', function (Blueprint $table) {
+                $table->string('stripe_price_id')->nullable()->after('paypal_plan_id');
+            });
+        }
 
-        Schema::table('thewebsiteguy_nexuscrm_clients', function (Blueprint $table) {
-            $table->string('stripe_customer_id')->nullable()->after('user_id');
-        });
+        if (!Schema::hasColumn('thewebsiteguy_nexuscrm_clients', 'stripe_customer_id')) {
+            Schema::table('thewebsiteguy_nexuscrm_clients', function (Blueprint $table) {
+                $table->string('stripe_customer_id')->nullable()->after('user_id');
+            });
+        }
 
-        Schema::table('thewebsiteguy_nexuscrm_subscriptions', function (Blueprint $table) {
-            $table->string('stripe_subscription_id')->nullable()->after('reference_id');
-            $table->string('stripe_checkout_session_id')->nullable()->after('stripe_subscription_id');
-        });
+        if (!Schema::hasColumn('thewebsiteguy_nexuscrm_subscriptions', 'stripe_subscription_id')) {
+            Schema::table('thewebsiteguy_nexuscrm_subscriptions', function (Blueprint $table) {
+                $table->string('stripe_subscription_id')->nullable()->after('reference_id');
+                $table->string('stripe_checkout_session_id')->nullable()->after('stripe_subscription_id');
+            });
+        }
     }
 
     public function down()

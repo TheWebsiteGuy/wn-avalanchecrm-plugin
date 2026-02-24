@@ -82,7 +82,8 @@ class Projects extends Controller
         $invoice->invoice_number = $invoiceNumber;
         $invoice->client_id = $client ? $client->id : null;
         $invoice->project_id = $project->id;
-        $invoice->status = 'draft';
+        $invoice->internal_status = 'draft';
+        $invoice->status = 'outstanding';
         $invoice->issue_date = now();
         $invoice->due_date = $dueDate ?: null;
         $invoice->notes = $notes ?: null;

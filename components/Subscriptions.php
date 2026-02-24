@@ -83,6 +83,8 @@ class Subscriptions extends ComponentBase
         $this->addCss('/plugins/thewebsiteguy/nexuscrm/assets/css/subscriptions.css');
         $this->addJs('/plugins/thewebsiteguy/nexuscrm/assets/js/subscriptions.js');
 
+        $this->page['themeStyles'] = \TheWebsiteGuy\NexusCRM\Classes\ThemeStyles::render();
+
         // Handle Stripe Checkout return
         if (Input::get('stripe_success') && Input::get('session_id')) {
             $this->handleStripeReturn(Input::get('session_id'));

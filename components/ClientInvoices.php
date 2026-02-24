@@ -81,6 +81,8 @@ class ClientInvoices extends ComponentBase
     {
         $this->addCss('/plugins/thewebsiteguy/nexuscrm/assets/css/client-invoices.css');
 
+        $this->page['themeStyles'] = \TheWebsiteGuy\NexusCRM\Classes\ThemeStyles::render();
+
         $this->prepareVars();
     }
 
@@ -108,14 +110,14 @@ class ClientInvoices extends ComponentBase
         if ($invoiceId) {
             $this->activeInvoice = $this->page['activeInvoice'] = Invoice::where('id', $invoiceId)
                 ->where('client_id', $this->client->id)
-                ->where('status', '!=', 'draft')
+                ->clientVisible()
                 ->with(['project', 'items'])
                 ->first();
         }
 
-        // Load all client invoices (exclude drafts)
+        // Load all client invoices (exclude drafts — only show sent invoices)
         $this->invoices = $this->page['invoices'] = Invoice::where('client_id', $this->client->id)
-            ->where('status', '!=', 'draft')
+            ->clientVisible()
             ->with(['project'])
             ->withCount('items')
             ->orderBy('created_at', 'desc')
@@ -142,7 +144,7 @@ class ClientInvoices extends ComponentBase
 
         $invoice = Invoice::where('id', $invoiceId)
             ->where('client_id', $client->id)
-            ->where('status', '!=', 'draft')
+            ->clientVisible()
             ->with(['project', 'items'])
             ->first();
 
@@ -187,7 +189,7 @@ class ClientInvoices extends ComponentBase
         $status = Input::get('status');
 
         $query = Invoice::where('client_id', $client->id)
-            ->where('status', '!=', 'draft')
+            ->clientVisible()
             ->with(['project']);
 
         if ($status && $status !== 'all') {

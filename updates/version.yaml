@@ -71,4 +71,7 @@
 0.2.4:
     - "Add payment fields to invoices for online payments"
     - v0.2.4/add_invoice_payment_fields.php
+0.2.5:
+    - "Separate invoice statuses: internal workflow stage (draft/sent) and client-facing payment status (outstanding/due/overdue/cancelled/paid)"
+    - v0.2.5/add_internal_status_to_invoices.php
 

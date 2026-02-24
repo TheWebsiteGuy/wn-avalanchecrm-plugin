@@ -252,7 +252,7 @@ class Plugin extends PluginBase
         return [
             'settings' => [
                 'label' => 'CRM Settings',
-                'description' => 'Configure Payment Gateways (Stripe, PayPal, GoCardless).',
+                'description' => 'Configure theme colours, currency, invoices and payment gateways.',
                 'category' => 'NexusCRM',
                 'icon' => 'icon-cog',
                 'class' => \TheWebsiteGuy\NexusCRM\Models\Settings::class,

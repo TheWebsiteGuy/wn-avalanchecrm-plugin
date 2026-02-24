@@ -7,8 +7,9 @@
             data-request-data="status: this.value"
             data-request-update="'{{ __SELF__ }}::list': '#client-invoices-list'">
             <option value="all">All Statuses</option>
-            <option value="draft">Draft</option>
-            <option value="sent">Sent</option>
+            <option value="outstanding">Outstanding</option>
+            <option value="due">Due</option>
+            <option value="overdue">Overdue</option>
             <option value="paid">Paid</option>
             <option value="cancelled">Cancelled</option>
         </select>
@@ -50,8 +51,8 @@
                         {% endif %}
                         <td class="client-invoices-amount">{{ invoice.amount|currency }}</td>
                         <td>
-                            <span class="client-invoices-badge client-invoices-badge--{{ invoice.status|default('draft') }}">
-                                {{ invoice.status|default('draft')|replace({'_': ' '})|title }}
+                            <span class="client-invoices-badge client-invoices-badge--{{ invoice.status|default('outstanding') }}">
+                                {{ invoice.status|default('outstanding')|replace({'_': ' '})|title }}
                             </span>
                         </td>
                         <td>

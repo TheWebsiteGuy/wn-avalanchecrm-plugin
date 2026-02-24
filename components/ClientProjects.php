@@ -96,6 +96,8 @@ class ClientProjects extends ComponentBase
     {
         $this->addCss('/plugins/thewebsiteguy/nexuscrm/assets/css/client-projects.css');
 
+        $this->page['themeStyles'] = \TheWebsiteGuy\NexusCRM\Classes\ThemeStyles::render();
+
         $this->prepareVars();
     }
 

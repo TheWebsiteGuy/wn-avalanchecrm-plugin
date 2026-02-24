@@ -47,7 +47,7 @@ $projectTasks = $formModel->tasks()->orderBy('sort_order')->get()->groupBy('stat
                                         data-request="onStopTimer"
                                         data-request-data="task_id: <?= $task->id ?>, project_id: <?= $formModel->id ?>"
                                         data-request-flash
-                                        onclick="event.stopPropagation();">
+                                        onclick="$(this).request(); event.stopPropagation(); return false;">
                                         <i class="icon-stop"></i>
                                     </a>
                                 <?php else: ?>
@@ -56,7 +56,7 @@ $projectTasks = $formModel->tasks()->orderBy('sort_order')->get()->groupBy('stat
                                         data-request="onStartTimer"
                                         data-request-data="task_id: <?= $task->id ?>, project_id: <?= $formModel->id ?>"
                                         data-request-flash
-                                        onclick="event.stopPropagation();">
+                                        onclick="$(this).request(); event.stopPropagation(); return false;">
                                         <i class="icon-play"></i>
                                     </a>
                                 <?php endif ?>

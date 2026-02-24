@@ -19,8 +19,11 @@ columns:
     amount:
         label: Amount
         type: number
+    internal_status:
+        label: Stage
+        searchable: true
     status:
-        label: Status
+        label: Payment Status
         searchable: true
     issue_date:
         label: Issue Date

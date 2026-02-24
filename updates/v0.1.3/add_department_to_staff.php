@@ -7,6 +7,10 @@ use Winter\Storm\Support\Facades\Schema;
 return new class extends Migration {
     public function up()
     {
+        if (Schema::hasColumn('thewebsiteguy_nexuscrm_staff', 'department')) {
+            return;
+        }
+
         Schema::table('thewebsiteguy_nexuscrm_staff', function (Blueprint $table) {
             $table->string('department')->nullable()->after('job_title');
         });
