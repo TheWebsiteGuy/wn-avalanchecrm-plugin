@@ -2,27 +2,27 @@
 
 A powerful, comprehensive Customer Relationship Management (CRM) and Billing system for Winter CMS. Streamline your client management, project tracking, invoicing, support tickets, and recurring subscriptions directly within your CMS.
 
-![Avalanche CRM](assets/images/dashboard.png)
+![Avalanche CRM](https://raw.githubusercontent.com/thewebsiteguy/avalanchecrm/main/assets/images/dashboard.png)
 
 > [!WARNING]
 > **Work In Progress**: This plugin is currently in early development. Features, database structures, and components are subject to significant changes without prior notice. Use in production at your own risk.
 
 ## Key Features
 
-*   **ðŸ‘¥ Client Management**: Centralised tracking of client details, associated user profiles, and activity.
-*   **ðŸ—ï¸ Projects & Tasks**: Robust project management with assignable tasks, staff roles, and Kanban-style management.
-*   **ðŸ§¾ Professional Invoicing**:
+*   👥 **Client Management**: Centralised tracking of client details, associated user profiles, and activity.
+*   🏗️ **Projects & Tasks**: Robust project management with assignable tasks, staff roles, and Kanban-style management.
+*   🧾 **Professional Invoicing**:
     *   Automatic PDF generation via DomPDF.
     *   Curated tax calculations and customisable currency symbols.
     *   Managed invoice status (Outstanding, Paid, etc.).
-*   **ðŸŽ« Support Tickets**: Integrated client-facing ticket system with categories, priority levels, and status tracking.
-*   **ðŸ”„ Subscriptions & Billing**: 
+*   🎟️ **Support Tickets**: Integrated client-facing ticket system with categories, priority levels, and status tracking.
+*   🔄 **Subscriptions & Billing**: 
     *   Recurring billing management for various plans.
     *   Support for multiple payment gateways (Stripe, PayPal, GoCardless).
     *   Managed billing cycles and payment methods.
-*   **ðŸ› ï¸ Staff Management**: Manage internal team members, job titles, and departments.
-*   **ðŸŽ¨ Dynamic Theming**: Built-in CSS variables for brand-specific dashboard customisation.
-*   **ðŸ‡¬ðŸ‡§ UK English Localisation**: Full support for UK English conventions (e.g., "Cancelled", "Synchronise").
+*   🛠️ **Staff Management**: Manage internal team members, job titles, and departments.
+*   🎨 **Dynamic Theming**: Built-in CSS variables for brand-specific dashboard customisation.
+*   🇬🇧 **UK English Localisation**: Full support for UK English conventions (e.g., "Cancelled", "Synchronise").
 
 ## Settings
 
@@ -35,7 +35,7 @@ Avalanche CRM provides a settings area in the Winter CMS backend to configure:
 *   **Custom Branding**: Adjust dashboard accent colours and UI elements via built-in CSS variable controls.
 
 
-![Avalanche CRM](assets/images/settings.png)
+![Avalanche CRM](https://raw.githubusercontent.com/thewebsiteguy/avalanchecrm/main/assets/images/settings.png)
 
 ## Email Templates
 
@@ -46,7 +46,7 @@ Avalanche CRM provides a settings area in the Winter CMS backend to manage email
 *   **Subscription Alerts**: Automated messages for renewals, cancellations, and payment failures.
 *   **Dynamic Variables**: Personalise templates using placeholders for client names, invoice amounts, and ticket IDs.
 
-![Avalanche CRM](assets/images/email-templates.png)
+![Avalanche CRM](https://raw.githubusercontent.com/thewebsiteguy/avalanchecrm/main/assets/images/email-templates.png)
 
 ## Requirements
 
@@ -73,7 +73,7 @@ Avalanche CRM provides a settings area in the Winter CMS backend to manage email
 
 This plugin provides several components to build a fully functional client portal:
 
-### ðŸŽ« tickets
+### 🎟️ tickets
 Allows clients to view, create, and manage their support tickets.
 ```ini
 [tickets]
@@ -82,7 +82,7 @@ allowCreate = 1
 allowClose = 1
 ```
 
-### ðŸ—ï¸ projects
+### 🏗️ projects
 Displays projects assigned to the client, including tasks, tickets, and invoices.
 ```ini
 [projects]
@@ -90,14 +90,14 @@ projectsPerPage = 10
 showTasks = 1
 ```
 
-### ðŸ“‘ invoices
+### 🧾 invoices
 Provides a list of sent invoices with PDF download capability.
 ```ini
 [invoices]
 invoicesPerPage = 10
 ```
 
-### ðŸ”„ subscriptions
+### 🔄 subscriptions
 Comprehensive subscription management including plan switching and payment method updates.
 ```ini
 [subscriptions]
@@ -105,7 +105,7 @@ showPlans = 1
 showPaymentMethods = 1
 ```
 
-### ðŸ‘¤ account
+### 👤 account
 Allows users to manage their profile details and contact information.
 ```ini
 [account]
@@ -114,7 +114,7 @@ Allows users to manage their profile details and contact information.
 ## Configuration
 
 Navigate to **Settings > CRM > Avalanche CRM Settings** to configure:
-*   **Currency Settings**: Custom symbols and codes (e.g., Â£ GBP).
+*   **Currency Settings**: Custom symbols and codes (e.g., £ GBP).
 *   **Brand Styling**: Primary and secondary colours for the client portal.
 *   **Invoicing**: Set your company details and invoice prefixes.
 *   **Payment Gateways**: API credentials for Stripe, PayPal, and GoCardless.
@@ -137,4 +137,4 @@ Registers granular permissions for:
 For technical support or feature requests, please contact [TheWebsiteGuy](mailto:support@thewebsiteguy.uk).
 
 ---
-*Built with â¤ï¸ for the Winter CMS Community.*
+*Built with ❤️ for the Winter CMS Community.*
