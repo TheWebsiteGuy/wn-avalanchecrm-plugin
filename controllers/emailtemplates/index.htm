@@ -1,64 +1,70 @@
 <?php Block::put('breadcrumb') ?>
-    <ul>
-        <li><a href="<?= Backend::url('thewebsiteguy/avalanchecrm/dashboard') ?>">Avalanche CRM</a></li>
-        <li class="active">Email Templates</li>
-    </ul>
+<ul>
+    <li><a href="<?= Backend::url('thewebsiteguy/avalanchecrm/dashboard') ?>">Avalanche CRM</a></li>
+    <li class="active">Email Templates</li>
+</ul>
 <?php Block::endPut() ?>
 
 <?php
-    $baseUrl = Backend::url('thewebsiteguy/avalanchecrm/emailtemplates');
-    $createUrl = Backend::url('thewebsiteguy/avalanchecrm/emailtemplates/create');
+$baseUrl = Backend::url('thewebsiteguy/avalanchecrm/emailtemplates');
+$createUrl = Backend::url('thewebsiteguy/avalanchecrm/emailtemplates/create');
 ?>
 
 <!-- Category Cards -->
 <div class="padded-container" style="padding-top: 20px;">
     <div class="template-category-grid">
         <?php foreach ($categories as $key => $cat): ?>
-        <div class="template-category-card" style="border-top-color: <?= $cat['color'] ?>;">
-            <div class="tpl-card-header">
-                <div class="tpl-card-icon" style="background-color: <?= $cat['color'] ?>15; color: <?= $cat['color'] ?>;">
-                    <i class="<?= $cat['icon'] ?>"></i>
+            <div class="template-category-card" style="border-top-color: <?= $cat['color'] ?>;">
+                <div class="tpl-card-header">
+                    <div class="tpl-card-icon"
+                        style="background-color: <?= $cat['color'] ?>15; color: <?= $cat['color'] ?>;">
+                        <i class="<?= $cat['icon'] ?>"></i>
+                    </div>
+                    <div class="tpl-card-title">
+                        <h4><?= e($cat['label']) ?></h4>
+                        <span class="tpl-card-count"><?= $cat['count'] ?>
+                            template<?= $cat['count'] !== 1 ? 's' : '' ?></span>
+                    </div>
                 </div>
-                <div class="tpl-card-title">
-                    <h4><?= e($cat['label']) ?></h4>
-                    <span class="tpl-card-count"><?= $cat['count'] ?> template<?= $cat['count'] !== 1 ? 's' : '' ?></span>
+                <div class="tpl-card-body">
+                    <p><?= e($cat['description']) ?></p>
+                    <?php if (!empty($cat['templates'])): ?>
+                        <ul class="tpl-template-list">
+                            <?php foreach ($cat['templates'] as $tpl): ?>
+                                <li>
+                                    <a href="<?= $baseUrl ?>/update/<?= $tpl->id ?>">
+                                        <span class="tpl-name"><?= e($tpl->name) ?></span>
+                                        <?php if ($tpl->is_active): ?>
+                                            <span class="tpl-badge tpl-badge-active">Active</span>
+                                        <?php else: ?>
+                                            <span class="tpl-badge tpl-badge-inactive">Inactive</span>
+                                        <?php endif; ?>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php else: ?>
+                        <p class="tpl-empty">No templates in this category yet.</p>
+                    <?php endif; ?>
+                </div>
+                <div class="tpl-card-footer">
+                    <a href="<?= $baseUrl ?>?category=<?= $key ?>" class="btn btn-sm btn-default">
+                        <i class="icon-list"></i> View All
+                    </a>
+                    <a href="<?= $createUrl ?>?category=<?= $key ?>" class="btn btn-sm btn-primary">
+                        <i class="icon-plus"></i> New Template
+                    </a>
+                    <button class="btn btn-sm btn-secondary" data-control="popup"
+                        data-request-data="category: '<?= $key ?>'" data-handler="onLoadSettings"
+                        style="margin-left: auto;">
+                        <i class="icon-cog"></i> Settings
+                    </button>
                 </div>
             </div>
-            <div class="tpl-card-body">
-                <p><?= e($cat['description']) ?></p>
-                <?php if (!empty($cat['templates'])): ?>
-                <ul class="tpl-template-list">
-                    <?php foreach ($cat['templates'] as $tpl): ?>
-                    <li>
-                        <a href="<?= $baseUrl ?>/update/<?= $tpl->id ?>">
-                            <span class="tpl-name"><?= e($tpl->name) ?></span>
-                            <?php if ($tpl->is_active): ?>
-                                <span class="tpl-badge tpl-badge-active">Active</span>
-                            <?php else: ?>
-                                <span class="tpl-badge tpl-badge-inactive">Inactive</span>
-                            <?php endif; ?>
-                        </a>
-                    </li>
-                    <?php endforeach; ?>
-                </ul>
-                <?php else: ?>
-                <p class="tpl-empty">No templates in this category yet.</p>
-                <?php endif; ?>
-            </div>
-            <div class="tpl-card-footer">
-                <a href="<?= $baseUrl ?>?category=<?= $key ?>" class="btn btn-sm btn-default">
-                    <i class="icon-list"></i> View All
-                </a>
-                <a href="<?= $createUrl ?>?category=<?= $key ?>" class="btn btn-sm btn-primary">
-                    <i class="icon-plus"></i> New Template
-                </a>
-            </div>
-        </div>
         <?php endforeach; ?>
     </div>
 </div>
 
-<!-- Full Template List Below -->
 <div class="padded-container" style="padding-top: 10px;">
     <h4 style="margin-bottom: 15px;">All Templates</h4>
     <?= $this->listRender() ?>
@@ -75,7 +81,7 @@
     .template-category-card {
         background: #fff;
         border-radius: 6px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         border-top: 4px solid #ddd;
         display: flex;
         flex-direction: column;
@@ -84,7 +90,7 @@
 
     .template-category-card:hover {
         transform: translateY(-3px);
-        box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
     }
 
     .tpl-card-header {
@@ -123,7 +129,7 @@
         flex-grow: 1;
     }
 
-    .tpl-card-body > p:first-child {
+    .tpl-card-body>p:first-child {
         font-size: 13px;
         color: #777;
         margin: 0 0 12px;
