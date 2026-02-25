@@ -73,6 +73,8 @@ Avalanche CRM provides a settings area in the Winter CMS backend to manage email
 
 This plugin provides several components to build a fully functional client portal:
 
+![Avalanche CRM](https://raw.githubusercontent.com/thewebsiteguy/avalanchecrm/main/assets/images/components.png)
+
 ### 🎟️ tickets
 Allows clients to view, create, and manage their support tickets.
 ```ini
