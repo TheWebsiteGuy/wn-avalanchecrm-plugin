@@ -2,7 +2,7 @@
 
 A powerful, comprehensive Customer Relationship Management (CRM) and Billing system for Winter CMS. Streamline your client management, project tracking, invoicing, support tickets, and recurring subscriptions directly within your CMS.
 
-![Avalanche CRM](https://raw.githubusercontent.com/thewebsiteguy/avalanchecrm/main/assets/images/dashboard.png)
+![Avalanche CRM](https://raw.githubusercontent.com/thewebsiteguy/wn-avalanchecrm-plugin/main/assets/images/dashboard.png)
 
 > [!WARNING]
 > **Work In Progress**: This plugin is currently in early development. Features, database structures, and components are subject to significant changes without prior notice. Use in production at your own risk.
@@ -35,7 +35,7 @@ Avalanche CRM provides a settings area in the Winter CMS backend to configure:
 *   **Custom Branding**: Adjust dashboard accent colours and UI elements via built-in CSS variable controls.
 
 
-![Avalanche CRM](https://raw.githubusercontent.com/thewebsiteguy/avalanchecrm/main/assets/images/settings.png)
+![Avalanche CRM](https://raw.githubusercontent.com/thewebsiteguy/wn-avalanchecrm-plugin/main/assets/images/settings.png)
 
 ## Email Templates
 
@@ -46,7 +46,7 @@ Avalanche CRM provides a settings area in the Winter CMS backend to manage email
 *   **Subscription Alerts**: Automated messages for renewals, cancellations, and payment failures.
 *   **Dynamic Variables**: Personalise templates using placeholders for client names, invoice amounts, and ticket IDs.
 
-![Avalanche CRM](https://raw.githubusercontent.com/thewebsiteguy/avalanchecrm/main/assets/images/email-templates.png)
+![Avalanche CRM](https://raw.githubusercontent.com/thewebsiteguy/wn-avalanchecrm-plugin/main/assets/images/email-templates.png)
 
 ## Requirements
 
@@ -73,7 +73,7 @@ Avalanche CRM provides a settings area in the Winter CMS backend to manage email
 
 This plugin provides several components to build a fully functional client portal:
 
-![Avalanche CRM](https://raw.githubusercontent.com/thewebsiteguy/avalanchecrm/main/assets/images/components.png)
+![Avalanche CRM](https://raw.githubusercontent.com/thewebsiteguy/wn-avalanchecrm-plugin/main/assets/images/components.png)
 
 ### 🎟️ tickets
 Allows clients to view, create, and manage their support tickets.
