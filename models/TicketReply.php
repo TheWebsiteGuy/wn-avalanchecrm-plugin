@@ -26,7 +26,7 @@ class TicketReply extends Model
 
     public $rules = [
         'ticket_id' => 'required',
-        'content'   => 'required',
+        'content' => 'required',
     ];
 
     protected $casts = [
@@ -40,7 +40,7 @@ class TicketReply extends Model
 
     public $belongsTo = [
         'ticket' => [\TheWebsiteGuy\AvalancheCRM\Models\Ticket::class],
-        'user'   => [\Winter\User\Models\User::class],
+        'user' => [\Winter\User\Models\User::class],
     ];
 
     /**
@@ -53,14 +53,23 @@ class TicketReply extends Model
             return;
         }
 
-        // Don't notify if the client wrote the reply
-        if ($this->author_type === 'client') {
+        $ticket = $this->ticket;
+        if (!$ticket) {
             return;
         }
 
-        // Send notification to the ticket's client
-        $ticket = $this->ticket;
-        if ($ticket && $ticket->client) {
+        // If client replied, notify all assigned staff
+        if ($this->author_type === 'client') {
+            if ($ticket->staff) {
+                foreach ($ticket->staff as $staff) {
+                    $staff->sendNotification('ticket', 'Staff: New Client Reply');
+                }
+            }
+            return;
+        }
+
+        // If staff (or other) replied, notify the client
+        if ($ticket->client) {
             $ticket->client->sendNotification('ticket', 'Ticket Reply');
         }
     }

@@ -46,6 +46,13 @@
                     <span class="tickets-priority-dot tickets-priority-dot--{{ ticket.priority }}" title="{{ ticket.priority|title }} priority"></span>
                     <span class="tickets-card-meta">{{ ticket.priority|title }}</span>
 
+                    {% if ticket.staff is not empty %}
+                        <span class="tickets-card-sep"></span>
+                        <span class="tickets-card-meta" title="Assigned to: {{ ticket.staff|map(s => s.name)|join(', ') }}">
+                            <i class="icon-user"></i> {{ ticket.staff|map(s => s.name)|join(', ') }}
+                        </span>
+                    {% endif %}
+
                     {% if ticket.project %}
                         <span class="tickets-card-sep"></span>
                         <span class="tickets-card-meta"><i class="icon-briefcase"></i> {{ ticket.project.name }}</span>

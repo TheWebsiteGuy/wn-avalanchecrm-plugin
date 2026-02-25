@@ -73,19 +73,19 @@ class Campaign extends Model
     public static function getAvailableTags(): array
     {
         return [
-            '{{client.name}}'       => 'Client full name',
+            '{{client.name}}' => 'Client full name',
             '{{client.first_name}}' => 'Client first name',
-            '{{client.last_name}}'  => 'Client last name (everything after first word)',
-            '{{client.email}}'      => 'Client email address',
-            '{{client.company}}'    => 'Client company name',
-            '{{client.phone}}'      => 'Client phone number',
-            '{{company.name}}'      => 'Your company name (from Settings)',
-            '{{company.email}}'     => 'Your company email (from Settings)',
-            '{{company.phone}}'     => 'Your company phone (from Settings)',
-            '{{company.address}}'   => 'Your company address (from Settings)',
-            '{{unsubscribe_url}}'   => 'Unsubscribe link URL for this client',
-            '{{date}}'              => 'Current date (e.g. 1 January 2025)',
-            '{{year}}'              => 'Current year (e.g. 2025)',
+            '{{client.last_name}}' => 'Client last name (everything after first word)',
+            '{{client.email}}' => 'Client email address',
+            '{{client.company}}' => 'Client company name',
+            '{{client.phone}}' => 'Client phone number',
+            '{{company.name}}' => 'Your company name (from Settings)',
+            '{{company.email}}' => 'Your company email (from Settings)',
+            '{{company.phone}}' => 'Your company phone (from Settings)',
+            '{{company.address}}' => 'Your company address (from Settings)',
+            '{{unsubscribe_url}}' => 'Unsubscribe link URL for this client',
+            '{{date}}' => 'Current date (e.g. 1 January 2025)',
+            '{{year}}' => 'Current year (e.g. 2025)',
         ];
     }
 
@@ -102,34 +102,40 @@ class Campaign extends Model
      * @param Client $client   The client to personalise for
      * @return string
      */
-    public static function parseTags(string $content, Client $client): string
+    public static function parseTags(string $content, $model): string
     {
-        // Client data
-        $nameParts  = explode(' ', trim($client->name ?? ''), 2);
-        $firstName  = $nameParts[0] ?? '';
-        $lastName   = $nameParts[1] ?? '';
+        // Model data
+        $nameParts = explode(' ', trim($model->name ?? ''), 2);
+        $firstName = $nameParts[0] ?? '';
+        $lastName = $nameParts[1] ?? '';
 
         // Company settings
-        $companyName    = Settings::get('company_name', '');
-        $companyEmail   = Settings::get('company_email', '');
-        $companyPhone   = Settings::get('company_phone', '');
+        $companyName = Settings::get('company_name', '');
+        $companyEmail = Settings::get('company_email', '');
+        $companyPhone = Settings::get('company_phone', '');
         $companyAddress = Settings::get('company_address', '');
 
         $replacements = [
-            '{{client.name}}'       => $client->name ?? '',
+            '{{client.name}}' => $model->name ?? '',
             '{{client.first_name}}' => $firstName,
-            '{{client.last_name}}'  => $lastName,
-            '{{client.email}}'      => $client->email ?? '',
-            '{{client.company}}'    => $client->company ?? '',
-            '{{client.phone}}'      => $client->phone ?? '',
-            '{{company.name}}'      => $companyName,
-            '{{company.email}}'     => $companyEmail,
-            '{{company.phone}}'     => $companyPhone,
-            '{{company.address}}'   => $companyAddress,
-            '{{unsubscribe_url}}'   => $client->getUnsubscribeUrl(),
-            '{{date}}'              => Carbon::now()->format('j F Y'),
-            '{{year}}'              => Carbon::now()->format('Y'),
+            '{{client.last_name}}' => $lastName,
+            '{{client.email}}' => $model->email ?? '',
+            '{{client.company}}' => $model->company ?? '',
+            '{{client.phone}}' => $model->phone ?? '',
+            '{{company.name}}' => $companyName,
+            '{{company.email}}' => $companyEmail,
+            '{{company.phone}}' => $companyPhone,
+            '{{company.address}}' => $companyAddress,
+            '{{unsubscribe_url}}' => method_exists($model, 'getUnsubscribeUrl') ? $model->getUnsubscribeUrl() : '',
+            '{{date}}' => Carbon::now()->format('j F Y'),
+            '{{year}}' => Carbon::now()->format('Y'),
         ];
+
+        // Also support {{staff.name}} etc for clarity if it's a staff member
+        if ($model instanceof \TheWebsiteGuy\AvalancheCRM\Models\Staff) {
+            $replacements['{{staff.name}}'] = $model->name;
+            $replacements['{{staff.email}}'] = $model->email;
+        }
 
         return str_replace(array_keys($replacements), array_values($replacements), $content);
     }
@@ -160,7 +166,7 @@ class Campaign extends Model
 
             try {
                 // Parse data tags in content and subject
-                $body    = static::parseTags($this->content, $client);
+                $body = static::parseTags($this->content, $client);
                 $subject = static::parseTags($this->subject ?: $this->name, $client);
 
                 // Append unsubscribe footer

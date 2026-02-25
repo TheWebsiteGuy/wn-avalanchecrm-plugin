@@ -7,6 +7,9 @@ use Winter\User\Models\User;
 use Winter\User\Models\UserGroup;
 use Backend\Models\User as BackendUser;
 use Backend\Models\UserRole;
+use Winter\Storm\Support\Facades\Mail;
+use TheWebsiteGuy\AvalancheCRM\Models\EmailTemplate;
+use TheWebsiteGuy\AvalancheCRM\Models\Campaign;
 use Illuminate\Support\Str;
 use Winter\Storm\Exception\ValidationException;
 
@@ -35,10 +38,7 @@ class Staff extends Model
     /**
      * @var array Validation rules for attributes
      */
-    public $rules = [
-        'name' => 'required',
-        'email' => 'required|email',
-    ];
+    public $rules = [];
 
     /**
      * @var array Relations
@@ -52,6 +52,20 @@ class Staff extends Model
      */
     public function beforeCreate()
     {
+        // If created via the User form, pull the name and email from the parent form data
+        // to satisfy NOT NULL database constraints before the relation is saved.
+        if (request()->has('User')) {
+            $userData = request()->input('User');
+            if (empty($this->name)) {
+                $this->name = trim(($userData['name'] ?? '') . ' ' . ($userData['surname'] ?? '')) ?: ($userData['email'] ?? '');
+            }
+            if (empty($this->email)) {
+                $this->email = $userData['email'] ?? '';
+            }
+            return; // Bypass the standalone auto-creation logic
+        }
+
+        // Bypass auto-creation if we already have a user_id
         if ($this->user_id) {
             return;
         }
@@ -116,14 +130,14 @@ class Staff extends Model
 
         $nameParts = explode(' ', $this->name, 2);
         $firstName = $nameParts[0];
-        $lastName  = $nameParts[1] ?? '';
+        $lastName = $nameParts[1] ?? '';
 
         $backendUser = new BackendUser();
         $backendUser->first_name = $firstName;
-        $backendUser->last_name  = $lastName;
-        $backendUser->login      = $this->email;
-        $backendUser->email      = $this->email;
-        $backendUser->password   = $password;
+        $backendUser->last_name = $lastName;
+        $backendUser->login = $this->email;
+        $backendUser->email = $this->email;
+        $backendUser->password = $password;
         $backendUser->password_confirmation = $password;
         $backendUser->is_activated = true;
 
@@ -136,5 +150,43 @@ class Staff extends Model
         $backendUser->forceSave();
 
         $this->backend_user_id = $backendUser->id;
+    }
+
+    /**
+     * Send a notification email to this staff member using a named template.
+     *
+     * @param string $category  Template category (e.g. 'client', 'ticket')
+     * @param string $name      Template name (e.g. 'Staff Notification')
+     * @return bool Whether the email was sent
+     */
+    public function sendNotification(string $category, string $name): bool
+    {
+        if (empty($this->email)) {
+            return false;
+        }
+
+        $template = EmailTemplate::where('category', $category)
+            ->where('name', $name)
+            ->where('is_active', true)
+            ->first();
+
+        if (!$template) {
+            return false;
+        }
+
+        try {
+            $subject = Campaign::parseTags($template->subject ?: $template->name, $this);
+            $body = Campaign::parseTags($template->content, $this);
+
+            Mail::raw(['html' => $body], function ($message) use ($subject) {
+                $message->to($this->email, $this->name);
+                $message->subject($subject);
+            });
+
+            return true;
+        } catch (\Exception $e) {
+            \Log::error('Avalanche CRM: Failed to send notification "' . $name . '" to staff #' . $this->id . ': ' . $e->getMessage());
+            return false;
+        }
     }
 }

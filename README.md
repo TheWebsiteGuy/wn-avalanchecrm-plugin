@@ -110,7 +110,7 @@ showPaymentMethods = 1
 ### 👤 account
 Allows users to manage their profile details and contact information.
 ```ini
-[account]
+[crmAccount]
 ```
 
 ## Configuration

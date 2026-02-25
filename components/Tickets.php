@@ -11,6 +11,7 @@ use Cms\Classes\ComponentBase;
 use TheWebsiteGuy\AvalancheCRM\Models\Client;
 use TheWebsiteGuy\AvalancheCRM\Models\Ticket;
 use TheWebsiteGuy\AvalancheCRM\Models\TicketCategory;
+use TheWebsiteGuy\AvalancheCRM\Models\TicketStatus;
 use TheWebsiteGuy\AvalancheCRM\Models\TicketReply;
 use TheWebsiteGuy\AvalancheCRM\Models\Settings;
 use Winter\Storm\Exception\ApplicationException;
@@ -130,7 +131,7 @@ class Tickets extends ComponentBase
 
         // Load all client tickets
         $this->tickets = $this->page['tickets'] = Ticket::where('client_id', $this->client->id)
-            ->with(['project', 'category'])
+            ->with(['project', 'category', 'staff'])
             ->orderBy('created_at', 'desc')
             ->paginate($this->property('ticketsPerPage', 10));
 
@@ -208,6 +209,7 @@ class Tickets extends ComponentBase
      */
     public function onCreateTicket()
     {
+        trace_log('onCreateTicket called. Input: ' . json_encode(Input::all()));
         $client = $this->getAuthenticatedClient();
 
         $data = Input::get('ticket', []);
@@ -230,7 +232,15 @@ class Tickets extends ComponentBase
         $ticket->subject = $data['subject'];
         $ticket->description = $description;
         $ticket->priority = $data['priority'] ?? 'medium';
-        $ticket->status = 'open';
+
+        // Set default status if available
+        $defaultStatus = TicketStatus::where('is_default', true)->first() ?: TicketStatus::where('name', 'open')->first();
+        if ($defaultStatus) {
+            $ticket->status_id = $defaultStatus->id;
+            $ticket->status = strtolower($defaultStatus->name);
+        } else {
+            $ticket->status = 'open';
+        }
 
         if (!empty($data['category_id'])) {
             $ticket->category_id = $data['category_id'];
@@ -267,7 +277,7 @@ class Tickets extends ComponentBase
         $status = Input::get('status');
 
         $query = Ticket::where('client_id', $client->id)
-            ->with(['project', 'category']);
+            ->with(['project', 'category', 'staff']);
 
         if ($status && $status !== 'all') {
             $query->where('status', $status);

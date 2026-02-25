@@ -103,7 +103,7 @@ class Client extends Model
     {
         return $query->where(function ($q) {
             $q->where('marketing_opt_out', false)
-              ->orWhereNull('marketing_opt_out');
+                ->orWhereNull('marketing_opt_out');
         })->whereNotNull('email');
     }
 
@@ -175,7 +175,7 @@ class Client extends Model
 
         try {
             $subject = Campaign::parseTags($template->subject ?: $template->name, $this);
-            $body    = Campaign::parseTags($template->content, $this);
+            $body = Campaign::parseTags($template->content, $this);
 
             Mail::raw(['html' => $body], function ($message) use ($subject) {
                 $message->to($this->email, $this->name);
@@ -194,6 +194,19 @@ class Client extends Model
      */
     public function beforeCreate()
     {
+        // If created via the User form, pull the name and email from the parent form data
+        // to satisfy NOT NULL database constraints before the relation is saved.
+        if (request()->has('User')) {
+            $userData = request()->input('User');
+            if (empty($this->name)) {
+                $this->name = trim(($userData['name'] ?? '') . ' ' . ($userData['surname'] ?? '')) ?: ($userData['email'] ?? '');
+            }
+            if (empty($this->email)) {
+                $this->email = $userData['email'] ?? '';
+            }
+            return; // Bypass the standalone auto-creation logic
+        }
+
         // Bypass auto-creation if the Client is being created through an existing User relation
         if ($this->user_id) {
             return;

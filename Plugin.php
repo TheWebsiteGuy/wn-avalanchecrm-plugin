@@ -8,6 +8,7 @@ use Winter\Storm\Support\Facades\Schema;
 use Winter\User\Models\User as UserModel;
 use Winter\User\Models\UserGroup;
 use Winter\User\Controllers\Users as UsersController;
+use Backend\Models\User as BackendUserModel;
 use Event;
 
 /**
@@ -80,38 +81,74 @@ class Plugin extends PluginBase
     {
         $this->ensureUserGroupsExist();
 
+        /*
+                BackendUserModel::extend(function ($model) {
+                    $model->bindEvent('model.afterSave', function () use ($model) {
+                        // Sync to Staff if linked via backend_user_id
+                        $staff = \TheWebsiteGuy\AvalancheCRM\Models\Staff::where('backend_user_id', $model->id)->first();
+                        if ($staff) {
+                            $staff->name = trim($model->first_name . ' ' . $model->last_name);
+                            $staff->email = $model->email;
+                            $staff->save();
+                        }
+                    });
+                });
+        */
+
         UserModel::extend(function ($model) {
             $model->hasOne['client'] = [\TheWebsiteGuy\AvalancheCRM\Models\Client::class];
             $model->hasOne['staff'] = [\TheWebsiteGuy\AvalancheCRM\Models\Staff::class];
 
+            $model->bindEvent('model.beforeValidate', function () use ($model) {
+                // trace_log('UserModel::beforeValidate called. Attributes: ' . json_encode($model->getAttributes()));
+            });
+
             $model->bindEvent('model.afterCreate', function () use ($model) {
+                // If we are in the backend User form, the FormController will automatically
+                // create the related Staff/Client models via deferred bindings. We only need 
+                // to manually create them if we are NOT in the backend form.
+                if (request()->has('User')) {
+                    return;
+                }
+
+                // Determine name and email
+                $name = trim(($model->name ?? '') . ' ' . ($model->surname ?? ''));
+                $email = $model->email;
+
                 if (request()->input('is_staff')) {
                     $staff = new \TheWebsiteGuy\AvalancheCRM\Models\Staff();
                     $staff->user_id = $model->id;
-                    $staff->name = trim($model->name . ' ' . $model->surname);
-                    $staff->email = $model->email;
+                    $staff->name = $name ?: $email; // Fallback to email if name is missing
+                    $staff->email = $email;
                     $staff->save();
                 }
 
                 if (request()->input('is_client')) {
                     $client = new \TheWebsiteGuy\AvalancheCRM\Models\Client();
                     $client->user_id = $model->id;
-                    $client->name = trim($model->name . ' ' . $model->surname);
-                    $client->email = $model->email;
+                    $client->name = $name ?: $email;
+                    $client->email = $email;
                     $client->save();
                 }
             });
 
             $model->bindEvent('model.afterSave', function () use ($model) {
-                if ($staffData = post('staff')) {
-                    $staff = $model->staff ?: new \TheWebsiteGuy\AvalancheCRM\Models\Staff();
-                    $staff->user_id = $model->id;
-                    $staff->name = trim($model->name . ' ' . $model->surname);
+                // Always sync email and name to associated Staff if they exist
+                if ($staff = $model->staff) {
+                    if ($staffData = post('staff')) {
+                        $staff->fill($staffData);
+                    }
+                    $staff->name = trim(($model->name ?? '') . ' ' . ($model->surname ?? '')) ?: $model->email;
                     $staff->email = $model->email;
-                    $staff->fill($staffData);
                     $staff->save();
                 }
 
+                // Sync for Client
+                if ($client = $model->client) {
+                    $client->name = trim(($model->name ?? '') . ' ' . ($model->surname ?? '')) ?: $model->email;
+                    $client->email = $model->email;
+                    $client->save();
+                }
                 // Save marketing opt-out preference for clients
                 if ($marketingData = post('client_marketing')) {
                     $client = $model->client;
@@ -124,6 +161,10 @@ class Plugin extends PluginBase
         });
 
         Event::listen('backend.form.extendFieldsBefore', function ($widget) {
+            if ($widget->getController() instanceof UsersController && post()) {
+                trace_log('Form submission data: ' . json_encode(post()));
+            }
+
             if (!$widget->getController() instanceof UsersController) {
                 return;
             }
@@ -266,16 +307,16 @@ class Plugin extends PluginBase
 
         if (!$exists) {
             \Db::table('backend_user_roles')->insert([
-                'name'        => 'CRM Staff',
-                'code'        => 'avalanchecrm-staff',
+                'name' => 'CRM Staff',
+                'code' => 'avalanchecrm-staff',
                 'description' => 'Backend role for CRM staff members with access to all CRM features and settings.',
                 'permissions' => json_encode([
-                    'thewebsiteguy.avalanchecrm.*'               => 1,
+                    'thewebsiteguy.avalanchecrm.*' => 1,
                     'thewebsiteguy.avalanchecrm.manage_settings' => 1,
-                    'thewebsiteguy.avalanchecrm.tickets.*'       => 1,
-                    'thewebsiteguy.avalanchecrm.marketing.*'     => 1,
+                    'thewebsiteguy.avalanchecrm.tickets.*' => 1,
+                    'thewebsiteguy.avalanchecrm.marketing.*' => 1,
                 ]),
-                'is_system'  => false,
+                'is_system' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -293,7 +334,7 @@ class Plugin extends PluginBase
             \TheWebsiteGuy\AvalancheCRM\Components\Projects::class => 'projects',
             \TheWebsiteGuy\AvalancheCRM\Components\Tickets::class => 'tickets',
             \TheWebsiteGuy\AvalancheCRM\Components\Invoices::class => 'invoices',
-            \TheWebsiteGuy\AvalancheCRM\Components\Account::class => 'account',
+            \TheWebsiteGuy\AvalancheCRM\Components\Account::class => 'crmAccount',
         ];
     }
 
@@ -331,7 +372,7 @@ class Plugin extends PluginBase
             'avalanchecrm' => [
                 'label' => 'thewebsiteguy.avalanchecrm::lang.navigation.crm',
                 'url' => Backend::url('thewebsiteguy/avalanchecrm/dashboard'),
-                'icon' => 'icon-dashboard',
+                'iconSvg' => '/plugins/thewebsiteguy/avalanchecrm/assets/images/mountain.svg',
                 'permissions' => ['thewebsiteguy.avalanchecrm.*'],
                 'order' => 500,
                 'sideMenu' => [
