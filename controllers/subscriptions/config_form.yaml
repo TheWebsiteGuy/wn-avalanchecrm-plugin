@@ -3,28 +3,28 @@
 # ===================================
 
 # Record name
-name: 'thewebsiteguy.nexuscrm::lang.models.subscription.label'
+name: 'thewebsiteguy.avalanchecrm::lang.models.subscription.label'
 
 # Model Form Field configuration
-form: $/thewebsiteguy/nexuscrm/models/subscription/fields.yaml
+form: $/thewebsiteguy/avalanchecrm/models/subscription/fields.yaml
 
 # Model Class name
-modelClass: TheWebsiteGuy\NexusCRM\Models\Subscription
+modelClass: TheWebsiteGuy\AvalancheCRM\Models\Subscription
 
 # Default redirect location
-defaultRedirect: thewebsiteguy/nexuscrm/subscriptions
+defaultRedirect: thewebsiteguy/avalanchecrm/subscriptions
 
 # Create page
 create:
     title: backend::lang.form.create_title
-    redirect: thewebsiteguy/nexuscrm/subscriptions/update/:id
-    redirectClose: thewebsiteguy/nexuscrm/subscriptions
+    redirect: thewebsiteguy/avalanchecrm/subscriptions/update/:id
+    redirectClose: thewebsiteguy/avalanchecrm/subscriptions
 
 # Update page
 update:
     title: backend::lang.form.update_title
-    redirect: thewebsiteguy/nexuscrm/subscriptions
-    redirectClose: thewebsiteguy/nexuscrm/subscriptions
+    redirect: thewebsiteguy/avalanchecrm/subscriptions
+    redirectClose: thewebsiteguy/avalanchecrm/subscriptions
 
 # Preview page
 preview:

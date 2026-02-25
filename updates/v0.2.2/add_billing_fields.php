@@ -8,8 +8,8 @@ return new class extends Migration {
     public function up()
     {
         // Add billing fields to projects
-        if (!Schema::hasColumn('thewebsiteguy_nexuscrm_projects', 'billing_type')) {
-            Schema::table('thewebsiteguy_nexuscrm_projects', function (Blueprint $table) {
+        if (!Schema::hasColumn('thewebsiteguy_avalanchecrm_projects', 'billing_type')) {
+            Schema::table('thewebsiteguy_avalanchecrm_projects', function (Blueprint $table) {
                 $table->string('billing_type')->default('non_billable')->after('status');
                 $table->decimal('hourly_rate', 10, 2)->nullable()->after('billing_type');
                 $table->decimal('fixed_price', 10, 2)->nullable()->after('hourly_rate');
@@ -17,8 +17,8 @@ return new class extends Migration {
         }
 
         // Add billing fields to tasks
-        if (!Schema::hasColumn('thewebsiteguy_nexuscrm_tasks', 'is_billable')) {
-            Schema::table('thewebsiteguy_nexuscrm_tasks', function (Blueprint $table) {
+        if (!Schema::hasColumn('thewebsiteguy_avalanchecrm_tasks', 'is_billable')) {
+            Schema::table('thewebsiteguy_avalanchecrm_tasks', function (Blueprint $table) {
                 $table->boolean('is_billable')->default(false)->after('sort_order');
                 $table->decimal('hours', 8, 2)->nullable()->after('is_billable');
                 $table->decimal('hourly_rate', 10, 2)->nullable()->after('hours');
@@ -27,15 +27,15 @@ return new class extends Migration {
         }
 
         // Add notes to invoices
-        if (!Schema::hasColumn('thewebsiteguy_nexuscrm_invoices', 'notes')) {
-            Schema::table('thewebsiteguy_nexuscrm_invoices', function (Blueprint $table) {
+        if (!Schema::hasColumn('thewebsiteguy_avalanchecrm_invoices', 'notes')) {
+            Schema::table('thewebsiteguy_avalanchecrm_invoices', function (Blueprint $table) {
                 $table->text('notes')->nullable()->after('due_date');
             });
         }
 
         // Create invoice items table
-        if (!Schema::hasTable('thewebsiteguy_nexuscrm_invoice_items')) {
-        Schema::create('thewebsiteguy_nexuscrm_invoice_items', function (Blueprint $table) {
+        if (!Schema::hasTable('thewebsiteguy_avalanchecrm_invoice_items')) {
+        Schema::create('thewebsiteguy_avalanchecrm_invoice_items', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('invoice_id')->unsigned();
             $table->integer('task_id')->unsigned()->nullable();
@@ -53,17 +53,17 @@ return new class extends Migration {
 
     public function down()
     {
-        Schema::dropIfExists('thewebsiteguy_nexuscrm_invoice_items');
+        Schema::dropIfExists('thewebsiteguy_avalanchecrm_invoice_items');
 
-        Schema::table('thewebsiteguy_nexuscrm_invoices', function (Blueprint $table) {
+        Schema::table('thewebsiteguy_avalanchecrm_invoices', function (Blueprint $table) {
             $table->dropColumn('notes');
         });
 
-        Schema::table('thewebsiteguy_nexuscrm_tasks', function (Blueprint $table) {
+        Schema::table('thewebsiteguy_avalanchecrm_tasks', function (Blueprint $table) {
             $table->dropColumn(['is_billable', 'hours', 'hourly_rate', 'is_invoiced']);
         });
 
-        Schema::table('thewebsiteguy_nexuscrm_projects', function (Blueprint $table) {
+        Schema::table('thewebsiteguy_avalanchecrm_projects', function (Blueprint $table) {
             $table->dropColumn(['billing_type', 'hourly_rate', 'fixed_price']);
         });
     }

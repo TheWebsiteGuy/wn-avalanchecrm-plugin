@@ -3,16 +3,16 @@
 # ===================================
 
 # Model List Column configuration
-list: $/thewebsiteguy/nexuscrm/models/ticket/columns.yaml
+list: $/thewebsiteguy/avalanchecrm/models/ticket/columns.yaml
 
 # Model Class name
-modelClass: TheWebsiteGuy\NexusCRM\Models\Ticket
+modelClass: TheWebsiteGuy\AvalancheCRM\Models\Ticket
 
 # List Title
-title: 'thewebsiteguy.nexuscrm::lang.models.ticket.label_plural'
+title: 'thewebsiteguy.avalanchecrm::lang.models.ticket.label_plural'
 
 # Link URL for each record
-recordUrl: thewebsiteguy/nexuscrm/tickets/update/:id
+recordUrl: thewebsiteguy/avalanchecrm/tickets/update/:id
 
 # Message to display if the list is empty
 noRecordsMessage: backend::lang.list.no_records

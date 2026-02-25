@@ -1,10 +1,12 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Models;
+namespace TheWebsiteGuy\AvalancheCRM\Models;
 
 use Winter\Storm\Database\Model;
 use Winter\User\Models\User;
 use Winter\User\Models\UserGroup;
+use Backend\Models\User as BackendUser;
+use Backend\Models\UserRole;
 use Illuminate\Support\Str;
 use Winter\Storm\Exception\ValidationException;
 
@@ -18,7 +20,7 @@ class Staff extends Model
     /**
      * @var string The database table used by the model.
      */
-    public $table = 'thewebsiteguy_nexuscrm_staff';
+    public $table = 'thewebsiteguy_avalanchecrm_staff';
 
     /**
      * @var array Guarded fields
@@ -85,5 +87,54 @@ class Staff extends Model
         }
 
         $this->user_id = $user->id;
+
+        // Create a backend administrator account with the CRM Staff role
+        $this->createBackendUser($password);
+    }
+
+    /**
+     * Create a backend (admin) user for this staff member with the CRM Staff role.
+     */
+    protected function createBackendUser(string $password = null): void
+    {
+        // Skip if a backend user already exists with this email
+        if (BackendUser::where('email', $this->email)->exists()) {
+            // Link existing backend user
+            $existing = BackendUser::where('email', $this->email)->first();
+            $this->backend_user_id = $existing->id;
+
+            // Ensure they have the CRM role
+            $crmRole = UserRole::where('code', 'avalanchecrm-staff')->first();
+            if ($crmRole && $existing->role_id !== $crmRole->id) {
+                $existing->role_id = $crmRole->id;
+                $existing->forceSave();
+            }
+            return;
+        }
+
+        $password = $password ?: Str::random(12);
+
+        $nameParts = explode(' ', $this->name, 2);
+        $firstName = $nameParts[0];
+        $lastName  = $nameParts[1] ?? '';
+
+        $backendUser = new BackendUser();
+        $backendUser->first_name = $firstName;
+        $backendUser->last_name  = $lastName;
+        $backendUser->login      = $this->email;
+        $backendUser->email      = $this->email;
+        $backendUser->password   = $password;
+        $backendUser->password_confirmation = $password;
+        $backendUser->is_activated = true;
+
+        // Assign CRM Staff role
+        $crmRole = UserRole::where('code', 'avalanchecrm-staff')->first();
+        if ($crmRole) {
+            $backendUser->role_id = $crmRole->id;
+        }
+
+        $backendUser->forceSave();
+
+        $this->backend_user_id = $backendUser->id;
     }
 }

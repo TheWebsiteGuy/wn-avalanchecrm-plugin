@@ -6,7 +6,7 @@ fields:
     _download_pdf:
         label: Download PDF
         type: partial
-        path: $/thewebsiteguy/nexuscrm/controllers/invoices/_download_pdf_button.php
+        path: $/thewebsiteguy/avalanchecrm/controllers/invoices/_download_pdf_button.php
         span: full
         context: update
 
@@ -34,7 +34,7 @@ fields:
         type: dropdown
         span: left
         default: draft
-        comment: Internal workflow stage — clients only see invoices marked as Sent.
+        comment: Internal workflow stage â€” clients only see invoices marked as Sent.
     status:
         label: Payment Status
         type: dropdown
@@ -61,4 +61,4 @@ tabs:
             label: Line Items
             tab: Line Items
             type: partial
-            path: $/thewebsiteguy/nexuscrm/controllers/invoices/_items_relation.php
+            path: $/thewebsiteguy/avalanchecrm/controllers/invoices/_items_relation.php

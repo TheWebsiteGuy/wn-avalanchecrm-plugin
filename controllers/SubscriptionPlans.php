@@ -1,6 +1,6 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Controllers;
+namespace TheWebsiteGuy\AvalancheCRM\Controllers;
 
 use Backend\Classes\Controller;
 use Backend\Facades\BackendMenu;
@@ -19,12 +19,12 @@ class SubscriptionPlans extends Controller
     public $listConfig = 'config_list.yaml';
 
     protected $requiredPermissions = [
-        'thewebsiteguy.nexuscrm.subscriptions.manage_all',
+        'thewebsiteguy.avalanchecrm.subscriptions.manage_all',
     ];
 
     public function __construct()
     {
         parent::__construct();
-        BackendMenu::setContext('TheWebsiteGuy.NexusCRM', 'nexuscrm', 'subscriptionplans');
+        BackendMenu::setContext('TheWebsiteGuy.AvalancheCRM', 'avalanchecrm', 'subscriptionplans');
     }
 }

@@ -1,11 +1,14 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Models;
+namespace TheWebsiteGuy\AvalancheCRM\Models;
 
 use Winter\Storm\Database\Model;
 use Winter\User\Models\User;
+use Winter\Storm\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Winter\Storm\Exception\ValidationException;
+use TheWebsiteGuy\AvalancheCRM\Models\EmailTemplate;
+use TheWebsiteGuy\AvalancheCRM\Models\Campaign;
 
 /**
  * Client Model
@@ -17,7 +20,7 @@ class Client extends Model
     /**
      * @var string The database table used by the model.
      */
-    public $table = 'thewebsiteguy_nexuscrm_clients';
+    public $table = 'thewebsiteguy_avalanchecrm_clients';
 
     /**
      * @var array Guarded fields
@@ -37,7 +40,9 @@ class Client extends Model
     /**
      * @var array Attributes to be cast to native types
      */
-    protected $casts = [];
+    protected $casts = [
+        'marketing_opt_out' => 'boolean',
+    ];
 
     /**
      * @var array Attributes to be cast to JSON
@@ -67,9 +72,10 @@ class Client extends Model
      */
     public $hasOne = [];
     public $hasMany = [
-        'tickets' => [\TheWebsiteGuy\NexusCRM\Models\Ticket::class],
-        'invoices' => [\TheWebsiteGuy\NexusCRM\Models\Invoice::class],
-        'subscriptions' => [\TheWebsiteGuy\NexusCRM\Models\Subscription::class],
+        'tickets' => [\TheWebsiteGuy\AvalancheCRM\Models\Ticket::class],
+        'invoices' => [\TheWebsiteGuy\AvalancheCRM\Models\Invoice::class],
+        'subscriptions' => [\TheWebsiteGuy\AvalancheCRM\Models\Subscription::class],
+        'transactions' => [\TheWebsiteGuy\AvalancheCRM\Models\Transaction::class],
     ];
     public $hasOneThrough = [];
     public $hasManyThrough = [];
@@ -78,8 +84,8 @@ class Client extends Model
     ];
     public $belongsToMany = [
         'projects' => [
-            \TheWebsiteGuy\NexusCRM\Models\Project::class,
-            'table' => 'thewebsiteguy_nexuscrm_projects_clients',
+            \TheWebsiteGuy\AvalancheCRM\Models\Project::class,
+            'table' => 'thewebsiteguy_avalanchecrm_projects_clients',
             'key' => 'client_id',
             'otherKey' => 'project_id'
         ]
@@ -89,6 +95,99 @@ class Client extends Model
     public $morphMany = [];
     public $attachOne = [];
     public $attachMany = [];
+
+    /**
+     * Scope: only clients who have NOT opted out of marketing.
+     */
+    public function scopeMarketable($query)
+    {
+        return $query->where(function ($q) {
+            $q->where('marketing_opt_out', false)
+              ->orWhereNull('marketing_opt_out');
+        })->whereNotNull('email');
+    }
+
+    /**
+     * Generate a unique unsubscribe token for this client.
+     */
+    public function generateUnsubscribeToken(): string
+    {
+        if (!$this->unsubscribe_token) {
+            $this->unsubscribe_token = Str::random(64);
+            $this->save();
+        }
+
+        return $this->unsubscribe_token;
+    }
+
+    /**
+     * Get the unsubscribe URL for this client.
+     */
+    public function getUnsubscribeUrl(): string
+    {
+        return url('/avalanchecrm/unsubscribe/' . $this->generateUnsubscribeToken());
+    }
+
+    /**
+     * After creating a client, send the welcome email if a template exists.
+     */
+    public function afterCreate()
+    {
+        $this->sendNotification('client', 'Client Welcome');
+    }
+
+    /**
+     * After saving a client, send account update notification if profile fields changed.
+     */
+    public function afterSave()
+    {
+        if ($this->wasRecentlyCreated) {
+            return;
+        }
+
+        $watchedFields = ['name', 'email', 'phone', 'company'];
+        if ($this->isDirty($watchedFields)) {
+            $this->sendNotification('client', 'Client Account Update');
+        }
+    }
+
+    /**
+     * Send a notification email to this client using a named template.
+     *
+     * @param string $category  Template category (e.g. 'client', 'ticket')
+     * @param string $name      Template name (e.g. 'Client Welcome')
+     * @return bool Whether the email was sent
+     */
+    public function sendNotification(string $category, string $name): bool
+    {
+        if (empty($this->email)) {
+            return false;
+        }
+
+        $template = EmailTemplate::where('category', $category)
+            ->where('name', $name)
+            ->where('is_active', true)
+            ->first();
+
+        if (!$template) {
+            return false;
+        }
+
+        try {
+            $subject = Campaign::parseTags($template->subject ?: $template->name, $this);
+            $body    = Campaign::parseTags($template->content, $this);
+
+            Mail::raw(['html' => $body], function ($message) use ($subject) {
+                $message->to($this->email, $this->name);
+                $message->subject($subject);
+            });
+
+            return true;
+        } catch (\Exception $e) {
+            \Log::error('Avalanche CRM: Failed to send notification "' . $name . '" to client #' . $this->id . ': ' . $e->getMessage());
+            return false;
+        }
+    }
 
     /**
      * Hook before creating a Client to automatically create an associated User.

@@ -7,8 +7,8 @@ use Winter\Storm\Support\Facades\Schema;
 return new class extends Migration {
     public function up()
     {
-        if (!Schema::hasTable('thewebsiteguy_nexuscrm_subscription_plans')) {
-            Schema::create('thewebsiteguy_nexuscrm_subscription_plans', function (Blueprint $table) {
+        if (!Schema::hasTable('thewebsiteguy_avalanchecrm_subscription_plans')) {
+            Schema::create('thewebsiteguy_avalanchecrm_subscription_plans', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('name');
                 $table->string('slug')->nullable()->unique();
@@ -22,8 +22,8 @@ return new class extends Migration {
             });
         }
 
-        if (!Schema::hasColumn('thewebsiteguy_nexuscrm_subscriptions', 'plan_id')) {
-            Schema::table('thewebsiteguy_nexuscrm_subscriptions', function (Blueprint $table) {
+        if (!Schema::hasColumn('thewebsiteguy_avalanchecrm_subscriptions', 'plan_id')) {
+            Schema::table('thewebsiteguy_avalanchecrm_subscriptions', function (Blueprint $table) {
                 $table->integer('plan_id')->unsigned()->nullable()->after('client_id');
             });
         }
@@ -31,10 +31,10 @@ return new class extends Migration {
 
     public function down()
     {
-        Schema::table('thewebsiteguy_nexuscrm_subscriptions', function (Blueprint $table) {
+        Schema::table('thewebsiteguy_avalanchecrm_subscriptions', function (Blueprint $table) {
             $table->dropColumn('plan_id');
         });
 
-        Schema::dropIfExists('thewebsiteguy_nexuscrm_subscription_plans');
+        Schema::dropIfExists('thewebsiteguy_avalanchecrm_subscription_plans');
     }
 };

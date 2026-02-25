@@ -4,7 +4,7 @@
 
 columns:
   id:
-    label: thewebsiteguy.nexuscrm::lang.models.general.id
+    label: thewebsiteguy.avalanchecrm::lang.models.general.id
     searchable: true
 
   name:
@@ -20,5 +20,5 @@ columns:
     searchable: true
 
   created_at:
-    label: thewebsiteguy.nexuscrm::lang.models.general.created_at
+    label: thewebsiteguy.avalanchecrm::lang.models.general.created_at
     type: datetime

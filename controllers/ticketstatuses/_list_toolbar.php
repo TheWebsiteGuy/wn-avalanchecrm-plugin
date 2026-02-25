@@ -2,7 +2,7 @@
     <div class="toolbar-widget list-header" id="Toolbar-listToolbar">
         <div class="control-toolbar">
             <div class="toolbar-item">
-                <a href="<?= Backend::url('thewebsiteguy/nexuscrm/ticketstatuses/create') ?>"
+                <a href="<?= Backend::url('thewebsiteguy/avalanchecrm/ticketstatuses/create') ?>"
                     class="btn btn-primary oc-icon-plus">
                     New Ticket Status
                 </a>

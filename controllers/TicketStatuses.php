@@ -1,6 +1,6 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Controllers;
+namespace TheWebsiteGuy\AvalancheCRM\Controllers;
 
 use Backend\Classes\Controller;
 use Backend\Facades\BackendMenu;
@@ -32,6 +32,6 @@ class TicketStatuses extends Controller
     {
         parent::__construct();
 
-        BackendMenu::setContext('TheWebsiteGuy.NexusCRM', 'nexuscrm', 'tickets');
+        BackendMenu::setContext('TheWebsiteGuy.AvalancheCRM', 'avalanchecrm', 'tickets');
     }
 }

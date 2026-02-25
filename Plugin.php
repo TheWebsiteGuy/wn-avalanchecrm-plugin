@@ -1,9 +1,8 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM;
+namespace TheWebsiteGuy\AvalancheCRM;
 
 use Backend\Facades\Backend;
-use Backend\Models\UserRole;
 use System\Classes\PluginBase;
 use Winter\Storm\Support\Facades\Schema;
 use Winter\User\Models\User as UserModel;
@@ -12,7 +11,7 @@ use Winter\User\Controllers\Users as UsersController;
 use Event;
 
 /**
- * Nexus CRM Plugin Information File
+ * Avalanche CRM Plugin Information File
  */
 class Plugin extends PluginBase
 {
@@ -22,8 +21,8 @@ class Plugin extends PluginBase
     public function pluginDetails(): array
     {
         return [
-            'name' => 'thewebsiteguy.nexuscrm::lang.plugin.name',
-            'description' => 'thewebsiteguy.nexuscrm::lang.plugin.description',
+            'name' => 'thewebsiteguy.avalanchecrm::lang.plugin.name',
+            'description' => 'thewebsiteguy.avalanchecrm::lang.plugin.description',
             'author' => 'TheWebsiteGuy',
             'icon' => 'icon-leaf'
         ];
@@ -34,10 +33,26 @@ class Plugin extends PluginBase
      */
     public function register(): void
     {
-        // Winter CMS has no "public" directory — set dompdf's base path to the project root.
+        // Winter CMS has no "public" directory â€” set dompdf's base path to the project root.
         $this->app['config']->set('dompdf.public_path', base_path());
 
         $this->app->register(\Barryvdh\DomPDF\ServiceProvider::class);
+
+        // Register console commands
+        $this->registerConsoleCommand('avalanchecrm.send-overdue-reminders', \TheWebsiteGuy\AvalancheCRM\Console\SendOverdueReminders::class);
+        $this->registerConsoleCommand('avalanchecrm.send-renewal-reminders', \TheWebsiteGuy\AvalancheCRM\Console\SendRenewalReminders::class);
+    }
+
+    /**
+     * Register scheduled tasks.
+     */
+    public function registerSchedule($schedule): void
+    {
+        // Send overdue invoice reminders daily at 9:00 AM
+        $schedule->command('avalanchecrm:send-overdue-reminders')->dailyAt('09:00');
+
+        // Send subscription renewal reminders daily at 9:00 AM
+        $schedule->command('avalanchecrm:send-renewal-reminders')->dailyAt('09:00');
     }
 
     /**
@@ -48,7 +63,7 @@ class Plugin extends PluginBase
         return [
             'filters' => [
                 'currency' => function ($value) {
-                    $settings = \TheWebsiteGuy\NexusCRM\Models\Settings::instance();
+                    $settings = \TheWebsiteGuy\AvalancheCRM\Models\Settings::instance();
                     $symbol = $settings->currency_symbol ?: '$';
                     $code = $settings->currency_code ?: 'USD';
 
@@ -66,12 +81,12 @@ class Plugin extends PluginBase
         $this->ensureUserGroupsExist();
 
         UserModel::extend(function ($model) {
-            $model->hasOne['client'] = [\TheWebsiteGuy\NexusCRM\Models\Client::class];
-            $model->hasOne['staff'] = [\TheWebsiteGuy\NexusCRM\Models\Staff::class];
+            $model->hasOne['client'] = [\TheWebsiteGuy\AvalancheCRM\Models\Client::class];
+            $model->hasOne['staff'] = [\TheWebsiteGuy\AvalancheCRM\Models\Staff::class];
 
             $model->bindEvent('model.afterCreate', function () use ($model) {
                 if (request()->input('is_staff')) {
-                    $staff = new \TheWebsiteGuy\NexusCRM\Models\Staff();
+                    $staff = new \TheWebsiteGuy\AvalancheCRM\Models\Staff();
                     $staff->user_id = $model->id;
                     $staff->name = trim($model->name . ' ' . $model->surname);
                     $staff->email = $model->email;
@@ -79,7 +94,7 @@ class Plugin extends PluginBase
                 }
 
                 if (request()->input('is_client')) {
-                    $client = new \TheWebsiteGuy\NexusCRM\Models\Client();
+                    $client = new \TheWebsiteGuy\AvalancheCRM\Models\Client();
                     $client->user_id = $model->id;
                     $client->name = trim($model->name . ' ' . $model->surname);
                     $client->email = $model->email;
@@ -89,12 +104,21 @@ class Plugin extends PluginBase
 
             $model->bindEvent('model.afterSave', function () use ($model) {
                 if ($staffData = post('staff')) {
-                    $staff = $model->staff ?: new \TheWebsiteGuy\NexusCRM\Models\Staff();
+                    $staff = $model->staff ?: new \TheWebsiteGuy\AvalancheCRM\Models\Staff();
                     $staff->user_id = $model->id;
                     $staff->name = trim($model->name . ' ' . $model->surname);
                     $staff->email = $model->email;
                     $staff->fill($staffData);
                     $staff->save();
+                }
+
+                // Save marketing opt-out preference for clients
+                if ($marketingData = post('client_marketing')) {
+                    $client = $model->client;
+                    if ($client) {
+                        $client->marketing_opt_out = !empty($marketingData['marketing_opt_out']);
+                        $client->save();
+                    }
                 }
             });
         });
@@ -155,6 +179,39 @@ class Plugin extends PluginBase
                     ]
                 ]);
             }
+
+            // Only show Client tabs if the user is in the Client group or is_client is requested
+            $isClient = $widget->model->groups()->where('code', 'client')->exists() || request()->input('is_client');
+
+            if ($isClient) {
+                $widget->addTabFields([
+                    'client_marketing' => [
+                        'tab' => 'Marketing',
+                        'type' => 'partial',
+                        'path' => '$/thewebsiteguy/avalanchecrm/views/user_tabs/_marketing.htm'
+                    ],
+                    'client_tickets' => [
+                        'tab' => 'Tickets',
+                        'type' => 'partial',
+                        'path' => '$/thewebsiteguy/avalanchecrm/views/user_tabs/_tickets.htm'
+                    ],
+                    'client_projects' => [
+                        'tab' => 'Projects',
+                        'type' => 'partial',
+                        'path' => '$/thewebsiteguy/avalanchecrm/views/user_tabs/_projects.htm'
+                    ],
+                    'client_invoices' => [
+                        'tab' => 'Invoices',
+                        'type' => 'partial',
+                        'path' => '$/thewebsiteguy/avalanchecrm/views/user_tabs/_invoices.htm'
+                    ],
+                    'client_subscriptions' => [
+                        'tab' => 'Subscriptions',
+                        'type' => 'partial',
+                        'path' => '$/thewebsiteguy/avalanchecrm/views/user_tabs/_subscriptions.htm'
+                    ],
+                ]);
+            }
         });
 
     }
@@ -186,6 +243,43 @@ class Plugin extends PluginBase
                 UserGroup::create($group);
             }
         }
+
+        // Ensure the CRM Staff backend role exists
+        $this->ensureBackendRoleExists();
+    }
+
+    /**
+     * Ensure the CRM Staff backend role exists with all required permissions.
+     */
+    protected function ensureBackendRoleExists(): void
+    {
+        if (!Schema::hasTable('backend_user_roles')) {
+            return;
+        }
+
+        // Check by both code and name to avoid unique-validation failures
+        // after a plugin rename where the old role still exists.
+        $exists = \Db::table('backend_user_roles')
+            ->where('code', 'avalanchecrm-staff')
+            ->orWhere('name', 'CRM Staff')
+            ->exists();
+
+        if (!$exists) {
+            \Db::table('backend_user_roles')->insert([
+                'name'        => 'CRM Staff',
+                'code'        => 'avalanchecrm-staff',
+                'description' => 'Backend role for CRM staff members with access to all CRM features and settings.',
+                'permissions' => json_encode([
+                    'thewebsiteguy.avalanchecrm.*'               => 1,
+                    'thewebsiteguy.avalanchecrm.manage_settings' => 1,
+                    'thewebsiteguy.avalanchecrm.tickets.*'       => 1,
+                    'thewebsiteguy.avalanchecrm.marketing.*'     => 1,
+                ]),
+                'is_system'  => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 
     /**
@@ -194,11 +288,12 @@ class Plugin extends PluginBase
     public function registerComponents(): array
     {
         return [
-            \TheWebsiteGuy\NexusCRM\Components\Subscriptions::class => 'subscriptions',
-            \TheWebsiteGuy\NexusCRM\Components\Projects::class => 'projects',
-            \TheWebsiteGuy\NexusCRM\Components\Tickets::class => 'tickets',
-            \TheWebsiteGuy\NexusCRM\Components\Invoices::class => 'invoices',
-            \TheWebsiteGuy\NexusCRM\Components\Account::class => 'account',
+            \TheWebsiteGuy\AvalancheCRM\Components\Dashboard::class => 'dashboard',
+            \TheWebsiteGuy\AvalancheCRM\Components\Subscriptions::class => 'subscriptions',
+            \TheWebsiteGuy\AvalancheCRM\Components\Projects::class => 'projects',
+            \TheWebsiteGuy\AvalancheCRM\Components\Tickets::class => 'tickets',
+            \TheWebsiteGuy\AvalancheCRM\Components\Invoices::class => 'invoices',
+            \TheWebsiteGuy\AvalancheCRM\Components\Account::class => 'account',
         ];
     }
 
@@ -208,17 +303,21 @@ class Plugin extends PluginBase
     public function registerPermissions(): array
     {
         return [
-            'thewebsiteguy.nexuscrm.*' => [
-                'tab' => 'Nexus CRM',
+            'thewebsiteguy.avalanchecrm.*' => [
+                'tab' => 'Avalanche CRM',
                 'label' => 'Manage all CRM features',
             ],
-            'thewebsiteguy.nexuscrm.manage_settings' => [
-                'tab' => 'Nexus CRM',
+            'thewebsiteguy.avalanchecrm.manage_settings' => [
+                'tab' => 'Avalanche CRM',
                 'label' => 'Manage CRM Settings',
             ],
-            'thewebsiteguy.nexuscrm.tickets.*' => [
-                'tab' => 'Nexus CRM',
+            'thewebsiteguy.avalanchecrm.tickets.*' => [
+                'tab' => 'Avalanche CRM',
                 'label' => 'Access Tickets section',
+            ],
+            'thewebsiteguy.avalanchecrm.marketing.*' => [
+                'tab' => 'Avalanche CRM',
+                'label' => 'Manage Email Marketing',
             ],
         ];
     }
@@ -229,54 +328,74 @@ class Plugin extends PluginBase
     public function registerNavigation(): array
     {
         return [
-            'nexuscrm' => [
-                'label' => 'thewebsiteguy.nexuscrm::lang.navigation.crm',
-                'url' => Backend::url('thewebsiteguy/nexuscrm/dashboard'),
+            'avalanchecrm' => [
+                'label' => 'thewebsiteguy.avalanchecrm::lang.navigation.crm',
+                'url' => Backend::url('thewebsiteguy/avalanchecrm/dashboard'),
                 'icon' => 'icon-dashboard',
-                'permissions' => ['thewebsiteguy.nexuscrm.*'],
+                'permissions' => ['thewebsiteguy.avalanchecrm.*'],
                 'order' => 500,
                 'sideMenu' => [
                     'dashboard' => [
-                        'label' => 'thewebsiteguy.nexuscrm::lang.navigation.dashboard',
+                        'label' => 'thewebsiteguy.avalanchecrm::lang.navigation.dashboard',
                         'icon' => 'icon-dashboard',
-                        'url' => Backend::url('thewebsiteguy/nexuscrm/dashboard'),
-                        'permissions' => ['thewebsiteguy.nexuscrm.*'],
+                        'url' => Backend::url('thewebsiteguy/avalanchecrm/dashboard'),
+                        'permissions' => ['thewebsiteguy.avalanchecrm.*'],
                     ],
                     'clients' => [
-                        'label' => 'thewebsiteguy.nexuscrm::lang.navigation.clients',
+                        'label' => 'thewebsiteguy.avalanchecrm::lang.navigation.clients',
                         'icon' => 'icon-users',
-                        'url' => Backend::url('thewebsiteguy/nexuscrm/clients'),
-                        'permissions' => ['thewebsiteguy.nexuscrm.*'],
+                        'url' => Backend::url('thewebsiteguy/avalanchecrm/clients'),
+                        'permissions' => ['thewebsiteguy.avalanchecrm.*'],
                     ],
                     'staff' => [
-                        'label' => 'thewebsiteguy.nexuscrm::lang.navigation.staff',
+                        'label' => 'thewebsiteguy.avalanchecrm::lang.navigation.staff',
                         'icon' => 'icon-user-tie',
-                        'url' => Backend::url('thewebsiteguy/nexuscrm/staff'),
-                        'permissions' => ['thewebsiteguy.nexuscrm.*'],
+                        'url' => Backend::url('thewebsiteguy/avalanchecrm/staff'),
+                        'permissions' => ['thewebsiteguy.avalanchecrm.*'],
                     ],
                     'projects' => [
-                        'label' => 'thewebsiteguy.nexuscrm::lang.navigation.projects',
+                        'label' => 'thewebsiteguy.avalanchecrm::lang.navigation.projects',
                         'icon' => 'icon-briefcase',
-                        'url' => Backend::url('thewebsiteguy/nexuscrm/projects'),
-                        'permissions' => ['thewebsiteguy.nexuscrm.*'],
+                        'url' => Backend::url('thewebsiteguy/avalanchecrm/projects'),
+                        'permissions' => ['thewebsiteguy.avalanchecrm.*'],
                     ],
                     'tickets' => [
-                        'label' => 'thewebsiteguy.nexuscrm::lang.navigation.tickets',
+                        'label' => 'thewebsiteguy.avalanchecrm::lang.navigation.tickets',
                         'icon' => 'icon-ticket',
-                        'url' => Backend::url('thewebsiteguy/nexuscrm/tickets'),
-                        'permissions' => ['thewebsiteguy.nexuscrm.*'],
+                        'url' => Backend::url('thewebsiteguy/avalanchecrm/tickets'),
+                        'permissions' => ['thewebsiteguy.avalanchecrm.*'],
                     ],
                     'invoices' => [
-                        'label' => 'thewebsiteguy.nexuscrm::lang.navigation.invoices',
+                        'label' => 'thewebsiteguy.avalanchecrm::lang.navigation.invoices',
                         'icon' => 'icon-file-text-o',
-                        'url' => Backend::url('thewebsiteguy/nexuscrm/invoices'),
-                        'permissions' => ['thewebsiteguy.nexuscrm.*'],
+                        'url' => Backend::url('thewebsiteguy/avalanchecrm/invoices'),
+                        'permissions' => ['thewebsiteguy.avalanchecrm.*'],
                     ],
                     'subscriptions' => [
-                        'label' => 'thewebsiteguy.nexuscrm::lang.navigation.subscriptions',
+                        'label' => 'thewebsiteguy.avalanchecrm::lang.navigation.subscriptions',
                         'icon' => 'icon-refresh',
-                        'url' => Backend::url('thewebsiteguy/nexuscrm/subscriptions'),
-                        'permissions' => ['thewebsiteguy.nexuscrm.*'],
+                        'url' => Backend::url('thewebsiteguy/avalanchecrm/subscriptions'),
+                        'permissions' => ['thewebsiteguy.avalanchecrm.*'],
+                    ],
+                    'campaigns' => [
+                        'label' => 'thewebsiteguy.avalanchecrm::lang.navigation.marketing',
+                        'icon' => 'icon-envelope',
+                        'url' => Backend::url('thewebsiteguy/avalanchecrm/campaigns'),
+                        'permissions' => ['thewebsiteguy.avalanchecrm.marketing.*'],
+                        'sideMenu' => [
+                            'campaigns' => [
+                                'label' => 'thewebsiteguy.avalanchecrm::lang.navigation.campaigns',
+                                'icon' => 'icon-bullhorn',
+                                'url' => Backend::url('thewebsiteguy/avalanchecrm/campaigns'),
+                                'permissions' => ['thewebsiteguy.avalanchecrm.marketing.*'],
+                            ],
+                        ]
+                    ],
+                    'templates' => [
+                        'label' => 'thewebsiteguy.avalanchecrm::lang.navigation.email_templates',
+                        'icon' => 'icon-file-code-o',
+                        'url' => Backend::url('thewebsiteguy/avalanchecrm/emailtemplates'),
+                        'permissions' => ['thewebsiteguy.avalanchecrm.marketing.*'],
                     ],
                 ]
             ],
@@ -290,14 +409,14 @@ class Plugin extends PluginBase
     {
         return [
             'settings' => [
-                'label' => 'thewebsiteguy.nexuscrm::lang.models.settings.label',
-                'description' => 'thewebsiteguy.nexuscrm::lang.models.settings.description',
-                'category' => 'Nexus CRM',
+                'label' => 'thewebsiteguy.avalanchecrm::lang.models.settings.label',
+                'description' => 'thewebsiteguy.avalanchecrm::lang.models.settings.description',
+                'category' => 'Avalanche CRM',
                 'icon' => 'icon-cog',
-                'class' => \TheWebsiteGuy\NexusCRM\Models\Settings::class,
+                'class' => \TheWebsiteGuy\AvalancheCRM\Models\Settings::class,
                 'order' => 500,
                 'keywords' => 'crm payments stripe paypal gocardless settings',
-                'permissions' => ['thewebsiteguy.nexuscrm.manage_settings']
+                'permissions' => ['thewebsiteguy.avalanchecrm.manage_settings']
             ]
         ];
     }

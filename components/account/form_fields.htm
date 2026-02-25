@@ -70,4 +70,24 @@
             </div>
         </div>
     </div>
+
+    {# Marketing Preferences Section #}
+    {% if client %}
+    <div class="account-details-section account-details-section--full">
+        <h3>Marketing Preferences</h3>
+        <div class="account-details-row">
+            <div class="account-details-field">
+                <label class="account-details-checkbox">
+                    <input type="hidden" name="marketing_opt_out" value="0">
+                    <input type="checkbox" name="marketing_opt_out" value="1" {% if client.marketing_opt_out %}checked{% endif %}>
+                    <span>Opt out of marketing emails</span>
+                </label>
+                <small class="account-details-hint">
+                    When checked, you will not receive promotional or marketing emails. 
+                    You will still receive transactional emails such as invoices and account notifications.
+                </small>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </div>

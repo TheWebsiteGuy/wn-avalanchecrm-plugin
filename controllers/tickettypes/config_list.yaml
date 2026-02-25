@@ -3,16 +3,16 @@
 # ===================================
 
 # Model List Configuration
-list: $/thewebsiteguy/nexuscrm/models/tickettype/columns.yaml
+list: $/thewebsiteguy/avalanchecrm/models/tickettype/columns.yaml
 
 # Model Class name
-modelClass: TheWebsiteGuy\NexusCRM\Models\TicketType
+modelClass: TheWebsiteGuy\AvalancheCRM\Models\TicketType
 
 # List Title
 title: Manage Ticket Types
 
 # Link URL for each record
-recordUrl: thewebsiteguy/nexuscrm/tickettypes/update/:id
+recordUrl: thewebsiteguy/avalanchecrm/tickettypes/update/:id
 
 # Message to display if the list is empty
 noRecordsMessage: No ticket types found.

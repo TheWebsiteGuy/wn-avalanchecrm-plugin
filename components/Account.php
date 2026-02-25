@@ -1,6 +1,6 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Components;
+namespace TheWebsiteGuy\AvalancheCRM\Components;
 
 use Winter\User\Facades\Auth;
 use Winter\Storm\Support\Facades\Flash;
@@ -9,7 +9,7 @@ use Winter\Storm\Support\Facades\Validator;
 use Winter\Storm\Exception\ValidationException;
 use Winter\Storm\Exception\ApplicationException;
 use Cms\Classes\ComponentBase;
-use TheWebsiteGuy\NexusCRM\Models\Client;
+use TheWebsiteGuy\AvalancheCRM\Models\Client;
 
 /**
  * Account Component
@@ -43,8 +43,8 @@ class Account extends ComponentBase
 
     public function onRun()
     {
-        $this->addCss('/plugins/thewebsiteguy/nexuscrm/assets/css/account_details.css');
-        $this->page['themeStyles'] = \TheWebsiteGuy\NexusCRM\Classes\ThemeStyles::render();
+        $this->addCss('/plugins/thewebsiteguy/avalanchecrm/assets/css/account_details.css');
+        $this->page['themeStyles'] = \TheWebsiteGuy\AvalancheCRM\Classes\ThemeStyles::render();
 
         $this->prepareVars();
     }
@@ -61,7 +61,7 @@ class Account extends ComponentBase
     {
         $user = Auth::getUser();
         if (!$user) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.must_be_logged_in'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.must_be_logged_in'));
         }
 
         $data = Input::all();
@@ -86,10 +86,14 @@ class Account extends ComponentBase
             $client->email = $user->email;
             $client->phone = $user->phone ?? $client->phone;
             $client->company = $user->company ?? $client->company;
+
+            // Marketing opt-out preference
+            $client->marketing_opt_out = (bool) Input::get('marketing_opt_out', false);
+
             $client->save();
         }
 
-        Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.account_updated'));
+        Flash::success(trans('thewebsiteguy.avalanchecrm::lang.messages.account_updated'));
 
         $this->prepareVars();
 

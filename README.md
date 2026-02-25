@@ -1,32 +1,32 @@
-# Nexus CRM
+# Avalanche CRM
 
 A powerful, comprehensive Customer Relationship Management (CRM) and Billing system for Winter CMS. Streamline your client management, project tracking, invoicing, support tickets, and recurring subscriptions directly within your CMS.
 
-![Nexus CRM](assets/images/dashboard.png)
+![Avalanche CRM](assets/images/dashboard.png)
 
 > [!WARNING]
 > **Work In Progress**: This plugin is currently in early development. Features, database structures, and components are subject to significant changes without prior notice. Use in production at your own risk.
 
 ## Key Features
 
-*   **👥 Client Management**: Centralised tracking of client details, associated user profiles, and activity.
-*   **🏗️ Projects & Tasks**: Robust project management with assignable tasks, staff roles, and Kanban-style management.
-*   **🧾 Professional Invoicing**:
+*   **ðŸ‘¥ Client Management**: Centralised tracking of client details, associated user profiles, and activity.
+*   **ðŸ—ï¸ Projects & Tasks**: Robust project management with assignable tasks, staff roles, and Kanban-style management.
+*   **ðŸ§¾ Professional Invoicing**:
     *   Automatic PDF generation via DomPDF.
     *   Curated tax calculations and customisable currency symbols.
     *   Managed invoice status (Outstanding, Paid, etc.).
-*   **🎫 Support Tickets**: Integrated client-facing ticket system with categories, priority levels, and status tracking.
-*   **🔄 Subscriptions & Billing**: 
+*   **ðŸŽ« Support Tickets**: Integrated client-facing ticket system with categories, priority levels, and status tracking.
+*   **ðŸ”„ Subscriptions & Billing**: 
     *   Recurring billing management for various plans.
     *   Support for multiple payment gateways (Stripe, PayPal, GoCardless).
     *   Managed billing cycles and payment methods.
-*   **🛠️ Staff Management**: Manage internal team members, job titles, and departments.
-*   **🎨 Dynamic Theming**: Built-in CSS variables for brand-specific dashboard customisation.
-*   **🇬🇧 UK English Localisation**: Full support for UK English conventions (e.g., "Cancelled", "Synchronise").
+*   **ðŸ› ï¸ Staff Management**: Manage internal team members, job titles, and departments.
+*   **ðŸŽ¨ Dynamic Theming**: Built-in CSS variables for brand-specific dashboard customisation.
+*   **ðŸ‡¬ðŸ‡§ UK English Localisation**: Full support for UK English conventions (e.g., "Cancelled", "Synchronise").
 
 ## Settings
 
-Nexus CRM provides a settings area in the Winter CMS backend to configure:
+Avalanche CRM provides a settings area in the Winter CMS backend to configure:
 
 *   **Company Details**: Set your business name, address, contact information, and logo for use on generated PDFs.
 *   **Billing & Currency**: Define your default currency symbol, tax percentage, and invoice numbering formats.
@@ -35,7 +35,18 @@ Nexus CRM provides a settings area in the Winter CMS backend to configure:
 *   **Custom Branding**: Adjust dashboard accent colours and UI elements via built-in CSS variable controls.
 
 
-![Nexus CRM](assets/images/settings.png)
+![Avalanche CRM](assets/images/settings.png)
+
+## Email Templates
+
+Avalanche CRM provides a settings area in the Winter CMS backend to manage email templates:
+
+*   **Invoice Notifications**: Automated emails for new invoices, payment reminders, and receipts.
+*   **Ticket Updates**: Instant notifications for ticket creation, staff replies, and status changes.
+*   **Subscription Alerts**: Automated messages for renewals, cancellations, and payment failures.
+*   **Dynamic Variables**: Personalise templates using placeholders for client names, invoice amounts, and ticket IDs.
+
+![Avalanche CRM](assets/images/email-templates.png)
 
 ## Requirements
 
@@ -51,7 +62,7 @@ Nexus CRM provides a settings area in the Winter CMS backend to configure:
 
 1.  Install plugin with composer:
     ```bash
-    composer require thewebsiteguy/wn-nexuscrm-plugin
+    composer require thewebsiteguy/wn-avalanchecrm-plugin
     ```
 2.  Execute migrations:
     ```bash
@@ -62,7 +73,7 @@ Nexus CRM provides a settings area in the Winter CMS backend to configure:
 
 This plugin provides several components to build a fully functional client portal:
 
-### 🎫 tickets
+### ðŸŽ« tickets
 Allows clients to view, create, and manage their support tickets.
 ```ini
 [tickets]
@@ -71,7 +82,7 @@ allowCreate = 1
 allowClose = 1
 ```
 
-### 🏗️ projects
+### ðŸ—ï¸ projects
 Displays projects assigned to the client, including tasks, tickets, and invoices.
 ```ini
 [projects]
@@ -79,14 +90,14 @@ projectsPerPage = 10
 showTasks = 1
 ```
 
-### 📑 invoices
+### ðŸ“‘ invoices
 Provides a list of sent invoices with PDF download capability.
 ```ini
 [invoices]
 invoicesPerPage = 10
 ```
 
-### 🔄 subscriptions
+### ðŸ”„ subscriptions
 Comprehensive subscription management including plan switching and payment method updates.
 ```ini
 [subscriptions]
@@ -94,7 +105,7 @@ showPlans = 1
 showPaymentMethods = 1
 ```
 
-### 👤 account
+### ðŸ‘¤ account
 Allows users to manage their profile details and contact information.
 ```ini
 [account]
@@ -102,8 +113,8 @@ Allows users to manage their profile details and contact information.
 
 ## Configuration
 
-Navigate to **Settings > CRM > Nexus CRM Settings** to configure:
-*   **Currency Settings**: Custom symbols and codes (e.g., £ GBP).
+Navigate to **Settings > CRM > Avalanche CRM Settings** to configure:
+*   **Currency Settings**: Custom symbols and codes (e.g., Â£ GBP).
 *   **Brand Styling**: Primary and secondary colours for the client portal.
 *   **Invoicing**: Set your company details and invoice prefixes.
 *   **Payment Gateways**: API credentials for Stripe, PayPal, and GoCardless.
@@ -123,7 +134,7 @@ Registers granular permissions for:
 
 ## Support
 
-For technical support or feature requests, please contact [TheWebsiteGuy](mailto:support@thewebsiteguy.com).
+For technical support or feature requests, please contact [TheWebsiteGuy](mailto:support@thewebsiteguy.uk).
 
 ---
-*Built with ❤️ for the Winter CMS Community.*
+*Built with â¤ï¸ for the Winter CMS Community.*

@@ -1,8 +1,11 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Models;
+namespace TheWebsiteGuy\AvalancheCRM\Models;
 
 use Winter\Storm\Database\Model;
+use TheWebsiteGuy\AvalancheCRM\Models\Campaign;
+use TheWebsiteGuy\AvalancheCRM\Models\EmailTemplate;
+use Winter\Storm\Support\Facades\Mail;
 
 /**
  * Project Model
@@ -14,7 +17,7 @@ class Project extends Model
     /**
      * @var string The database table used by the model.
      */
-    public $table = 'thewebsiteguy_nexuscrm_projects';
+    public $table = 'thewebsiteguy_avalanchecrm_projects';
 
     /**
      * @var array Guarded fields
@@ -67,23 +70,23 @@ class Project extends Model
      */
     public $hasOne = [];
     public $hasMany = [
-        'tickets' => [\TheWebsiteGuy\NexusCRM\Models\Ticket::class],
-        'invoices' => [\TheWebsiteGuy\NexusCRM\Models\Invoice::class],
-        'tasks' => [\TheWebsiteGuy\NexusCRM\Models\Task::class],
+        'tickets' => [\TheWebsiteGuy\AvalancheCRM\Models\Ticket::class],
+        'invoices' => [\TheWebsiteGuy\AvalancheCRM\Models\Invoice::class],
+        'tasks' => [\TheWebsiteGuy\AvalancheCRM\Models\Task::class],
     ];
     public $hasOneThrough = [];
     public $hasManyThrough = [];
     public $belongsTo = [];
     public $belongsToMany = [
         'staff' => [
-            \TheWebsiteGuy\NexusCRM\Models\Staff::class,
-            'table' => 'thewebsiteguy_nexuscrm_projects_staff',
+            \TheWebsiteGuy\AvalancheCRM\Models\Staff::class,
+            'table' => 'thewebsiteguy_avalanchecrm_projects_staff',
             'key' => 'project_id',
             'otherKey' => 'staff_id'
         ],
         'clients' => [
-            \TheWebsiteGuy\NexusCRM\Models\Client::class,
-            'table' => 'thewebsiteguy_nexuscrm_projects_clients',
+            \TheWebsiteGuy\AvalancheCRM\Models\Client::class,
+            'table' => 'thewebsiteguy_avalanchecrm_projects_clients',
             'key' => 'project_id',
             'otherKey' => 'client_id'
         ]
@@ -93,6 +96,44 @@ class Project extends Model
     public $morphMany = [];
     public $attachOne = [];
     public $attachMany = [];
+
+    /**
+     * After creating a project, notify all attached clients.
+     */
+    public function afterCreate()
+    {
+        $this->notifyClients('project', 'New Project Created');
+    }
+
+    /**
+     * After saving, detect status changes and notify clients.
+     */
+    public function afterSave()
+    {
+        if ($this->wasRecentlyCreated) {
+            return;
+        }
+
+        if ($this->isDirty('status')) {
+            $newStatus = $this->status;
+
+            if (in_array($newStatus, ['completed', 'complete', 'finished'])) {
+                $this->notifyClients('project', 'Project Completed');
+            } else {
+                $this->notifyClients('project', 'Project Status Update');
+            }
+        }
+    }
+
+    /**
+     * Send a notification to all clients associated with this project.
+     */
+    public function notifyClients(string $category, string $templateName): void
+    {
+        foreach ($this->clients as $client) {
+            $client->sendNotification($category, $templateName);
+        }
+    }
 
     /**
      * Dropdown options for billing type.

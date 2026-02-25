@@ -1,7 +1,41 @@
 <div class="layout-row min-height-0">
     <div class="layout-cell">
         <div class="padded-container">
-            <h3 class="m-b-lg">Nexus CRM Dashboard</h3>
+            <div class="dashboard-stats-bar">
+                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/clients') ?>" class="dash-stat">
+                    <span class="dash-stat-number"><?= $totalClients ?></span>
+                    <span class="dash-stat-label">Clients</span>
+                </a>
+                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/projects') ?>?status=active"
+                    class="dash-stat">
+                    <span class="dash-stat-number"><?= $activeProjects ?></span>
+                    <span class="dash-stat-label">Active Projects</span>
+                </a>
+                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/tickets') ?>?status=open"
+                    class="dash-stat">
+                    <span class="dash-stat-number"><?= $openTickets ?></span>
+                    <span class="dash-stat-label">Open Tickets</span>
+                </a>
+                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/invoices') ?>?status=outstanding"
+                    class="dash-stat">
+                    <span class="dash-stat-number"><?= $unpaidInvoices ?></span>
+                    <span class="dash-stat-label">Unpaid Invoices</span>
+                </a>
+                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/subscriptions') ?>?status=active"
+                    class="dash-stat">
+                    <span class="dash-stat-number"><?= $activeSubscriptions ?></span>
+                    <span class="dash-stat-label">Subscriptions</span>
+                </a>
+                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/tasks') ?>?status=todo"
+                    class="dash-stat">
+                    <span class="dash-stat-number"><?= $pendingTasks ?></span>
+                    <span class="dash-stat-label">Pending Tasks</span>
+                </a>
+                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/staff') ?>" class="dash-stat">
+                    <span class="dash-stat-number"><?= $totalStaff ?></span>
+                    <span class="dash-stat-label">Staff</span>
+                </a>
+            </div>
 
             <div class="dashboard-grid">
                 <!-- Clients Card -->
@@ -13,7 +47,7 @@
                     <div class="card-body">
                         <p>Manage your client database and relationships.</p>
                         <div class="card-actions">
-                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/clients') ?>"
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/clients') ?>"
                                 class="btn btn-sm btn-primary">Manage Clients</a>
                             <a href="<?= \Backend\Facades\Backend::url('winter/user/users/create?is_client=1') ?>"
                                 class="btn btn-sm btn-secondary">Add Client</a>
@@ -30,7 +64,7 @@
                     <div class="card-body">
                         <p>Track team members, departments and job titles.</p>
                         <div class="card-actions">
-                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/staff') ?>"
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/staff') ?>"
                                 class="btn btn-sm btn-primary">Manage Staff</a>
                             <a href="<?= \Backend\Facades\Backend::url('winter/user/users/create?is_staff=1') ?>"
                                 class="btn btn-sm btn-secondary">Add Staff</a>
@@ -47,9 +81,9 @@
                     <div class="card-body">
                         <p>Track project progress, tasks and deliverables.</p>
                         <div class="card-actions">
-                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/projects') ?>"
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/projects') ?>"
                                 class="btn btn-sm btn-primary">Manage Projects</a>
-                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/projects/create') ?>"
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/projects/create') ?>"
                                 class="btn btn-sm btn-secondary">New Project</a>
                         </div>
                     </div>
@@ -64,9 +98,9 @@
                     <div class="card-body">
                         <p>Monitor and respond to client support requests.</p>
                         <div class="card-actions">
-                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/tickets') ?>"
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/tickets') ?>"
                                 class="btn btn-sm btn-primary">All Tickets</a>
-                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/tickets/create') ?>"
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/tickets/create') ?>"
                                 class="btn btn-sm btn-secondary">New Ticket</a>
                         </div>
                     </div>
@@ -81,9 +115,9 @@
                     <div class="card-body">
                         <p>Generate and manage billing and payments.</p>
                         <div class="card-actions">
-                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/invoices') ?>"
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/invoices') ?>"
                                 class="btn btn-sm btn-primary">All Invoices</a>
-                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/invoices/create') ?>"
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/invoices/create') ?>"
                                 class="btn btn-sm btn-secondary">New Invoice</a>
                         </div>
                     </div>
@@ -98,10 +132,44 @@
                     <div class="card-body">
                         <p>Recurring billing plans and client subscriptions.</p>
                         <div class="card-actions">
-                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/subscriptions') ?>"
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/subscriptions') ?>"
                                 class="btn btn-sm btn-primary">Active Subscriptions</a>
-                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/subscriptionplans') ?>"
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/subscriptionplans') ?>"
                                 class="btn btn-sm btn-secondary">Manage Plans</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campaigns Card -->
+                <div class="dashboard-card border-marketing">
+                    <div class="card-header">
+                        <i class="icon-bullhorn"></i>
+                        <h4>Campaigns</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>Create and send email campaigns to your clients.</p>
+                        <div class="card-actions">
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/campaigns') ?>"
+                                class="btn btn-sm btn-primary">All Campaigns</a>
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/campaigns/create') ?>"
+                                class="btn btn-sm btn-secondary">New Campaign</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email Templates Card -->
+                <div class="dashboard-card border-template">
+                    <div class="card-header">
+                        <i class="icon-file-code-o"></i>
+                        <h4>Email Templates</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>Design reusable email templates for your campaigns.</p>
+                        <div class="card-actions">
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/emailtemplates') ?>"
+                                class="btn btn-sm btn-primary">All Templates</a>
+                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/emailtemplates/create') ?>"
+                                class="btn btn-sm btn-secondary">New Template</a>
                         </div>
                     </div>
                 </div>
@@ -111,6 +179,72 @@
 </div>
 
 <style>
+    .dashboard-stats-bar {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 12px;
+        margin-bottom: 28px;
+    }
+
+    a.dash-stat {
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        padding: 18px 12px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        border-left: 3px solid #5fb4ef;
+        text-decoration: none;
+        transition: transform 0.15s, box-shadow 0.15s;
+        cursor: pointer;
+    }
+
+    a.dash-stat:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        text-decoration: none;
+    }
+
+    .dash-stat:nth-child(2) {
+        border-left-color: #f1c40f;
+    }
+
+    .dash-stat:nth-child(3) {
+        border-left-color: #e74c3c;
+    }
+
+    .dash-stat:nth-child(4) {
+        border-left-color: #2b3e50;
+    }
+
+    .dash-stat:nth-child(5) {
+        border-left-color: #95a5a6;
+    }
+
+    .dash-stat:nth-child(6) {
+        border-left-color: #8e44ad;
+    }
+
+    .dash-stat:nth-child(7) {
+        border-left-color: #3498db;
+    }
+
+    .dash-stat-number {
+        font-size: 30px;
+        font-weight: 700;
+        color: #2b3e50;
+        line-height: 1;
+    }
+
+    .dash-stat-label {
+        font-size: 11px;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
     .dashboard-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -155,6 +289,14 @@
 
     .dashboard-card.border-secondary {
         border-top-color: #95a5a6;
+    }
+
+    .dashboard-card.border-marketing {
+        border-top-color: #8e44ad;
+    }
+
+    .dashboard-card.border-template {
+        border-top-color: #16a085;
     }
 
     .card-header {

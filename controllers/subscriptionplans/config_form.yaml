@@ -4,21 +4,21 @@
 
 name: "Subscription Plan"
 
-form: $/thewebsiteguy/nexuscrm/models/subscriptionplan/fields.yaml
+form: $/thewebsiteguy/avalanchecrm/models/subscriptionplan/fields.yaml
 
-modelClass: TheWebsiteGuy\NexusCRM\Models\SubscriptionPlan
+modelClass: TheWebsiteGuy\AvalancheCRM\Models\SubscriptionPlan
 
-defaultRedirect: thewebsiteguy/nexuscrm/subscriptionplans
+defaultRedirect: thewebsiteguy/avalanchecrm/subscriptionplans
 
 create:
   title: "New Subscription Plan"
-  redirect: thewebsiteguy/nexuscrm/subscriptionplans/update/:id
-  redirectClose: thewebsiteguy/nexuscrm/subscriptionplans
+  redirect: thewebsiteguy/avalanchecrm/subscriptionplans/update/:id
+  redirectClose: thewebsiteguy/avalanchecrm/subscriptionplans
 
 update:
   title: "Edit Subscription Plan"
-  redirect: thewebsiteguy/nexuscrm/subscriptionplans
-  redirectClose: thewebsiteguy/nexuscrm/subscriptionplans
+  redirect: thewebsiteguy/avalanchecrm/subscriptionplans
+  redirectClose: thewebsiteguy/avalanchecrm/subscriptionplans
 
 preview:
   title: "Preview Subscription Plan"

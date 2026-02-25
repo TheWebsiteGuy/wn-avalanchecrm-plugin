@@ -1,11 +1,11 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Http;
+namespace TheWebsiteGuy\AvalancheCRM\Http;
 
 use Log;
-use TheWebsiteGuy\NexusCRM\Models\Invoice;
-use TheWebsiteGuy\NexusCRM\Models\Client;
-use TheWebsiteGuy\NexusCRM\Models\Settings;
+use TheWebsiteGuy\AvalancheCRM\Models\Invoice;
+use TheWebsiteGuy\AvalancheCRM\Models\Client;
+use TheWebsiteGuy\AvalancheCRM\Models\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -14,9 +14,9 @@ use Illuminate\Routing\Controller;
  */
 class InvoicePaymentController extends Controller
 {
-    // ────────────────────────────────────────────────────────────
-    //  Stripe — Card Payment via Checkout Session
-    // ────────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    //  Stripe â€” Card Payment via Checkout Session
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     /**
      * Create a Stripe Checkout Session and redirect the client to pay.
@@ -55,8 +55,8 @@ class InvoicePaymentController extends Controller
                 ],
                 'quantity' => 1,
             ]],
-            'success_url' => url('nexuscrm/invoice/' . $invoice->id . '/payment/success') . '?method=stripe&session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url'  => url('nexuscrm/invoice/' . $invoice->id . '/payment/cancel'),
+            'success_url' => url('avalanchecrm/invoice/' . $invoice->id . '/payment/success') . '?method=stripe&session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url'  => url('avalanchecrm/invoice/' . $invoice->id . '/payment/cancel'),
         ]);
 
         // Store session ID for webhook matching
@@ -66,9 +66,9 @@ class InvoicePaymentController extends Controller
         return redirect($session->url, 303);
     }
 
-    // ────────────────────────────────────────────────────────────
-    //  PayPal — Create Order and redirect
-    // ────────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    //  PayPal â€” Create Order and redirect
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     /**
      * Create a PayPal order and redirect the client to approve it.
@@ -116,8 +116,8 @@ class InvoicePaymentController extends Controller
                     'invoice_id'   => $invoice->invoice_number,
                 ]],
                 'application_context' => [
-                    'return_url' => url('nexuscrm/invoice/' . $invoice->id . '/payment/paypal/capture'),
-                    'cancel_url' => url('nexuscrm/invoice/' . $invoice->id . '/payment/cancel'),
+                    'return_url' => url('avalanchecrm/invoice/' . $invoice->id . '/payment/paypal/capture'),
+                    'cancel_url' => url('avalanchecrm/invoice/' . $invoice->id . '/payment/cancel'),
                     'user_action' => 'PAY_NOW',
                 ],
             ],
@@ -145,7 +145,7 @@ class InvoicePaymentController extends Controller
     }
 
     /**
-     * PayPal redirects here after approval — capture the payment.
+     * PayPal redirects here after approval â€” capture the payment.
      */
     public function paypalCapture(Request $request, $invoiceId)
     {
@@ -154,7 +154,7 @@ class InvoicePaymentController extends Controller
 
         $orderId = $invoice->paypal_order_id;
         if (!$orderId) {
-            return redirect(url('nexuscrm/invoice/' . $invoiceId . '/payment/cancel'));
+            return redirect(url('avalanchecrm/invoice/' . $invoiceId . '/payment/cancel'));
         }
 
         $baseUrl = ($settings->paypal_mode === 'live')
@@ -187,15 +187,15 @@ class InvoicePaymentController extends Controller
             }
         } catch (\Exception $e) {
             Log::error('PayPal capture failed for invoice ' . $invoice->id . ': ' . $e->getMessage());
-            return redirect(url('nexuscrm/invoice/' . $invoiceId . '/payment/cancel'));
+            return redirect(url('avalanchecrm/invoice/' . $invoiceId . '/payment/cancel'));
         }
 
-        return redirect(url('nexuscrm/invoice/' . $invoiceId . '/payment/success') . '?method=paypal');
+        return redirect(url('avalanchecrm/invoice/' . $invoiceId . '/payment/success') . '?method=paypal');
     }
 
-    // ────────────────────────────────────────────────────────────
-    //  GoCardless — Instant Bank Payment
-    // ────────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    //  GoCardless â€” Instant Bank Payment
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     /**
      * Create a GoCardless Billing Request for an instant bank payment
@@ -240,8 +240,8 @@ class InvoicePaymentController extends Controller
         // Create a billing request flow (hosted payment page)
         $flow = $client->billingRequestFlows()->create([
             'params' => [
-                'redirect_uri'       => url('nexuscrm/invoice/' . $invoice->id . '/payment/success') . '?method=gocardless',
-                'exit_uri'           => url('nexuscrm/invoice/' . $invoice->id . '/payment/cancel'),
+                'redirect_uri'       => url('avalanchecrm/invoice/' . $invoice->id . '/payment/success') . '?method=gocardless',
+                'exit_uri'           => url('avalanchecrm/invoice/' . $invoice->id . '/payment/cancel'),
                 'links'              => [
                     'billing_request' => $billingRequest->id,
                 ],
@@ -255,9 +255,9 @@ class InvoicePaymentController extends Controller
         return redirect($flow->authorisation_url, 303);
     }
 
-    // ────────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     //  Success / Cancel Pages
-    // ────────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     /**
      * Generic success page after payment redirect.
@@ -294,7 +294,7 @@ class InvoicePaymentController extends Controller
         $settings = Settings::instance();
         $currencySymbol = $settings->currency_symbol ?: '$';
 
-        return response()->view('thewebsiteguy.nexuscrm::payment.success', [
+        return response()->view('thewebsiteguy.avalanchecrm::payment.success', [
             'invoice'        => $invoice,
             'method'         => $method,
             'currencySymbol' => $currencySymbol,
@@ -308,14 +308,14 @@ class InvoicePaymentController extends Controller
     {
         $invoice = $this->resolveInvoice($invoiceId);
 
-        return response()->view('thewebsiteguy.nexuscrm::payment.cancel', [
+        return response()->view('thewebsiteguy.avalanchecrm::payment.cancel', [
             'invoice' => $invoice,
         ]);
     }
 
-    // ────────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     //  Helpers
-    // ────────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     /**
      * Resolve the invoice and verify the authenticated client owns it.

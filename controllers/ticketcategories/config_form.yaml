@@ -1,11 +1,11 @@
 name: Ticket Categories
-form: $/thewebsiteguy/nexuscrm/models/ticketcategory/fields.yaml
-modelClass: TheWebsiteGuy\NexusCRM\Models\TicketCategory
-defaultRedirect: thewebsiteguy/nexuscrm/ticketcategories
+form: $/thewebsiteguy/avalanchecrm/models/ticketcategory/fields.yaml
+modelClass: TheWebsiteGuy\AvalancheCRM\Models\TicketCategory
+defaultRedirect: thewebsiteguy/avalanchecrm/ticketcategories
 create:
-  redirect: thewebsiteguy/nexuscrm/ticketcategories/update/:id
-  redirectClose: thewebsiteguy/nexuscrm/ticketcategories
+  redirect: thewebsiteguy/avalanchecrm/ticketcategories/update/:id
+  redirectClose: thewebsiteguy/avalanchecrm/ticketcategories
 update:
-  redirect: thewebsiteguy/nexuscrm/ticketcategories
-  redirectClose: thewebsiteguy/nexuscrm/ticketcategories
+  redirect: thewebsiteguy/avalanchecrm/ticketcategories
+  redirectClose: thewebsiteguy/avalanchecrm/ticketcategories
 confirmDelete: "Do you really want to delete this category?"

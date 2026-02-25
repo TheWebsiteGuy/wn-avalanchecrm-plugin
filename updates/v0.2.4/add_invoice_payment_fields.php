@@ -7,11 +7,11 @@ use Winter\Storm\Support\Facades\Schema;
 return new class extends Migration {
     public function up()
     {
-        if (Schema::hasColumn('thewebsiteguy_nexuscrm_invoices', 'payment_method')) {
+        if (Schema::hasColumn('thewebsiteguy_avalanchecrm_invoices', 'payment_method')) {
             return;
         }
 
-        Schema::table('thewebsiteguy_nexuscrm_invoices', function (Blueprint $table) {
+        Schema::table('thewebsiteguy_avalanchecrm_invoices', function (Blueprint $table) {
             $table->string('payment_method')->nullable()->after('status');
             $table->string('payment_reference')->nullable()->after('payment_method');
             $table->timestamp('paid_at')->nullable()->after('payment_reference');
@@ -26,7 +26,7 @@ return new class extends Migration {
 
     public function down()
     {
-        Schema::table('thewebsiteguy_nexuscrm_invoices', function (Blueprint $table) {
+        Schema::table('thewebsiteguy_avalanchecrm_invoices', function (Blueprint $table) {
             $table->dropColumn([
                 'payment_method',
                 'payment_reference',

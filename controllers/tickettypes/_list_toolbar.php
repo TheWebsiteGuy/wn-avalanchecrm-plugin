@@ -2,7 +2,7 @@
     <div class="toolbar-widget list-header" id="Toolbar-listToolbar">
         <div class="control-toolbar">
             <div class="toolbar-item">
-                <a href="<?= Backend::url('thewebsiteguy/nexuscrm/tickettypes/create') ?>"
+                <a href="<?= Backend::url('thewebsiteguy/avalanchecrm/tickettypes/create') ?>"
                     class="btn btn-primary oc-icon-plus">
                     New Ticket Type
                 </a>

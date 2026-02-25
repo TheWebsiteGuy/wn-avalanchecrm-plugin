@@ -1,4 +1,4 @@
-<?= $this->makePartial('$/thewebsiteguy/nexuscrm/controllers/tickets/_submenu.php') ?>
+<?= $this->makePartial('$/thewebsiteguy/avalanchecrm/controllers/tickets/_submenu.php') ?>
 
 <div class="layout-row">
     <?= $this->listRender() ?>

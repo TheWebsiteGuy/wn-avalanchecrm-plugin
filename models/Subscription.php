@@ -1,6 +1,6 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Models;
+namespace TheWebsiteGuy\AvalancheCRM\Models;
 
 use Winter\Storm\Database\Model;
 
@@ -14,7 +14,7 @@ class Subscription extends Model
     /**
      * @var string The database table used by the model.
      */
-    public $table = 'thewebsiteguy_nexuscrm_subscriptions';
+    public $table = 'thewebsiteguy_avalanchecrm_subscriptions';
 
     /**
      * @var array Guarded fields
@@ -92,8 +92,8 @@ class Subscription extends Model
     public $hasOneThrough = [];
     public $hasManyThrough = [];
     public $belongsTo = [
-        'client' => [\TheWebsiteGuy\NexusCRM\Models\Client::class],
-        'plan' => [\TheWebsiteGuy\NexusCRM\Models\SubscriptionPlan::class, 'key' => 'plan_id'],
+        'client' => [\TheWebsiteGuy\AvalancheCRM\Models\Client::class],
+        'plan' => [\TheWebsiteGuy\AvalancheCRM\Models\SubscriptionPlan::class, 'key' => 'plan_id'],
     ];
     public $belongsToMany = [];
     public $morphTo = [];
@@ -101,4 +101,30 @@ class Subscription extends Model
     public $morphMany = [];
     public $attachOne = [];
     public $attachMany = [];
+
+    // Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+    //  Notification Hooks
+    // Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+
+    /**
+     * After saving, detect status changes and notify the client.
+     */
+    public function afterSave()
+    {
+        if ($this->wasRecentlyCreated || !$this->client) {
+            return;
+        }
+
+        if ($this->isDirty('status')) {
+            $newStatus = $this->status;
+
+            if ($newStatus === 'active') {
+                $this->client->sendNotification('subscription', 'Subscription Activated');
+            }
+
+            if ($newStatus === 'canceled') {
+                $this->client->sendNotification('subscription', 'Subscription Cancelled');
+            }
+        }
+    }
 }

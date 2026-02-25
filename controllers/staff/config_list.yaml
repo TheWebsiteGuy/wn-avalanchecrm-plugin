@@ -3,10 +3,10 @@
 # ===================================
 
 # Model List Structure
-list: $/thewebsiteguy/nexuscrm/models/staff/columns.yaml
+list: $/thewebsiteguy/avalanchecrm/models/staff/columns.yaml
 
 # Model Class name
-modelClass: TheWebsiteGuy\NexusCRM\Models\Staff
+modelClass: TheWebsiteGuy\AvalancheCRM\Models\Staff
 
 # List Title
 title: Manage Staff

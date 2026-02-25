@@ -1,6 +1,6 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Components;
+namespace TheWebsiteGuy\AvalancheCRM\Components;
 
 use Winter\User\Facades\Auth;
 use Winter\Storm\Support\Facades\Flash;
@@ -8,9 +8,9 @@ use Winter\Storm\Support\Facades\Input;
 use Winter\Storm\Support\Facades\Redirect;
 use Winter\Storm\Support\Facades\Log;
 use Cms\Classes\ComponentBase;
-use TheWebsiteGuy\NexusCRM\Models\Client;
-use TheWebsiteGuy\NexusCRM\Models\Invoice;
-use TheWebsiteGuy\NexusCRM\Models\Settings;
+use TheWebsiteGuy\AvalancheCRM\Models\Client;
+use TheWebsiteGuy\AvalancheCRM\Models\Invoice;
+use TheWebsiteGuy\AvalancheCRM\Models\Settings;
 use Winter\Storm\Exception\ApplicationException;
 
 /**
@@ -80,9 +80,9 @@ class Invoices extends ComponentBase
      */
     public function onRun()
     {
-        $this->addCss('/plugins/thewebsiteguy/nexuscrm/assets/css/invoices.css');
+        $this->addCss('/plugins/thewebsiteguy/avalanchecrm/assets/css/invoices.css');
 
-        $this->page['themeStyles'] = \TheWebsiteGuy\NexusCRM\Classes\ThemeStyles::render();
+        $this->page['themeStyles'] = \TheWebsiteGuy\AvalancheCRM\Classes\ThemeStyles::render();
 
         $this->prepareVars();
     }
@@ -116,7 +116,7 @@ class Invoices extends ComponentBase
                 ->first();
         }
 
-        // Load all client invoices (exclude drafts — only show sent invoices)
+        // Load all client invoices (exclude drafts â€” only show sent invoices)
         $this->invoices = $this->page['invoices'] = Invoice::where('client_id', $this->client->id)
             ->clientVisible()
             ->with(['project'])
@@ -140,7 +140,7 @@ class Invoices extends ComponentBase
 
         $invoiceId = Input::get('invoice_id');
         if (!$invoiceId) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.invoice_not_specified'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.invoice_not_specified'));
         }
 
         $invoice = Invoice::where('id', $invoiceId)
@@ -150,7 +150,7 @@ class Invoices extends ComponentBase
             ->first();
 
         if (!$invoice) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.invoice_not_found'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.invoice_not_found'));
         }
 
         $this->page['activeInvoice'] = $invoice;
@@ -226,12 +226,12 @@ class Invoices extends ComponentBase
     {
         $user = Auth::getUser();
         if (!$user) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.must_be_logged_in'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.must_be_logged_in'));
         }
 
         $client = Client::where('user_id', $user->id)->first();
         if (!$client) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.no_client_profile'));
         }
 
         return $client;

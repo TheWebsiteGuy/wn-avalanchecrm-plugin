@@ -6,25 +6,25 @@
 name: Ticket Type
 
 # Model Form Configuration
-form: $/thewebsiteguy/nexuscrm/models/tickettype/fields.yaml
+form: $/thewebsiteguy/avalanchecrm/models/tickettype/fields.yaml
 
 # Model Class name
-modelClass: TheWebsiteGuy\NexusCRM\Models\TicketType
+modelClass: TheWebsiteGuy\AvalancheCRM\Models\TicketType
 
 # Default redirect location
-defaultRedirect: thewebsiteguy/nexuscrm/tickettypes
+defaultRedirect: thewebsiteguy/avalanchecrm/tickettypes
 
 # Create page
 create:
   title: Create Ticket Type
-  redirect: thewebsiteguy/nexuscrm/tickettypes/update/:id
-  redirectClose: thewebsiteguy/nexuscrm/tickettypes
+  redirect: thewebsiteguy/avalanchecrm/tickettypes/update/:id
+  redirectClose: thewebsiteguy/avalanchecrm/tickettypes
 
 # Update page
 update:
   title: Edit Ticket Type
-  redirect: thewebsiteguy/nexuscrm/tickettypes
-  redirectClose: thewebsiteguy/nexuscrm/tickettypes
+  redirect: thewebsiteguy/avalanchecrm/tickettypes
+  redirectClose: thewebsiteguy/avalanchecrm/tickettypes
 
 # Preview page
 preview:

@@ -55,6 +55,12 @@ fields:
 
 tabs:
     fields:
+        _replies:
+            label: Replies
+            tab: Replies
+            type: partial
+            path: $/thewebsiteguy/avalanchecrm/controllers/tickets/_replies.php
+            context: [update, preview]
         staff:
             label: Staff Assignments
             tab: Assignments

@@ -1,6 +1,6 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Models;
+namespace TheWebsiteGuy\AvalancheCRM\Models;
 
 use Winter\Storm\Database\Model;
 use Carbon\Carbon;
@@ -14,7 +14,7 @@ class TimeEntry extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
 
-    public $table = 'thewebsiteguy_nexuscrm_time_entries';
+    public $table = 'thewebsiteguy_avalanchecrm_time_entries';
 
     protected $guarded = [];
 
@@ -44,7 +44,7 @@ class TimeEntry extends Model
     ];
 
     public $belongsTo = [
-        'task' => [\TheWebsiteGuy\NexusCRM\Models\Task::class],
+        'task' => [\TheWebsiteGuy\AvalancheCRM\Models\Task::class],
         'user' => [\Backend\Models\User::class],
     ];
 

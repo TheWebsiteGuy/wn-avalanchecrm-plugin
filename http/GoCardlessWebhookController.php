@@ -1,13 +1,13 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Http;
+namespace TheWebsiteGuy\AvalancheCRM\Http;
 
 use Log;
-use TheWebsiteGuy\NexusCRM\Models\Settings;
-use TheWebsiteGuy\NexusCRM\Models\Subscription;
-use TheWebsiteGuy\NexusCRM\Models\Invoice;
-use TheWebsiteGuy\NexusCRM\Models\Client;
-use TheWebsiteGuy\NexusCRM\Http\InvoicePaymentController;
+use TheWebsiteGuy\AvalancheCRM\Models\Settings;
+use TheWebsiteGuy\AvalancheCRM\Models\Subscription;
+use TheWebsiteGuy\AvalancheCRM\Models\Invoice;
+use TheWebsiteGuy\AvalancheCRM\Models\Client;
+use TheWebsiteGuy\AvalancheCRM\Http\InvoicePaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -106,7 +106,7 @@ class GoCardlessWebhookController extends Controller
                 break;
 
             case 'payment_created':
-                // A payment was created for this subscription — subscription is healthy
+                // A payment was created for this subscription â€” subscription is healthy
                 break;
 
             case 'cancelled':
@@ -155,7 +155,7 @@ class GoCardlessWebhookController extends Controller
         switch ($action) {
             case 'confirmed':
             case 'paid_out':
-                // Payment succeeded — ensure subscription is active
+                // Payment succeeded â€” ensure subscription is active
                 if ($subscription->status === 'past_due') {
                     $subscription->status = 'active';
                     $subscription->save();
@@ -189,19 +189,25 @@ class GoCardlessWebhookController extends Controller
             case 'cancelled':
             case 'failed':
             case 'expired':
-                // Mandate is no longer valid — cancel any active subscriptions using it
+                // Mandate is no longer valid â€” cancel any active subscriptions using it
                 $client = Client::where('gocardless_mandate_id', $mandateId)->first();
                 if ($client) {
                     $client->gocardless_mandate_id = null;
                     $client->save();
 
                     // Mark related active direct debit subscriptions as canceled
-                    Subscription::where('client_id', $client->id)
+                    // Use loop instead of bulk update so model events (notifications) fire
+                    $subscriptions = Subscription::where('client_id', $client->id)
                         ->where('payment_method', 'direct_debit')
                         ->whereIn('status', ['active', 'past_due'])
-                        ->update(['status' => 'canceled']);
+                        ->get();
 
-                    Log::info("GoCardless mandate {$action}: {$mandateId} — subscriptions cancelled");
+                    foreach ($subscriptions as $subscription) {
+                        $subscription->status = 'canceled';
+                        $subscription->save();
+                    }
+
+                    Log::info("GoCardless mandate {$action}: {$mandateId} â€” subscriptions cancelled");
                 }
                 break;
         }

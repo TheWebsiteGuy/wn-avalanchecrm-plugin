@@ -1,6 +1,6 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Models;
+namespace TheWebsiteGuy\AvalancheCRM\Models;
 
 use Winter\Storm\Database\Model;
 
@@ -16,7 +16,7 @@ class InvoiceItem extends Model
     /**
      * @var string The database table used by the model.
      */
-    public $table = 'thewebsiteguy_nexuscrm_invoice_items';
+    public $table = 'thewebsiteguy_avalanchecrm_invoice_items';
 
     /**
      * @var array Guarded fields
@@ -65,8 +65,8 @@ class InvoiceItem extends Model
      * @var array Relations
      */
     public $belongsTo = [
-        'invoice' => [\TheWebsiteGuy\NexusCRM\Models\Invoice::class],
-        'task'    => [\TheWebsiteGuy\NexusCRM\Models\Task::class],
+        'invoice' => [\TheWebsiteGuy\AvalancheCRM\Models\Invoice::class],
+        'task'    => [\TheWebsiteGuy\AvalancheCRM\Models\Task::class],
     ];
 
     /**

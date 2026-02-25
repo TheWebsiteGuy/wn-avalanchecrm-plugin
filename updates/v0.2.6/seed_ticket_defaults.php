@@ -1,8 +1,8 @@
 <?php
 
 use Winter\Storm\Database\Updates\Migration;
-use TheWebsiteGuy\NexusCRM\Models\Ticket;
-use TheWebsiteGuy\NexusCRM\Models\TicketStatus;
+use TheWebsiteGuy\AvalancheCRM\Models\Ticket;
+use TheWebsiteGuy\AvalancheCRM\Models\TicketStatus;
 
 return new class extends Migration {
     public function up()

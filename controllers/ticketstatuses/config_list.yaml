@@ -3,16 +3,16 @@
 # ===================================
 
 # Model List Configuration
-list: $/thewebsiteguy/nexuscrm/models/ticketstatus/columns.yaml
+list: $/thewebsiteguy/avalanchecrm/models/ticketstatus/columns.yaml
 
 # Model Class name
-modelClass: TheWebsiteGuy\NexusCRM\Models\TicketStatus
+modelClass: TheWebsiteGuy\AvalancheCRM\Models\TicketStatus
 
 # List Title
 title: Manage Ticket Statuses
 
 # Link URL for each record
-recordUrl: thewebsiteguy/nexuscrm/ticketstatuses/update/:id
+recordUrl: thewebsiteguy/avalanchecrm/ticketstatuses/update/:id
 
 # Message to display if the list is empty
 noRecordsMessage: No ticket statuses found.

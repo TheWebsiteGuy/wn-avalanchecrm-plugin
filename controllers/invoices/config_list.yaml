@@ -3,16 +3,16 @@
 # ===================================
 
 # Model List Column configuration
-list: $/thewebsiteguy/nexuscrm/models/invoice/columns.yaml
+list: $/thewebsiteguy/avalanchecrm/models/invoice/columns.yaml
 
 # Model Class name
-modelClass: TheWebsiteGuy\NexusCRM\Models\Invoice
+modelClass: TheWebsiteGuy\AvalancheCRM\Models\Invoice
 
 # List Title
-title: 'thewebsiteguy.nexuscrm::lang.models.invoice.label_plural'
+title: 'thewebsiteguy.avalanchecrm::lang.models.invoice.label_plural'
 
 # Link URL for each record
-recordUrl: thewebsiteguy/nexuscrm/invoices/update/:id
+recordUrl: thewebsiteguy/avalanchecrm/invoices/update/:id
 
 # Message to display if the list is empty
 noRecordsMessage: backend::lang.list.no_records

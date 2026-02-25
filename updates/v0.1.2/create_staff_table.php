@@ -8,8 +8,8 @@ use Winter\User\Models\UserGroup;
 return new class extends Migration {
     public function up()
     {
-        if (!Schema::hasTable('thewebsiteguy_nexuscrm_staff')) {
-            Schema::create('thewebsiteguy_nexuscrm_staff', function (Blueprint $table) {
+        if (!Schema::hasTable('thewebsiteguy_avalanchecrm_staff')) {
+            Schema::create('thewebsiteguy_avalanchecrm_staff', function (Blueprint $table) {
                 $table->increments('id');
                 $table->integer('user_id')->unsigned()->nullable()->index();
                 $table->string('name');
@@ -33,7 +33,7 @@ return new class extends Migration {
 
     public function down()
     {
-        Schema::dropIfExists('thewebsiteguy_nexuscrm_staff');
+        Schema::dropIfExists('thewebsiteguy_avalanchecrm_staff');
 
         if (class_exists(UserGroup::class) && Schema::hasTable('user_groups')) {
             $group = UserGroup::where('code', 'staff')->first();

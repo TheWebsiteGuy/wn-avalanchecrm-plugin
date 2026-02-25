@@ -3,16 +3,16 @@
 # ===================================
 
 # Model List Column configuration
-list: $/thewebsiteguy/nexuscrm/models/task/columns.yaml
+list: $/thewebsiteguy/avalanchecrm/models/task/columns.yaml
 
 # Model Class name
-modelClass: TheWebsiteGuy\NexusCRM\Models\Task
+modelClass: TheWebsiteGuy\AvalancheCRM\Models\Task
 
 # List Title
 title: Tasks
 
 # Link URL for each record
-recordUrl: thewebsiteguy/nexuscrm/tasks/update/:id
+recordUrl: thewebsiteguy/avalanchecrm/tasks/update/:id
 
 # Message to display if the list is empty
 noRecordsMessage: No tasks found.

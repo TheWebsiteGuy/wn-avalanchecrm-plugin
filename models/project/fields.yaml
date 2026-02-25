@@ -61,7 +61,7 @@ tabs:
         _generate_invoice:
             tab: Billing
             type: partial
-            path: $/thewebsiteguy/nexuscrm/controllers/projects/_generate_invoice_button.php
+            path: $/thewebsiteguy/avalanchecrm/controllers/projects/_generate_invoice_button.php
             span: full
             context: update
         clients:
@@ -85,4 +85,4 @@ tabs:
             label: Project Tasks
             tab: Tasks
             type: partial
-            path: $/thewebsiteguy/nexuscrm/controllers/projects/_kanban_tab.php
+            path: $/thewebsiteguy/avalanchecrm/controllers/projects/_kanban_tab.php

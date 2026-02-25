@@ -1,13 +1,13 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Http;
+namespace TheWebsiteGuy\AvalancheCRM\Http;
 
 use Log;
-use TheWebsiteGuy\NexusCRM\Models\Settings;
-use TheWebsiteGuy\NexusCRM\Models\Subscription;
-use TheWebsiteGuy\NexusCRM\Models\Invoice;
-use TheWebsiteGuy\NexusCRM\Http\InvoicePaymentController;
-use TheWebsiteGuy\NexusCRM\Models\Client;
+use TheWebsiteGuy\AvalancheCRM\Models\Settings;
+use TheWebsiteGuy\AvalancheCRM\Models\Subscription;
+use TheWebsiteGuy\AvalancheCRM\Models\Invoice;
+use TheWebsiteGuy\AvalancheCRM\Http\InvoicePaymentController;
+use TheWebsiteGuy\AvalancheCRM\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -84,7 +84,7 @@ class StripeWebhookController extends Controller
     }
 
     /**
-     * checkout.session.completed — activate the pending subscription OR mark invoice paid.
+     * checkout.session.completed â€” activate the pending subscription OR mark invoice paid.
      */
     protected function handleCheckoutSessionCompleted($session): void
     {
@@ -129,7 +129,7 @@ class StripeWebhookController extends Controller
     }
 
     /**
-     * invoice.payment_succeeded — renew subscription on successful recurring payment.
+     * invoice.payment_succeeded â€” renew subscription on successful recurring payment.
      */
     protected function handleInvoicePaymentSucceeded($invoice): void
     {
@@ -155,7 +155,7 @@ class StripeWebhookController extends Controller
     }
 
     /**
-     * invoice.payment_failed — mark subscription as past_due.
+     * invoice.payment_failed â€” mark subscription as past_due.
      */
     protected function handleInvoicePaymentFailed($invoice): void
     {
@@ -176,7 +176,7 @@ class StripeWebhookController extends Controller
     }
 
     /**
-     * customer.subscription.updated — sync status changes from Stripe.
+     * customer.subscription.updated â€” sync status changes from Stripe.
      */
     protected function handleSubscriptionUpdated($stripeSub): void
     {
@@ -207,7 +207,7 @@ class StripeWebhookController extends Controller
     }
 
     /**
-     * customer.subscription.deleted — mark subscription as canceled.
+     * customer.subscription.deleted â€” mark subscription as canceled.
      */
     protected function handleSubscriptionDeleted($stripeSub): void
     {

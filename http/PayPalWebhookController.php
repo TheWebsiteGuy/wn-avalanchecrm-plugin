@@ -1,12 +1,12 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Http;
+namespace TheWebsiteGuy\AvalancheCRM\Http;
 
 use Log;
-use TheWebsiteGuy\NexusCRM\Models\Settings;
-use TheWebsiteGuy\NexusCRM\Models\Subscription;
-use TheWebsiteGuy\NexusCRM\Models\Invoice;
-use TheWebsiteGuy\NexusCRM\Http\InvoicePaymentController;
+use TheWebsiteGuy\AvalancheCRM\Models\Settings;
+use TheWebsiteGuy\AvalancheCRM\Models\Subscription;
+use TheWebsiteGuy\AvalancheCRM\Models\Invoice;
+use TheWebsiteGuy\AvalancheCRM\Http\InvoicePaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -140,7 +140,7 @@ class PayPalWebhookController extends Controller
     }
 
     /**
-     * BILLING.SUBSCRIPTION.ACTIVATED — activate the subscription.
+     * BILLING.SUBSCRIPTION.ACTIVATED â€” activate the subscription.
      */
     protected function handleSubscriptionActivated($resource): void
     {
@@ -163,7 +163,7 @@ class PayPalWebhookController extends Controller
     }
 
     /**
-     * BILLING.SUBSCRIPTION.CANCELLED — cancel the subscription.
+     * BILLING.SUBSCRIPTION.CANCELLED â€” cancel the subscription.
      */
     protected function handleSubscriptionCancelled($resource): void
     {
@@ -183,7 +183,7 @@ class PayPalWebhookController extends Controller
     }
 
     /**
-     * BILLING.SUBSCRIPTION.SUSPENDED — mark as past_due.
+     * BILLING.SUBSCRIPTION.SUSPENDED â€” mark as past_due.
      */
     protected function handleSubscriptionSuspended($resource): void
     {
@@ -203,7 +203,7 @@ class PayPalWebhookController extends Controller
     }
 
     /**
-     * BILLING.SUBSCRIPTION.EXPIRED — mark as canceled.
+     * BILLING.SUBSCRIPTION.EXPIRED â€” mark as canceled.
      */
     protected function handleSubscriptionExpired($resource): void
     {
@@ -223,7 +223,7 @@ class PayPalWebhookController extends Controller
     }
 
     /**
-     * PAYMENT.SALE.COMPLETED — payment received for a subscription.
+     * PAYMENT.SALE.COMPLETED â€” payment received for a subscription.
      */
     protected function handlePaymentCompleted($resource): void
     {
@@ -246,7 +246,7 @@ class PayPalWebhookController extends Controller
     }
 
     /**
-     * PAYMENT.SALE.DENIED / REFUNDED — payment failed.
+     * PAYMENT.SALE.DENIED / REFUNDED â€” payment failed.
      */
     protected function handlePaymentFailed($resource): void
     {
@@ -268,7 +268,7 @@ class PayPalWebhookController extends Controller
     }
 
     /**
-     * PAYMENT.CAPTURE.COMPLETED — handle invoice one-off payment captures.
+     * PAYMENT.CAPTURE.COMPLETED â€” handle invoice one-off payment captures.
      */
     protected function handleCaptureCompleted($resource): void
     {

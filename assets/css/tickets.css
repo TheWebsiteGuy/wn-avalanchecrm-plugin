@@ -687,3 +687,169 @@ button.tickets-card:focus-visible {
         gap: 0.35rem;
     }
 }
+
+/* Conversation / Replies
+   ========================================================================== */
+
+.tickets-replies-section {
+    margin-top: 1.5rem;
+}
+
+.tickets-replies-heading {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 1rem 0;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.tickets-replies-thread {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-bottom: 1.5rem;
+}
+
+.tickets-reply {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 1rem 1.15rem;
+    transition: box-shadow 0.15s;
+}
+
+.tickets-reply:hover {
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* Client replies – subtle green left border */
+.tickets-reply--client {
+    border-left: 3px solid #34d399;
+    background: #f0fdf4;
+}
+
+/* Staff replies – subtle blue left border */
+.tickets-reply--staff {
+    border-left: 3px solid var(--crm-primary, #4a6cf7);
+    background: #eff6ff;
+}
+
+/* System replies */
+.tickets-reply--system {
+    border-left: 3px solid #9ca3af;
+    background: #f9fafb;
+}
+
+.tickets-reply-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.55rem;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.tickets-reply-author {
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: #374151;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.tickets-reply-author i {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+.tickets-reply--client .tickets-reply-author {
+    color: #065f46;
+}
+
+.tickets-reply--staff .tickets-reply-author {
+    color: #1e40af;
+}
+
+.tickets-reply-date {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    white-space: nowrap;
+}
+
+.tickets-reply-body {
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: #374151;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.tickets-reply-body p {
+    margin: 0 0 0.5rem 0;
+}
+
+.tickets-reply-body p:last-child {
+    margin-bottom: 0;
+}
+
+/* Reply Form
+   ========================================================================== */
+
+.tickets-reply-form {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 1.25rem;
+    margin-top: 1rem;
+}
+
+.tickets-reply-form-heading {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 0.85rem 0;
+}
+
+.tickets-form-group {
+    margin-bottom: 0.85rem;
+}
+
+.tickets-textarea {
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-family: inherit;
+    line-height: 1.55;
+    color: #374151;
+    background: #fff;
+    resize: vertical;
+    min-height: 90px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    box-sizing: border-box;
+}
+
+.tickets-textarea:focus {
+    outline: none;
+    border-color: var(--crm-primary, #4a6cf7);
+    box-shadow: 0 0 0 3px var(--crm-primary-ring, rgba(74, 108, 247, 0.12));
+}
+
+.tickets-textarea::placeholder {
+    color: #9ca3af;
+}
+
+/* Responsive – replies */
+@media (max-width: 640px) {
+    .tickets-reply-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .tickets-reply-form {
+        padding: 1rem;
+    }
+}

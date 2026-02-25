@@ -1,6 +1,6 @@
 <?php Block::put('breadcrumb') ?>
 <ul>
-    <li><a href="<?= Backend::url('thewebsiteguy/nexuscrm/tickettypes') ?>">Ticket Types</a></li>
+    <li><a href="<?= Backend::url('thewebsiteguy/avalanchecrm/tickettypes') ?>">Ticket Types</a></li>
     <li>
         <?= e($this->pageTitle) ?>
     </li>
@@ -9,7 +9,7 @@
 
 <?php if (!$this->fatalError): ?>
 
-    <?= $this->makePartial('$/thewebsiteguy/nexuscrm/controllers/tickets/_submenu.php') ?>
+    <?= $this->makePartial('$/thewebsiteguy/avalanchecrm/controllers/tickets/_submenu.php') ?>
 
     <?= Form::open(['class' => 'layout']) ?>
 
@@ -31,7 +31,7 @@
                 data-request-confirm="<?= e(trans('backend::lang.form.confirm_delete')) ?>">
             </button>
             <span class="btn-text">
-                or <a href="<?= Backend::url('thewebsiteguy/nexuscrm/tickettypes') ?>">Cancel</a>
+                or <a href="<?= Backend::url('thewebsiteguy/avalanchecrm/tickettypes') ?>">Cancel</a>
             </span>
         </div>
     </div>
@@ -43,7 +43,7 @@
     <p class="flash-message static error">
         <?= e($this->fatalError) ?>
     </p>
-    <p><a href="<?= Backend::url('thewebsiteguy/nexuscrm/tickettypes') ?>" class="btn btn-default">Return to ticket
+    <p><a href="<?= Backend::url('thewebsiteguy/avalanchecrm/tickettypes') ?>" class="btn btn-default">Return to ticket
             types list</a></p>
 
 <?php endif ?>

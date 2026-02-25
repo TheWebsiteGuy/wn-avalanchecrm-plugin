@@ -1,6 +1,6 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Components;
+namespace TheWebsiteGuy\AvalancheCRM\Components;
 
 use Winter\User\Facades\Auth;
 use Winter\Storm\Support\Facades\Flash;
@@ -8,11 +8,11 @@ use Winter\Storm\Support\Facades\Input;
 use Winter\Storm\Support\Facades\Redirect;
 use Winter\Storm\Support\Facades\Log;
 use Cms\Classes\ComponentBase;
-use TheWebsiteGuy\NexusCRM\Models\Client;
-use TheWebsiteGuy\NexusCRM\Models\Project;
-use TheWebsiteGuy\NexusCRM\Models\Task;
-use TheWebsiteGuy\NexusCRM\Models\Staff;
-use TheWebsiteGuy\NexusCRM\Models\Settings;
+use TheWebsiteGuy\AvalancheCRM\Models\Client;
+use TheWebsiteGuy\AvalancheCRM\Models\Project;
+use TheWebsiteGuy\AvalancheCRM\Models\Task;
+use TheWebsiteGuy\AvalancheCRM\Models\Staff;
+use TheWebsiteGuy\AvalancheCRM\Models\Settings;
 use Winter\Storm\Exception\ApplicationException;
 
 /**
@@ -94,9 +94,9 @@ class Projects extends ComponentBase
      */
     public function onRun()
     {
-        $this->addCss('/plugins/thewebsiteguy/nexuscrm/assets/css/projects.css');
+        $this->addCss('/plugins/thewebsiteguy/avalanchecrm/assets/css/projects.css');
 
-        $this->page['themeStyles'] = \TheWebsiteGuy\NexusCRM\Classes\ThemeStyles::render();
+        $this->page['themeStyles'] = \TheWebsiteGuy\AvalancheCRM\Classes\ThemeStyles::render();
 
         $this->prepareVars();
     }
@@ -154,17 +154,17 @@ class Projects extends ComponentBase
     {
         $user = Auth::getUser();
         if (!$user) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.must_be_logged_in'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.must_be_logged_in'));
         }
 
         $client = Client::where('user_id', $user->id)->first();
         if (!$client) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.no_client_profile'));
         }
 
         $projectId = Input::get('project_id');
         if (!$projectId) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.project_not_specified'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.project_not_specified'));
         }
 
         $project = $client->projects()
@@ -172,7 +172,7 @@ class Projects extends ComponentBase
             ->find($projectId);
 
         if (!$project) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.project_not_found'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.project_not_found'));
         }
 
         $this->page['activeProject'] = $project;
@@ -208,12 +208,12 @@ class Projects extends ComponentBase
     {
         $user = Auth::getUser();
         if (!$user) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.must_be_logged_in'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.must_be_logged_in'));
         }
 
         $client = Client::where('user_id', $user->id)->first();
         if (!$client) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.no_client_profile'));
         }
 
         $taskId = Input::get('task_id');
@@ -226,7 +226,7 @@ class Projects extends ComponentBase
         // Verify the client owns this project
         $project = $client->projects()->find($projectId);
         if (!$project) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.project_not_found'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.project_not_found'));
         }
 
         $task = Task::where('id', $taskId)->where('project_id', $projectId)->first();
@@ -258,7 +258,7 @@ class Projects extends ComponentBase
         $task->fill($data);
         $task->save();
 
-        Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.task_updated'));
+        Flash::success(trans('thewebsiteguy.avalanchecrm::lang.messages.task_updated'));
 
         return $this->refreshProjectDetail($client, $projectId);
     }
@@ -318,12 +318,12 @@ class Projects extends ComponentBase
     {
         $user = Auth::getUser();
         if (!$user) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.must_be_logged_in'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.must_be_logged_in'));
         }
 
         $client = Client::where('user_id', $user->id)->first();
         if (!$client) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.no_client_profile'));
         }
 
         $status = Input::get('status');
@@ -349,12 +349,12 @@ class Projects extends ComponentBase
     {
         $user = Auth::getUser();
         if (!$user) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.must_be_logged_in'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.must_be_logged_in'));
         }
 
         $client = Client::where('user_id', $user->id)->first();
         if (!$client) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.no_client_profile'));
         }
 
         $taskId = Input::get('task_id');
@@ -366,7 +366,7 @@ class Projects extends ComponentBase
 
         $project = $client->projects()->find($projectId);
         if (!$project) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.project_not_found'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.project_not_found'));
         }
 
         $task = Task::where('id', $taskId)->where('project_id', $projectId)->first();
@@ -376,7 +376,7 @@ class Projects extends ComponentBase
 
         $task->startTimer(null);
 
-        Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.timer_started', ['name' => $task->title]));
+        Flash::success(trans('thewebsiteguy.avalanchecrm::lang.messages.timer_started', ['name' => $task->title]));
 
         return $this->refreshProjectDetail($client, $projectId);
     }
@@ -388,12 +388,12 @@ class Projects extends ComponentBase
     {
         $user = Auth::getUser();
         if (!$user) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.must_be_logged_in'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.must_be_logged_in'));
         }
 
         $client = Client::where('user_id', $user->id)->first();
         if (!$client) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.no_client_profile'));
         }
 
         $taskId = Input::get('task_id');
@@ -415,7 +415,7 @@ class Projects extends ComponentBase
 
         $task->stopTimer();
 
-        Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.timer_stopped', ['hours' => $task->formatted_hours]));
+        Flash::success(trans('thewebsiteguy.avalanchecrm::lang.messages.timer_stopped', ['hours' => $task->formatted_hours]));
 
         return $this->refreshProjectDetail($client, $projectId);
     }

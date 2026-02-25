@@ -31,6 +31,53 @@
                     </div>
                 {% endif %}
             </div>
+
+            {# Replies Thread #}
+            <div class="tickets-replies-section">
+                <h3 class="tickets-replies-heading">Conversation</h3>
+
+                {% set replies = activeTicket.replies %}
+                {% if replies is not empty %}
+                    <div class="tickets-replies-thread">
+                        {% for reply in replies %}
+                            {% if not reply.is_internal %}
+                                <div class="tickets-reply tickets-reply--{{ reply.author_type }}">
+                                    <div class="tickets-reply-header">
+                                        <span class="tickets-reply-author">
+                                            <i class="icon-{{ reply.author_type == 'client' ? 'user' : 'headset' }}"></i>
+                                            {{ reply.author_display_name }}
+                                        </span>
+                                        <span class="tickets-reply-date">{{ reply.created_at|date('M d, Y \\a\\t h:i A') }}</span>
+                                    </div>
+                                    <div class="tickets-reply-body">
+                                        {{ reply.content|nl2br }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="tickets-muted" style="font-style:italic;">No replies yet.</p>
+                {% endif %}
+
+                {# Reply Form #}
+                {% if activeTicket.status != 'closed' %}
+                    <div class="tickets-reply-form">
+                        <h4 class="tickets-reply-form-heading">Add a Reply</h4>
+                        <form>
+                            <input type="hidden" name="ticket_id" value="{{ activeTicket.id }}" />
+                            <div class="tickets-form-group">
+                                <textarea name="reply_content" class="tickets-textarea" rows="4" placeholder="Type your reply..."></textarea>
+                            </div>
+                            <button type="submit" class="tickets-btn tickets-btn--primary"
+                                data-request="{{ __SELF__ }}::onAddReply"
+                                data-request-flash>
+                                <i class="icon-paper-plane"></i> Send Reply
+                            </button>
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
         </div>
 
         {# Sidebar #}

@@ -1,6 +1,6 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Components;
+namespace TheWebsiteGuy\AvalancheCRM\Components;
 
 use Winter\User\Facades\Auth;
 use Winter\Storm\Support\Facades\Flash;
@@ -8,10 +8,11 @@ use Winter\Storm\Support\Facades\Input;
 use Winter\Storm\Support\Facades\Redirect;
 use Winter\Storm\Support\Facades\Log;
 use Cms\Classes\ComponentBase;
-use TheWebsiteGuy\NexusCRM\Models\Client;
-use TheWebsiteGuy\NexusCRM\Models\Ticket;
-use TheWebsiteGuy\NexusCRM\Models\TicketCategory;
-use TheWebsiteGuy\NexusCRM\Models\Settings;
+use TheWebsiteGuy\AvalancheCRM\Models\Client;
+use TheWebsiteGuy\AvalancheCRM\Models\Ticket;
+use TheWebsiteGuy\AvalancheCRM\Models\TicketCategory;
+use TheWebsiteGuy\AvalancheCRM\Models\TicketReply;
+use TheWebsiteGuy\AvalancheCRM\Models\Settings;
 use Winter\Storm\Exception\ApplicationException;
 
 /**
@@ -92,9 +93,9 @@ class Tickets extends ComponentBase
      */
     public function onRun()
     {
-        $this->addCss('/plugins/thewebsiteguy/nexuscrm/assets/css/tickets.css');
+        $this->addCss('/plugins/thewebsiteguy/avalanchecrm/assets/css/tickets.css');
 
-        $this->page['themeStyles'] = \TheWebsiteGuy\NexusCRM\Classes\ThemeStyles::render();
+        $this->page['themeStyles'] = \TheWebsiteGuy\AvalancheCRM\Classes\ThemeStyles::render();
 
         $this->prepareVars();
     }
@@ -123,7 +124,7 @@ class Tickets extends ComponentBase
         if ($ticketId) {
             $this->activeTicket = $this->page['activeTicket'] = Ticket::where('id', $ticketId)
                 ->where('client_id', $this->client->id)
-                ->with(['project', 'category', 'staff'])
+                ->with(['project', 'category', 'staff', 'replies'])
                 ->first();
         }
 
@@ -148,15 +149,18 @@ class Tickets extends ComponentBase
         $client = $this->getAuthenticatedClient();
 
         $ticketId = Input::get('ticket_id');
-        throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.ticket_not_specified'));
+
+        if (!$ticketId) {
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.ticket_not_specified'));
+        }
 
         $ticket = Ticket::where('id', $ticketId)
             ->where('client_id', $client->id)
-            ->with(['project', 'category', 'staff'])
+            ->with(['project', 'category', 'staff', 'replies'])
             ->first();
 
         if (!$ticket) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.ticket_not_found'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.ticket_not_found'));
         }
 
         $this->page['activeTicket'] = $ticket;
@@ -209,7 +213,7 @@ class Tickets extends ComponentBase
         $data = Input::get('ticket', []);
 
         if (empty($data['subject'])) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.subject_required'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.subject_required'));
         }
 
         // Sanitise description HTML
@@ -242,7 +246,7 @@ class Tickets extends ComponentBase
 
         $ticket->save();
 
-        Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.ticket_created'));
+        Flash::success(trans('thewebsiteguy.avalanchecrm::lang.messages.ticket_created'));
 
         $this->prepareVars();
 
@@ -294,13 +298,13 @@ class Tickets extends ComponentBase
             ->first();
 
         if (!$ticket) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.ticket_not_found'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.ticket_not_found'));
         }
 
         $ticket->status = 'closed';
         $ticket->save();
 
-        Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.ticket_closed'));
+        Flash::success(trans('thewebsiteguy.avalanchecrm::lang.messages.ticket_closed'));
 
         return $this->refreshTicketDetail($client, $ticketId);
     }
@@ -318,13 +322,13 @@ class Tickets extends ComponentBase
             ->first();
 
         if (!$ticket) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.ticket_not_found'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.ticket_not_found'));
         }
 
         $ticket->status = 'open';
         $ticket->save();
 
-        Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.ticket_reopened'));
+        Flash::success(trans('thewebsiteguy.avalanchecrm::lang.messages.ticket_reopened'));
 
         return $this->refreshTicketDetail($client, $ticketId);
     }
@@ -344,17 +348,56 @@ class Tickets extends ComponentBase
             ->first();
 
         if (!$ticket) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.ticket_not_found'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.ticket_not_found'));
         }
 
         if (!in_array($priority, ['low', 'medium', 'high'])) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.invalid_priority'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.invalid_priority'));
         }
 
         $ticket->priority = $priority;
         $ticket->save();
 
-        Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.priority_updated'));
+        Flash::success(trans('thewebsiteguy.avalanchecrm::lang.messages.priority_updated'));
+
+        return $this->refreshTicketDetail($client, $ticketId);
+    }
+
+    /**
+     * AJAX: Add a reply to a ticket (from the client frontend).
+     */
+    public function onAddReply()
+    {
+        $client = $this->getAuthenticatedClient();
+
+        $ticketId = Input::get('ticket_id');
+        $content = trim(Input::get('reply_content', ''));
+
+        if (empty($content)) {
+            throw new ApplicationException('Reply content cannot be empty.');
+        }
+
+        $ticket = Ticket::where('id', $ticketId)
+            ->where('client_id', $client->id)
+            ->first();
+
+        if (!$ticket) {
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.ticket_not_found'));
+        }
+
+        if ($ticket->status === 'closed') {
+            throw new ApplicationException('Cannot reply to a closed ticket.');
+        }
+
+        $reply = new TicketReply();
+        $reply->ticket_id = $ticket->id;
+        $reply->author_type = 'client';
+        $reply->author_name = $client->name;
+        $reply->content = $content;
+        $reply->is_internal = false;
+        $reply->save();
+
+        Flash::success('Reply added successfully.');
 
         return $this->refreshTicketDetail($client, $ticketId);
     }
@@ -366,12 +409,12 @@ class Tickets extends ComponentBase
     {
         $user = Auth::getUser();
         if (!$user) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.must_be_logged_in'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.must_be_logged_in'));
         }
 
         $client = Client::where('user_id', $user->id)->first();
         if (!$client) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.no_client_profile'));
         }
 
         return $client;
@@ -384,7 +427,7 @@ class Tickets extends ComponentBase
     {
         $ticket = Ticket::where('id', $ticketId)
             ->where('client_id', $client->id)
-            ->with(['project', 'category', 'staff'])
+            ->with(['project', 'category', 'staff', 'replies'])
             ->first();
 
         $this->page['activeTicket'] = $ticket;

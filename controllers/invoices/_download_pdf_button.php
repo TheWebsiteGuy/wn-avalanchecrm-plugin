@@ -1,6 +1,6 @@
 <?php if ($formModel->exists): ?>
     <div style="margin-bottom: 15px;">
-        <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/nexuscrm/invoices/pdf/' . $formModel->id) ?>"
+        <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/invoices/pdf/' . $formModel->id) ?>"
            class="btn btn-default oc-icon-file-pdf-o"
            target="_blank">
             Download PDF

@@ -1,8 +1,8 @@
 {
-    "name": "thewebsiteguy/wn-nexuscrm-plugin",
+    "name": "thewebsiteguy/wn-avalanchecrm-plugin",
     "type": "winter-plugin",
     "description": "Powerful, comprehensive Customer Relationship Management (CRM) and Billing system for Winter CMS.",
-    "homepage": "https://github.com/thewebsiteguy/nexuscrm",
+    "homepage": "https://github.com/thewebsiteguy/avalanchecrm",
     "license": "MIT",
     "authors": [
         {
@@ -21,6 +21,6 @@
         "barryvdh/laravel-dompdf": "^3.1"
     },
     "extra": {
-        "installer-name": "nexuscrm"
+        "installer-name": "avalanchecrm"
     }
 }

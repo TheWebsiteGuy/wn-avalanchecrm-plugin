@@ -1,9 +1,9 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Traits;
+namespace TheWebsiteGuy\AvalancheCRM\Traits;
 
-use TheWebsiteGuy\NexusCRM\Models\Task;
-use TheWebsiteGuy\NexusCRM\Models\Project;
+use TheWebsiteGuy\AvalancheCRM\Models\Task;
+use TheWebsiteGuy\AvalancheCRM\Models\Project;
 use Backend\Classes\Controller;
 use Flash;
 
@@ -22,7 +22,7 @@ trait HasTaskModal
         $this->vars['taskId'] = $taskId;
         $this->vars['task'] = $task;
 
-        return $this->makePartial('$/thewebsiteguy/nexuscrm/controllers/tasks/_task_form_modal.php');
+        return $this->makePartial('$/thewebsiteguy/avalanchecrm/controllers/tasks/_task_form_modal.php');
     }
 
     /**
@@ -114,7 +114,7 @@ trait HasTaskModal
             // Refresh integrated board
             $project = Project::find($projectId);
             return [
-                '#project-kanban-board-container' => $this->makePartial('$/thewebsiteguy/nexuscrm/controllers/projects/_kanban_board.php', [
+                '#project-kanban-board-container' => $this->makePartial('$/thewebsiteguy/avalanchecrm/controllers/projects/_kanban_board.php', [
                     'formModel' => $project
                 ])
             ];
@@ -122,7 +122,7 @@ trait HasTaskModal
             // Refresh standalone board
             $this->vars['tasks'] = Task::orderBy('sort_order')->get()->groupBy('status');
             return [
-                '#tasks-kanban-board-container' => $this->makePartial('$/thewebsiteguy/nexuscrm/controllers/tasks/_kanban_board.php')
+                '#tasks-kanban-board-container' => $this->makePartial('$/thewebsiteguy/avalanchecrm/controllers/tasks/_kanban_board.php')
             ];
         }
     }
@@ -132,7 +132,7 @@ trait HasTaskModal
      */
     protected function makeTaskFormWidget($model)
     {
-        $config = $this->makeConfig('$/thewebsiteguy/nexuscrm/models/task/fields.yaml');
+        $config = $this->makeConfig('$/thewebsiteguy/avalanchecrm/models/task/fields.yaml');
         $config->model = $model;
         $config->arrayName = 'Task';
         $config->alias = 'taskForm';

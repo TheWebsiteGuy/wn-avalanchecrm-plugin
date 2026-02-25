@@ -15,7 +15,7 @@ fields:
         type: relation
         span: full
         nameFrom: name
-        emptyOption: "— No plan selected —"
+        emptyOption: "â€” No plan selected â€”"
         comment: "Optionally link to a subscription plan. Price and billing cycle will be inherited if set."
 
     payment_method:
@@ -33,10 +33,10 @@ fields:
         type: dropdown
         span: right
         options:
-            active: thewebsiteguy.nexuscrm::lang.statuses.active
-            pending: thewebsiteguy.nexuscrm::lang.statuses.pending
-            past_due: thewebsiteguy.nexuscrm::lang.statuses.past_due
-            canceled: thewebsiteguy.nexuscrm::lang.statuses.canceled
+            active: thewebsiteguy.avalanchecrm::lang.statuses.active
+            pending: thewebsiteguy.avalanchecrm::lang.statuses.pending
+            past_due: thewebsiteguy.avalanchecrm::lang.statuses.past_due
+            canceled: thewebsiteguy.avalanchecrm::lang.statuses.canceled
         default: active
 
     plan_name:

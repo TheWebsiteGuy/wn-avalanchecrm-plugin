@@ -12,8 +12,8 @@ return new class extends Migration {
      */
     public function up()
     {
-        if (!Schema::hasTable('thewebsiteguy_nexuscrm_ticket_statuses')) {
-            Schema::create('thewebsiteguy_nexuscrm_ticket_statuses', function (Blueprint $table) {
+        if (!Schema::hasTable('thewebsiteguy_avalanchecrm_ticket_statuses')) {
+            Schema::create('thewebsiteguy_avalanchecrm_ticket_statuses', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('name');
                 $table->string('color')->nullable();
@@ -22,8 +22,8 @@ return new class extends Migration {
             });
         }
 
-        if (!Schema::hasTable('thewebsiteguy_nexuscrm_ticket_types')) {
-            Schema::create('thewebsiteguy_nexuscrm_ticket_types', function (Blueprint $table) {
+        if (!Schema::hasTable('thewebsiteguy_avalanchecrm_ticket_types')) {
+            Schema::create('thewebsiteguy_avalanchecrm_ticket_types', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('name');
                 $table->string('icon')->nullable();
@@ -32,15 +32,15 @@ return new class extends Migration {
             });
         }
 
-        if (Schema::hasTable('thewebsiteguy_nexuscrm_tickets')) {
-            Schema::table('thewebsiteguy_nexuscrm_tickets', function (Blueprint $table) {
-                if (!Schema::hasColumn('thewebsiteguy_nexuscrm_tickets', 'status_id')) {
+        if (Schema::hasTable('thewebsiteguy_avalanchecrm_tickets')) {
+            Schema::table('thewebsiteguy_avalanchecrm_tickets', function (Blueprint $table) {
+                if (!Schema::hasColumn('thewebsiteguy_avalanchecrm_tickets', 'status_id')) {
                     $table->integer('status_id')->unsigned()->nullable()->after('category_id');
                 }
-                if (!Schema::hasColumn('thewebsiteguy_nexuscrm_tickets', 'ticket_type_id')) {
+                if (!Schema::hasColumn('thewebsiteguy_avalanchecrm_tickets', 'ticket_type_id')) {
                     $table->integer('ticket_type_id')->unsigned()->nullable()->after('status_id');
                 }
-                if (!Schema::hasColumn('thewebsiteguy_nexuscrm_tickets', 'custom_fields_data')) {
+                if (!Schema::hasColumn('thewebsiteguy_avalanchecrm_tickets', 'custom_fields_data')) {
                     $table->text('custom_fields_data')->nullable()->after('description');
                 }
             });
@@ -55,13 +55,13 @@ return new class extends Migration {
         ];
 
         foreach ($defaults as $status) {
-            \TheWebsiteGuy\NexusCRM\Models\TicketStatus::firstOrCreate(['name' => $status['name']], $status);
+            \TheWebsiteGuy\AvalancheCRM\Models\TicketStatus::firstOrCreate(['name' => $status['name']], $status);
         }
 
         // Link existing tickets to the 'Open' status if they don't have one
-        $openStatus = \TheWebsiteGuy\NexusCRM\Models\TicketStatus::where('name', 'Open')->first();
+        $openStatus = \TheWebsiteGuy\AvalancheCRM\Models\TicketStatus::where('name', 'Open')->first();
         if ($openStatus) {
-            \TheWebsiteGuy\NexusCRM\Models\Ticket::whereNull('status_id')->update(['status_id' => $openStatus->id]);
+            \TheWebsiteGuy\AvalancheCRM\Models\Ticket::whereNull('status_id')->update(['status_id' => $openStatus->id]);
         }
     }
 
@@ -72,13 +72,13 @@ return new class extends Migration {
      */
     public function down()
     {
-        if (Schema::hasTable('thewebsiteguy_nexuscrm_tickets')) {
-            Schema::table('thewebsiteguy_nexuscrm_tickets', function (Blueprint $table) {
+        if (Schema::hasTable('thewebsiteguy_avalanchecrm_tickets')) {
+            Schema::table('thewebsiteguy_avalanchecrm_tickets', function (Blueprint $table) {
                 $table->dropColumn(['status_id', 'ticket_type_id', 'custom_fields_data']);
             });
         }
 
-        Schema::dropIfExists('thewebsiteguy_nexuscrm_ticket_statuses');
-        Schema::dropIfExists('thewebsiteguy_nexuscrm_ticket_types');
+        Schema::dropIfExists('thewebsiteguy_avalanchecrm_ticket_statuses');
+        Schema::dropIfExists('thewebsiteguy_avalanchecrm_ticket_types');
     }
 };

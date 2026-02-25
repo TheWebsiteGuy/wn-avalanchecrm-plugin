@@ -6,25 +6,25 @@
 name: Task
 
 # Model Form Field configuration
-form: $/thewebsiteguy/nexuscrm/models/task/fields.yaml
+form: $/thewebsiteguy/avalanchecrm/models/task/fields.yaml
 
 # Model Class name
-modelClass: TheWebsiteGuy\NexusCRM\Models\Task
+modelClass: TheWebsiteGuy\AvalancheCRM\Models\Task
 
 # Default redirect location
-defaultRedirect: thewebsiteguy/nexuscrm/tasks
+defaultRedirect: thewebsiteguy/avalanchecrm/tasks
 
 # Create page
 create:
   title: Create Task
-  redirect: thewebsiteguy/nexuscrm/tasks/update/:id
-  redirectClose: thewebsiteguy/nexuscrm/tasks
+  redirect: thewebsiteguy/avalanchecrm/tasks/update/:id
+  redirectClose: thewebsiteguy/avalanchecrm/tasks
 
 # Update page
 update:
   title: Edit Task
-  redirect: thewebsiteguy/nexuscrm/tasks
-  redirectClose: thewebsiteguy/nexuscrm/tasks
+  redirect: thewebsiteguy/avalanchecrm/tasks
+  redirectClose: thewebsiteguy/avalanchecrm/tasks
 
 # Preview page
 preview:

@@ -3,28 +3,28 @@
 # ===================================
 
 # Record name
-name: 'thewebsiteguy.nexuscrm::lang.models.invoice.label'
+name: 'thewebsiteguy.avalanchecrm::lang.models.invoice.label'
 
 # Model Form Field configuration
-form: $/thewebsiteguy/nexuscrm/models/invoice/fields.yaml
+form: $/thewebsiteguy/avalanchecrm/models/invoice/fields.yaml
 
 # Model Class name
-modelClass: TheWebsiteGuy\NexusCRM\Models\Invoice
+modelClass: TheWebsiteGuy\AvalancheCRM\Models\Invoice
 
 # Default redirect location
-defaultRedirect: thewebsiteguy/nexuscrm/invoices
+defaultRedirect: thewebsiteguy/avalanchecrm/invoices
 
 # Create page
 create:
     title: backend::lang.form.create_title
-    redirect: thewebsiteguy/nexuscrm/invoices/update/:id
-    redirectClose: thewebsiteguy/nexuscrm/invoices
+    redirect: thewebsiteguy/avalanchecrm/invoices/update/:id
+    redirectClose: thewebsiteguy/avalanchecrm/invoices
 
 # Update page
 update:
     title: backend::lang.form.update_title
-    redirect: thewebsiteguy/nexuscrm/invoices
-    redirectClose: thewebsiteguy/nexuscrm/invoices
+    redirect: thewebsiteguy/avalanchecrm/invoices
+    redirectClose: thewebsiteguy/avalanchecrm/invoices
 
 # Preview page
 preview:

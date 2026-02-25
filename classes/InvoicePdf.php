@@ -1,10 +1,10 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Classes;
+namespace TheWebsiteGuy\AvalancheCRM\Classes;
 
 use Barryvdh\DomPDF\Facade\Pdf;
-use TheWebsiteGuy\NexusCRM\Models\Invoice;
-use TheWebsiteGuy\NexusCRM\Models\Settings;
+use TheWebsiteGuy\AvalancheCRM\Models\Invoice;
+use TheWebsiteGuy\AvalancheCRM\Models\Settings;
 use Winter\Storm\Support\Facades\Twig;
 
 /**
@@ -36,7 +36,7 @@ class InvoicePdf
         ];
 
         // Render the Twig template to HTML
-        $templatePath = plugins_path('thewebsiteguy/nexuscrm/views/pdf/invoice.htm');
+        $templatePath = plugins_path('thewebsiteguy/avalanchecrm/views/pdf/invoice.htm');
         $templateContent = file_get_contents($templatePath);
         $html = Twig::parse($templateContent, $data);
 

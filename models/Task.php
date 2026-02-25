@@ -1,6 +1,6 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Models;
+namespace TheWebsiteGuy\AvalancheCRM\Models;
 
 use Winter\Storm\Database\Model;
 
@@ -15,7 +15,7 @@ class Task extends Model
     /**
      * @var string The database table used by the model.
      */
-    public $table = 'thewebsiteguy_nexuscrm_tasks';
+    public $table = 'thewebsiteguy_avalanchecrm_tasks';
 
     /**
      * @var array Guarded fields
@@ -60,13 +60,13 @@ class Task extends Model
      * @var array Relations
      */
     public $belongsTo = [
-        'project' => [\TheWebsiteGuy\NexusCRM\Models\Project::class],
+        'project' => [\TheWebsiteGuy\AvalancheCRM\Models\Project::class],
         'assigned_to' => [\Backend\Models\User::class, 'key' => 'assigned_to_id'],
-        'invoiceItem' => [\TheWebsiteGuy\NexusCRM\Models\InvoiceItem::class, 'key' => 'id', 'otherKey' => 'task_id'],
+        'invoiceItem' => [\TheWebsiteGuy\AvalancheCRM\Models\InvoiceItem::class, 'key' => 'id', 'otherKey' => 'task_id'],
     ];
 
     public $hasMany = [
-        'time_entries' => [\TheWebsiteGuy\NexusCRM\Models\TimeEntry::class, 'order' => 'started_at desc'],
+        'time_entries' => [\TheWebsiteGuy\AvalancheCRM\Models\TimeEntry::class, 'order' => 'started_at desc'],
     ];
 
     /**
@@ -149,7 +149,7 @@ class Task extends Model
 
         $this->save();
 
-        $entry = new \TheWebsiteGuy\NexusCRM\Models\TimeEntry();
+        $entry = new \TheWebsiteGuy\AvalancheCRM\Models\TimeEntry();
         $entry->task_id = $this->id;
         $entry->user_id = $userId;
         $entry->started_at = $now;

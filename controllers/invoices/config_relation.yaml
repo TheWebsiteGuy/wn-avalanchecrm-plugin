@@ -4,7 +4,7 @@
 
 items:
     label: Line Items
-    list: $/thewebsiteguy/nexuscrm/models/invoiceitem/columns.yaml
-    form: $/thewebsiteguy/nexuscrm/models/invoiceitem/fields.yaml
+    list: $/thewebsiteguy/avalanchecrm/models/invoiceitem/columns.yaml
+    form: $/thewebsiteguy/avalanchecrm/models/invoiceitem/fields.yaml
     view:
         toolbarButtons: create|delete

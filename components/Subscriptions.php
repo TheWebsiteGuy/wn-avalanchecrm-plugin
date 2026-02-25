@@ -1,6 +1,6 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Components;
+namespace TheWebsiteGuy\AvalancheCRM\Components;
 
 use Winter\User\Facades\Auth;
 use Winter\Storm\Support\Facades\Flash;
@@ -9,10 +9,10 @@ use Winter\Storm\Support\Facades\Redirect;
 use Winter\Storm\Support\Facades\Request;
 use Winter\Storm\Support\Facades\Log;
 use Cms\Classes\ComponentBase;
-use TheWebsiteGuy\NexusCRM\Models\Client;
-use TheWebsiteGuy\NexusCRM\Models\Subscription;
-use TheWebsiteGuy\NexusCRM\Models\SubscriptionPlan;
-use TheWebsiteGuy\NexusCRM\Models\Settings;
+use TheWebsiteGuy\AvalancheCRM\Models\Client;
+use TheWebsiteGuy\AvalancheCRM\Models\Subscription;
+use TheWebsiteGuy\AvalancheCRM\Models\SubscriptionPlan;
+use TheWebsiteGuy\AvalancheCRM\Models\Settings;
 use Winter\Storm\Exception\ApplicationException;
 
 /**
@@ -80,10 +80,10 @@ class Subscriptions extends ComponentBase
      */
     public function onRun()
     {
-        $this->addCss('/plugins/thewebsiteguy/nexuscrm/assets/css/subscriptions.css');
-        $this->addJs('/plugins/thewebsiteguy/nexuscrm/assets/js/subscriptions.js');
+        $this->addCss('/plugins/thewebsiteguy/avalanchecrm/assets/css/subscriptions.css');
+        $this->addJs('/plugins/thewebsiteguy/avalanchecrm/assets/js/subscriptions.js');
 
-        $this->page['themeStyles'] = \TheWebsiteGuy\NexusCRM\Classes\ThemeStyles::render();
+        $this->page['themeStyles'] = \TheWebsiteGuy\AvalancheCRM\Classes\ThemeStyles::render();
 
         // Handle Stripe Checkout return
         if (Input::get('stripe_success') && Input::get('session_id')) {
@@ -91,7 +91,7 @@ class Subscriptions extends ComponentBase
         }
 
         if (Input::get('stripe_cancel')) {
-            Flash::warning(e(trans('thewebsiteguy.nexuscrm::lang.messages.payment_cancelled')));
+            Flash::warning(e(trans('thewebsiteguy.avalanchecrm::lang.messages.payment_cancelled')));
         }
 
         // Handle GoCardless Redirect Flow return
@@ -100,7 +100,7 @@ class Subscriptions extends ComponentBase
         }
 
         if (Input::get('gc_cancel')) {
-            Flash::warning(e(trans('thewebsiteguy.nexuscrm::lang.messages.setup_cancelled')));
+            Flash::warning(e(trans('thewebsiteguy.avalanchecrm::lang.messages.setup_cancelled')));
         }
 
         // Handle PayPal Subscription return
@@ -109,7 +109,7 @@ class Subscriptions extends ComponentBase
         }
 
         if (Input::get('paypal_cancel')) {
-            Flash::warning(e(trans('thewebsiteguy.nexuscrm::lang.messages.payment_cancelled')));
+            Flash::warning(e(trans('thewebsiteguy.avalanchecrm::lang.messages.payment_cancelled')));
         }
 
         $this->prepareVars();
@@ -225,19 +225,19 @@ class Subscriptions extends ComponentBase
     /**
      * AJAX: Subscribe to a plan.
      *
-     * For card payments → creates a Stripe Checkout Session and returns the redirect URL.
-     * For other methods  → creates the subscription directly.
+     * For card payments â†’ creates a Stripe Checkout Session and returns the redirect URL.
+     * For other methods  â†’ creates the subscription directly.
      */
     public function onSubscribe()
     {
         $user = Auth::getUser();
         if (!$user) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.must_be_logged_in'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.must_be_logged_in'));
         }
 
         $client = Client::where('user_id', $user->id)->first();
         if (!$client) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.no_client_profile'));
         }
 
         $planId = post('plan_id');
@@ -256,25 +256,25 @@ class Subscriptions extends ComponentBase
             ->first();
 
         if ($existing) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.already_subscribed'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.already_subscribed'));
         }
 
-        // ── Card (Stripe Checkout) ──────────────────────────────────
+        // â”€â”€ Card (Stripe Checkout) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         if ($paymentMethod === 'card') {
             return $this->createStripeCheckoutSession($client, $plan, 'subscribe');
         }
 
-        // ── Direct Debit (GoCardless Redirect Flow) ────────────────
+        // â”€â”€ Direct Debit (GoCardless Redirect Flow) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         if ($paymentMethod === 'direct_debit') {
             return $this->createGoCardlessRedirectFlow($client, $plan, 'subscribe');
         }
 
-        // ── PayPal Subscription ────────────────────────────────
+        // â”€â”€ PayPal Subscription â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         if ($paymentMethod === 'paypal') {
             return $this->createPayPalSubscription($client, $plan, 'subscribe');
         }
 
-        // ── Other payment methods ──────────────────────────────
+        // â”€â”€ Other payment methods â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         $subscription = new Subscription();
         $subscription->client_id = $client->id;
         $subscription->plan_id = $plan->id;
@@ -286,7 +286,7 @@ class Subscriptions extends ComponentBase
         $subscription->next_billing_date = $this->calculateNextBillingDate($plan->billing_cycle);
         $subscription->save();
 
-        Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.payment_successful', ['name' => $plan->name]));
+        Flash::success(trans('thewebsiteguy.avalanchecrm::lang.messages.payment_successful', ['name' => $plan->name]));
 
         $this->prepareVars();
 
@@ -326,7 +326,7 @@ class Subscriptions extends ComponentBase
                 ],
             ];
         } else {
-            // No Stripe Price ID configured — create a one-off payment session with inline price
+            // No Stripe Price ID configured â€” create a one-off payment session with inline price
             $currencyCode = strtolower($settings->currency_code ?: 'usd');
             $sessionParams = [
                 'customer' => $customerId,
@@ -420,9 +420,9 @@ class Subscriptions extends ComponentBase
 
                 $subscription->save();
 
-                Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.payment_successful', ['name' => $subscription->plan_name]));
+                Flash::success(trans('thewebsiteguy.avalanchecrm::lang.messages.payment_successful', ['name' => $subscription->plan_name]));
             } else {
-                Flash::warning(trans('thewebsiteguy.nexuscrm::lang.messages.payment_processing'));
+                Flash::warning(trans('thewebsiteguy.avalanchecrm::lang.messages.payment_processing'));
             }
         } catch (\Exception $e) {
             Log::error('Stripe return handling failed: ' . $e->getMessage());
@@ -444,12 +444,12 @@ class Subscriptions extends ComponentBase
     {
         $user = Auth::getUser();
         if (!$user) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.must_be_logged_in'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.must_be_logged_in'));
         }
 
         $client = Client::where('user_id', $user->id)->first();
         if (!$client) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.no_client_profile'));
         }
 
         $subscriptionId = post('subscription_id');
@@ -469,7 +469,7 @@ class Subscriptions extends ComponentBase
 
         $settings = Settings::instance();
 
-        // ── Card (Stripe Checkout) ──────────────────────────────────
+        // â”€â”€ Card (Stripe Checkout) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         if ($subscription->payment_method === 'card') {
             if (!$settings->stripe_enabled) {
                 throw new ApplicationException('Card payments are not currently enabled. Please contact support.');
@@ -535,7 +535,7 @@ class Subscriptions extends ComponentBase
             return ['stripeRedirectUrl' => $session->url];
         }
 
-        // ── Direct Debit (GoCardless) ──────────────────────────────
+        // â”€â”€ Direct Debit (GoCardless) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         if ($subscription->payment_method === 'direct_debit') {
             if (!$settings->gocardless_enabled) {
                 throw new ApplicationException('Direct debit payments are not currently enabled. Please contact support.');
@@ -544,13 +544,13 @@ class Subscriptions extends ComponentBase
             return $this->createGoCardlessRedirectFlow($client, $plan, 'subscribe');
         }
 
-        // ── PayPal ─────────────────────────────────────────────────
+        // â”€â”€ PayPal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         if ($subscription->payment_method === 'paypal') {
             if (!$settings->paypal_enabled) {
                 throw new ApplicationException('PayPal payments are not currently enabled. Please contact support.');
             }
 
-            // Delete the old pending record — createPayPalSubscription will create a fresh one
+            // Delete the old pending record â€” createPayPalSubscription will create a fresh one
             $subscription->delete();
 
             return $this->createPayPalSubscription($client, $plan, 'subscribe');
@@ -567,12 +567,12 @@ class Subscriptions extends ComponentBase
     {
         $user = Auth::getUser();
         if (!$user) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.must_be_logged_in'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.must_be_logged_in'));
         }
 
         $client = Client::where('user_id', $user->id)->first();
         if (!$client) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.no_client_profile'));
         }
 
         $subscriptionId = post('subscription_id');
@@ -615,7 +615,7 @@ class Subscriptions extends ComponentBase
         $subscription->status = 'canceled';
         $subscription->save();
 
-        Flash::success(e(trans('thewebsiteguy.nexuscrm::lang.messages.subscription_cancelled')));
+        Flash::success(e(trans('thewebsiteguy.avalanchecrm::lang.messages.subscription_cancelled')));
 
         $this->prepareVars();
 
@@ -639,12 +639,12 @@ class Subscriptions extends ComponentBase
     {
         $user = Auth::getUser();
         if (!$user) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.must_be_logged_in'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.must_be_logged_in'));
         }
 
         $client = Client::where('user_id', $user->id)->first();
         if (!$client) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.no_client_profile'));
         }
 
         $subscriptionId = post('subscription_id');
@@ -709,7 +709,7 @@ class Subscriptions extends ComponentBase
         $subscription->payment_method = $paymentMethod;
         $subscription->save();
 
-        Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.payment_method_updated'));
+        Flash::success(trans('thewebsiteguy.avalanchecrm::lang.messages.payment_method_updated'));
 
         $this->prepareVars();
 
@@ -726,12 +726,12 @@ class Subscriptions extends ComponentBase
     {
         $user = Auth::getUser();
         if (!$user) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.must_be_logged_in'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.must_be_logged_in'));
         }
 
         $client = Client::where('user_id', $user->id)->first();
         if (!$client) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.no_client_profile'));
         }
 
         $subscriptionId = post('subscription_id');
@@ -775,7 +775,7 @@ class Subscriptions extends ComponentBase
         $subscription->next_billing_date = $this->calculateNextBillingDate($newPlan->billing_cycle);
         $subscription->save();
 
-        Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.plan_changed', ['name' => $newPlan->name]));
+        Flash::success(trans('thewebsiteguy.avalanchecrm::lang.messages.plan_changed', ['name' => $newPlan->name]));
 
         $this->prepareVars();
 
@@ -796,12 +796,12 @@ class Subscriptions extends ComponentBase
     {
         $user = Auth::getUser();
         if (!$user) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.must_be_logged_in'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.must_be_logged_in'));
         }
 
         $client = Client::where('user_id', $user->id)->first();
         if (!$client) {
-            throw new ApplicationException(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
+            throw new ApplicationException(trans('thewebsiteguy.avalanchecrm::lang.messages.no_client_profile'));
         }
 
         if (empty($client->stripe_customer_id)) {
@@ -951,7 +951,7 @@ class Subscriptions extends ComponentBase
 
             $client = Client::where('user_id', $user->id)->first();
             if (!$client) {
-                Flash::error(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
+                Flash::error(trans('thewebsiteguy.avalanchecrm::lang.messages.no_client_profile'));
                 return;
             }
 
@@ -985,7 +985,7 @@ class Subscriptions extends ComponentBase
                 $subscription->gocardless_redirect_flow_id = $redirectFlowId;
                 $subscription->save();
 
-                Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.payment_method_updated'));
+                Flash::success(trans('thewebsiteguy.avalanchecrm::lang.messages.payment_method_updated'));
             } else {
                 // New subscription flow
                 $subscription = Subscription::where('gocardless_redirect_flow_id', $redirectFlowId)->first();
@@ -1009,7 +1009,7 @@ class Subscriptions extends ComponentBase
                 $subscription->next_billing_date = $this->calculateNextBillingDate($subscription->billing_cycle);
                 $subscription->save();
 
-                Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.payment_successful', ['name' => $subscription->plan_name]));
+                Flash::success(trans('thewebsiteguy.avalanchecrm::lang.messages.payment_successful', ['name' => $subscription->plan_name]));
             }
 
             // Clear session data
@@ -1108,7 +1108,7 @@ class Subscriptions extends ComponentBase
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $body = $e->hasResponse() ? $e->getResponse()->getBody()->getContents() : '';
             Log::error('PayPal auth failed: ' . $e->getMessage() . ' | Body: ' . $body);
-            throw new ApplicationException('PayPal authentication failed. Please check the Client ID and Secret in the NexusCRM settings.');
+            throw new ApplicationException('PayPal authentication failed. Please check the Client ID and Secret in the Avalanche CRM settings.');
         }
     }
 
@@ -1148,7 +1148,7 @@ class Subscriptions extends ComponentBase
                 $subscriptionPayload = [
                     'plan_id' => $plan->paypal_plan_id,
                     'application_context' => [
-                        'brand_name' => config('app.name', 'NexusCRM'),
+                        'brand_name' => config('app.name', 'Avalanche CRM'),
                         'locale' => 'en-GB',
                         'shipping_preference' => 'NO_SHIPPING',
                         'user_action' => 'SUBSCRIBE_NOW',
@@ -1192,7 +1192,7 @@ class Subscriptions extends ComponentBase
                     throw new ApplicationException('Could not get PayPal approval URL.');
                 }
             } else {
-                // No PayPal Plan ID — create a one-off order instead
+                // No PayPal Plan ID â€” create a one-off order instead
                 $currencyCode = strtoupper($settings->currency_code ?: 'USD');
 
                 $orderPayload = [
@@ -1207,7 +1207,7 @@ class Subscriptions extends ComponentBase
                         ]
                     ],
                     'application_context' => [
-                        'brand_name' => config('app.name', 'NexusCRM'),
+                        'brand_name' => config('app.name', 'Avalanche CRM'),
                         'shipping_preference' => 'NO_SHIPPING',
                         'user_action' => 'PAY_NOW',
                         'return_url' => $currentUrl . '?paypal_success=1&order=1',
@@ -1290,7 +1290,7 @@ class Subscriptions extends ComponentBase
 
             $client = Client::where('user_id', $user->id)->first();
             if (!$client) {
-                Flash::error(trans('thewebsiteguy.nexuscrm::lang.messages.no_client_profile'));
+                Flash::error(trans('thewebsiteguy.avalanchecrm::lang.messages.no_client_profile'));
                 return;
             }
 
@@ -1342,9 +1342,9 @@ class Subscriptions extends ComponentBase
                     $subscription->paypal_subscription_id = $subscriptionId;
                     $subscription->save();
 
-                    Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.payment_method_updated'));
+                    Flash::success(trans('thewebsiteguy.avalanchecrm::lang.messages.payment_method_updated'));
                 } else {
-                    Flash::warning(trans('thewebsiteguy.nexuscrm::lang.messages.payment_processing'));
+                    Flash::warning(trans('thewebsiteguy.avalanchecrm::lang.messages.payment_processing'));
                 }
             } else {
                 // New subscription flow
@@ -1366,9 +1366,9 @@ class Subscriptions extends ComponentBase
                     $subscription->next_billing_date = $this->calculateNextBillingDate($subscription->billing_cycle);
                     $subscription->save();
 
-                    Flash::success(trans('thewebsiteguy.nexuscrm::lang.messages.payment_successful', ['name' => $subscription->plan_name]));
+                    Flash::success(trans('thewebsiteguy.avalanchecrm::lang.messages.payment_successful', ['name' => $subscription->plan_name]));
                 } else {
-                    Flash::warning(trans('thewebsiteguy.nexuscrm::lang.messages.payment_processing'));
+                    Flash::warning(trans('thewebsiteguy.avalanchecrm::lang.messages.payment_processing'));
                 }
             }
 

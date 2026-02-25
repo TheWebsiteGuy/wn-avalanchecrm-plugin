@@ -1,8 +1,8 @@
 <div class="control-toolbar">
     <div class="toolbar-item toolbar-primary">
-        <a href="<?= Backend::url('thewebsiteguy/nexuscrm/tasks/create') ?>" class="btn btn-primary oc-icon-plus">New
+        <a href="<?= Backend::url('thewebsiteguy/avalanchecrm/tasks/create') ?>" class="btn btn-primary oc-icon-plus">New
             Task</a>
-        <a href="<?= Backend::url('thewebsiteguy/nexuscrm/tasks/kanban') ?>"
+        <a href="<?= Backend::url('thewebsiteguy/avalanchecrm/tasks/kanban') ?>"
             class="btn btn-info oc-icon-th-large">Kanban Board</a>
     </div>
     <div class="toolbar-item">

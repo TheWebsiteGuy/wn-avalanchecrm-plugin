@@ -12,11 +12,11 @@ return new class extends Migration {
      */
     public function up()
     {
-        if (Schema::hasTable('thewebsiteguy_nexuscrm_projects_clients')) {
+        if (Schema::hasTable('thewebsiteguy_avalanchecrm_projects_clients')) {
             return;
         }
 
-        Schema::create('thewebsiteguy_nexuscrm_projects_clients', function (Blueprint $table) {
+        Schema::create('thewebsiteguy_avalanchecrm_projects_clients', function (Blueprint $table) {
             $table->integer('project_id')->unsigned();
             $table->integer('client_id')->unsigned();
             $table->primary(['project_id', 'client_id'], 'project_client_primary');
@@ -24,9 +24,9 @@ return new class extends Migration {
 
         // Optional: Migrate existing project->client relations to the pivot table
         // This is safer to do now while the data is fresh.
-        $projects = \TheWebsiteGuy\NexusCRM\Models\Project::whereNotNull('client_id')->get();
+        $projects = \TheWebsiteGuy\AvalancheCRM\Models\Project::whereNotNull('client_id')->get();
         foreach ($projects as $project) {
-            \Illuminate\Support\Facades\DB::table('thewebsiteguy_nexuscrm_projects_clients')->insert([
+            \Illuminate\Support\Facades\DB::table('thewebsiteguy_avalanchecrm_projects_clients')->insert([
                 'project_id' => $project->id,
                 'client_id' => $project->client_id
             ]);
@@ -40,6 +40,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('thewebsiteguy_nexuscrm_projects_clients');
+        Schema::dropIfExists('thewebsiteguy_avalanchecrm_projects_clients');
     }
 };

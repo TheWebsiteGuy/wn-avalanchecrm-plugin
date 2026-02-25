@@ -12,11 +12,11 @@ return new class extends Migration {
      */
     public function up()
     {
-        if (Schema::hasColumn('thewebsiteguy_nexuscrm_subscriptions', 'payment_method')) {
+        if (Schema::hasColumn('thewebsiteguy_avalanchecrm_subscriptions', 'payment_method')) {
             return;
         }
 
-        Schema::table('thewebsiteguy_nexuscrm_subscriptions', function (Blueprint $table) {
+        Schema::table('thewebsiteguy_avalanchecrm_subscriptions', function (Blueprint $table) {
             $table->string('payment_method')->nullable()->after('provider');
             $table->decimal('amount', 10, 2)->nullable()->after('payment_method');
             $table->string('billing_cycle')->nullable()->after('amount');
@@ -32,7 +32,7 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::table('thewebsiteguy_nexuscrm_subscriptions', function (Blueprint $table) {
+        Schema::table('thewebsiteguy_avalanchecrm_subscriptions', function (Blueprint $table) {
             $table->dropColumn(['payment_method', 'amount', 'billing_cycle', 'next_billing_date', 'notes']);
         });
     }

@@ -1,22 +1,22 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Controllers;
+namespace TheWebsiteGuy\AvalancheCRM\Controllers;
 
 use Backend;
 use Backend\Classes\Controller;
 use Backend\Facades\BackendMenu;
 use Flash;
 use Redirect;
-use TheWebsiteGuy\NexusCRM\Models\Project;
-use TheWebsiteGuy\NexusCRM\Models\Invoice;
-use TheWebsiteGuy\NexusCRM\Models\InvoiceItem;
+use TheWebsiteGuy\AvalancheCRM\Models\Project;
+use TheWebsiteGuy\AvalancheCRM\Models\Invoice;
+use TheWebsiteGuy\AvalancheCRM\Models\InvoiceItem;
 
 /**
  * Projects Backend Controller
  */
 class Projects extends Controller
 {
-    use \TheWebsiteGuy\NexusCRM\Traits\HasTaskModal;
+    use \TheWebsiteGuy\AvalancheCRM\Traits\HasTaskModal;
 
     /**
      * @var array Behaviors that are implemented by this controller.
@@ -35,8 +35,15 @@ class Projects extends Controller
      * @var array Permissions required to view this page.
      */
     protected $requiredPermissions = [
-        'thewebsiteguy.nexuscrm.projects.manage_all',
+        'thewebsiteguy.avalanchecrm.projects.manage_all',
     ];
+
+    public function listExtendQuery($query)
+    {
+        if ($status = request()->get('status')) {
+            $query->where('status', $status);
+        }
+    }
 
     /**
      * Show the Generate Invoice popup with uninvoiced billable tasks.
@@ -72,7 +79,7 @@ class Projects extends Controller
 
         $project = Project::with(['tasks', 'clients'])->findOrFail($projectId);
 
-        // Determine client — use first assigned client
+        // Determine client â€” use first assigned client
         $client = $project->clients->first();
 
         // Generate invoice number from settings
@@ -116,7 +123,7 @@ class Projects extends Controller
         if ($totalAmount == 0 && $project->billing_type === 'fixed' && $project->fixed_price > 0) {
             $item = new InvoiceItem();
             $item->invoice_id = $invoice->id;
-            $item->description = 'Fixed price — ' . $project->name;
+            $item->description = 'Fixed price â€” ' . $project->name;
             $item->quantity = 1;
             $item->unit_price = $project->fixed_price;
             $item->amount = $project->fixed_price;
@@ -130,6 +137,6 @@ class Projects extends Controller
 
         Flash::success('Invoice ' . $invoiceNumber . ' created for ' . number_format($totalAmount, 2) . '.');
 
-        return Redirect::to(Backend::url('thewebsiteguy/nexuscrm/invoices/update/' . $invoice->id));
+        return Redirect::to(Backend::url('thewebsiteguy/avalanchecrm/invoices/update/' . $invoice->id));
     }
 }

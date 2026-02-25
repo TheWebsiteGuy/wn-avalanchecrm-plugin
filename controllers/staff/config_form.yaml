@@ -6,28 +6,28 @@
 name: Staff member
 
 # Model Form Structure
-form: $/thewebsiteguy/nexuscrm/models/staff/fields.yaml
+form: $/thewebsiteguy/avalanchecrm/models/staff/fields.yaml
 
 # Model Class name
-modelClass: TheWebsiteGuy\NexusCRM\Models\Staff
+modelClass: TheWebsiteGuy\AvalancheCRM\Models\Staff
 
 # Default context
 defaultContext: create
 
 # Default redirect
-defaultRedirect: thewebsiteguy/nexuscrm/staff
+defaultRedirect: thewebsiteguy/avalanchecrm/staff
 
 # Create page
 create:
   title: Create Staff
-  redirect: thewebsiteguy/nexuscrm/staff
-  redirectClose: thewebsiteguy/nexuscrm/staff
+  redirect: thewebsiteguy/avalanchecrm/staff
+  redirectClose: thewebsiteguy/avalanchecrm/staff
 
 # Update page
 update:
   title: Edit Staff
-  redirect: thewebsiteguy/nexuscrm/staff
-  redirectClose: thewebsiteguy/nexuscrm/staff
+  redirect: thewebsiteguy/avalanchecrm/staff
+  redirectClose: thewebsiteguy/avalanchecrm/staff
 
 # Preview page
 preview:

@@ -1,8 +1,8 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Classes;
+namespace TheWebsiteGuy\AvalancheCRM\Classes;
 
-use TheWebsiteGuy\NexusCRM\Models\Settings;
+use TheWebsiteGuy\AvalancheCRM\Models\Settings;
 
 /**
  * Generates a <style> block containing CSS custom-properties derived from
@@ -57,7 +57,7 @@ class ThemeStyles
     }
 
     /* ------------------------------------------------------------------ */
-    /*  Tiny colour helpers – no external dependencies                     */
+    /*  Tiny colour helpers â€“ no external dependencies                     */
     /* ------------------------------------------------------------------ */
 
     /**

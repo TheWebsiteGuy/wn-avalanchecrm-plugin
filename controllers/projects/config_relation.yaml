@@ -4,7 +4,7 @@
 
 tasks:
   label: Task
-  list: $/thewebsiteguy/nexuscrm/models/task/columns.yaml
-  form: $/thewebsiteguy/nexuscrm/models/task/fields.yaml
+  list: $/thewebsiteguy/avalanchecrm/models/task/columns.yaml
+  form: $/thewebsiteguy/avalanchecrm/models/task/fields.yaml
   view:
     toolbarButtons: create|delete

@@ -1,6 +1,6 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Models;
+namespace TheWebsiteGuy\AvalancheCRM\Models;
 
 use Winter\Storm\Database\Model;
 
@@ -14,7 +14,7 @@ class TicketStatus extends Model
     /**
      * @var string The database table used by the model.
      */
-    public $table = 'thewebsiteguy_nexuscrm_ticket_statuses';
+    public $table = 'thewebsiteguy_avalanchecrm_ticket_statuses';
 
     /**
      * @var array Guarded fields
@@ -30,14 +30,14 @@ class TicketStatus extends Model
      * @var array Validation rules for attributes
      */
     public $rules = [
-        'name' => 'required|unique:thewebsiteguy_nexuscrm_ticket_statuses',
+        'name' => 'required|unique:thewebsiteguy_avalanchecrm_ticket_statuses',
     ];
 
     /**
      * @var array Relations
      */
     public $hasMany = [
-        'tickets' => [\TheWebsiteGuy\NexusCRM\Models\Ticket::class, 'key' => 'status_id'],
+        'tickets' => [\TheWebsiteGuy\AvalancheCRM\Models\Ticket::class, 'key' => 'status_id'],
     ];
 
     /**

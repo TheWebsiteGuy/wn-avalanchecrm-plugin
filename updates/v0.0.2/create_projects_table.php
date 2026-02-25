@@ -12,11 +12,11 @@ return new class extends Migration {
      */
     public function up()
     {
-        if (Schema::hasTable('thewebsiteguy_nexuscrm_projects')) {
+        if (Schema::hasTable('thewebsiteguy_avalanchecrm_projects')) {
             return;
         }
 
-        Schema::create('thewebsiteguy_nexuscrm_projects', function (Blueprint $table) {
+        Schema::create('thewebsiteguy_avalanchecrm_projects', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('client_id')->unsigned()->nullable();
             $table->string('name');
@@ -35,6 +35,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('thewebsiteguy_nexuscrm_projects');
+        Schema::dropIfExists('thewebsiteguy_avalanchecrm_projects');
     }
 };

@@ -2,13 +2,13 @@
 #  List Behavior Config
 # ===================================
 
-list: $/thewebsiteguy/nexuscrm/models/subscriptionplan/columns.yaml
+list: $/thewebsiteguy/avalanchecrm/models/subscriptionplan/columns.yaml
 
-modelClass: TheWebsiteGuy\NexusCRM\Models\SubscriptionPlan
+modelClass: TheWebsiteGuy\AvalancheCRM\Models\SubscriptionPlan
 
 title: "Subscription Plans"
 
-recordUrl: thewebsiteguy/nexuscrm/subscriptionplans/update/:id
+recordUrl: thewebsiteguy/avalanchecrm/subscriptionplans/update/:id
 
 noRecordsMessage: backend::lang.list.no_records
 

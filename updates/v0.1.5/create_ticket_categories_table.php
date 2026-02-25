@@ -12,8 +12,8 @@ return new class extends Migration {
      */
     public function up()
     {
-        if (!Schema::hasTable('thewebsiteguy_nexuscrm_ticket_categories')) {
-            Schema::create('thewebsiteguy_nexuscrm_ticket_categories', function (Blueprint $table) {
+        if (!Schema::hasTable('thewebsiteguy_avalanchecrm_ticket_categories')) {
+            Schema::create('thewebsiteguy_avalanchecrm_ticket_categories', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('name');
                 $table->string('color')->nullable();
@@ -21,8 +21,8 @@ return new class extends Migration {
             });
         }
 
-        if (!Schema::hasColumn('thewebsiteguy_nexuscrm_tickets', 'category_id')) {
-            Schema::table('thewebsiteguy_nexuscrm_tickets', function (Blueprint $table) {
+        if (!Schema::hasColumn('thewebsiteguy_avalanchecrm_tickets', 'category_id')) {
+            Schema::table('thewebsiteguy_avalanchecrm_tickets', function (Blueprint $table) {
                 $table->integer('category_id')->unsigned()->nullable()->after('project_id');
             });
         }
@@ -35,10 +35,10 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::table('thewebsiteguy_nexuscrm_tickets', function (Blueprint $table) {
+        Schema::table('thewebsiteguy_avalanchecrm_tickets', function (Blueprint $table) {
             $table->dropColumn('category_id');
         });
 
-        Schema::dropIfExists('thewebsiteguy_nexuscrm_ticket_categories');
+        Schema::dropIfExists('thewebsiteguy_avalanchecrm_ticket_categories');
     }
 };

@@ -12,7 +12,7 @@
                     <div class="subscription-card__header">
                         <h3 class="subscription-card__plan-name">{{ subscription.plan_name }}</h3>
                         <span class="subscription-card__badge subscription-card__badge--{{ subscription.status }}">
-                            {{ ('thewebsiteguy.nexuscrm::lang.statuses.' ~ subscription.status)|trans }}
+                            {{ ('thewebsiteguy.avalanchecrm::lang.statuses.' ~ subscription.status)|trans }}
                         </span>
                     </div>
 
@@ -164,7 +164,7 @@
                             <td>{{ subscription.billing_cycle|capitalize }}</td>
                             <td>
                                 <span class="subscription-card__badge subscription-card__badge--{{ subscription.status }}">
-                                    {{ ('thewebsiteguy.nexuscrm::lang.statuses.' ~ subscription.status)|trans }}
+                                    {{ ('thewebsiteguy.avalanchecrm::lang.statuses.' ~ subscription.status)|trans }}
                                 </span>
                             </td>
                             <td>{{ subscription.updated_at|date('M d, Y') }}</td>

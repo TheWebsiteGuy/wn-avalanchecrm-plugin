@@ -4,74 +4,87 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| NexusCRM Plugin Routes
+| Avalanche CRM Plugin Routes
 |--------------------------------------------------------------------------
 |
-| Webhook and API routes for the NexusCRM plugin.
+| Webhook and API routes for the Avalanche CRM plugin.
 |
 */
 
-Route::post('nexuscrm/webhook/stripe', [\TheWebsiteGuy\NexusCRM\Http\StripeWebhookController::class, 'handle'])
+Route::post('avalanchecrm/webhook/stripe', [\TheWebsiteGuy\AvalancheCRM\Http\StripeWebhookController::class, 'handle'])
     ->middleware('web')
-    ->name('nexuscrm.webhook.stripe');
+    ->name('avalanchecrm.webhook.stripe');
 
-Route::post('nexuscrm/webhook/gocardless', [\TheWebsiteGuy\NexusCRM\Http\GoCardlessWebhookController::class, 'handle'])
+Route::post('avalanchecrm/webhook/gocardless', [\TheWebsiteGuy\AvalancheCRM\Http\GoCardlessWebhookController::class, 'handle'])
     ->middleware('web')
-    ->name('nexuscrm.webhook.gocardless');
+    ->name('avalanchecrm.webhook.gocardless');
 
-Route::post('nexuscrm/webhook/paypal', [\TheWebsiteGuy\NexusCRM\Http\PayPalWebhookController::class, 'handle'])
+Route::post('avalanchecrm/webhook/paypal', [\TheWebsiteGuy\AvalancheCRM\Http\PayPalWebhookController::class, 'handle'])
     ->middleware('web')
-    ->name('nexuscrm.webhook.paypal');
+    ->name('avalanchecrm.webhook.paypal');
 
 /*
 |--------------------------------------------------------------------------
 | Client Invoice PDF Download
 |--------------------------------------------------------------------------
 */
-Route::get('nexuscrm/invoice/{id}/pdf', function ($id) {
+Route::get('avalanchecrm/invoice/{id}/pdf', function ($id) {
     $user = \Auth::getUser();
     if (!$user) {
         abort(403, 'Unauthorized');
     }
 
-    $client = \TheWebsiteGuy\NexusCRM\Models\Client::where('user_id', $user->id)->first();
+    $client = \TheWebsiteGuy\AvalancheCRM\Models\Client::where('user_id', $user->id)->first();
     if (!$client) {
         abort(403, 'No client profile found.');
     }
 
-    $invoice = \TheWebsiteGuy\NexusCRM\Models\Invoice::where('id', $id)
+    $invoice = \TheWebsiteGuy\AvalancheCRM\Models\Invoice::where('id', $id)
         ->where('client_id', $client->id)
         ->firstOrFail();
 
-    $pdf = \TheWebsiteGuy\NexusCRM\Classes\InvoicePdf::generate($invoice);
+    $pdf = \TheWebsiteGuy\AvalancheCRM\Classes\InvoicePdf::generate($invoice);
 
-    return $pdf->download(\TheWebsiteGuy\NexusCRM\Classes\InvoicePdf::filename($invoice));
-})->middleware('web')->name('nexuscrm.invoice.pdf');
+    return $pdf->download(\TheWebsiteGuy\AvalancheCRM\Classes\InvoicePdf::filename($invoice));
+})->middleware('web')->name('avalanchecrm.invoice.pdf');
 
 /*
 |--------------------------------------------------------------------------
 | Invoice Payments (Stripe, PayPal, GoCardless)
 |--------------------------------------------------------------------------
 */
-Route::prefix('nexuscrm/invoice/{id}/payment')->middleware('web')->group(function () {
+Route::prefix('avalanchecrm/invoice/{id}/payment')->middleware('web')->group(function () {
     // Initiate payment
-    Route::get('stripe', [\TheWebsiteGuy\NexusCRM\Http\InvoicePaymentController::class, 'stripeCheckout'])
-        ->name('nexuscrm.invoice.pay.stripe');
+    Route::get('stripe', [\TheWebsiteGuy\AvalancheCRM\Http\InvoicePaymentController::class, 'stripeCheckout'])
+        ->name('avalanchecrm.invoice.pay.stripe');
 
-    Route::get('paypal', [\TheWebsiteGuy\NexusCRM\Http\InvoicePaymentController::class, 'paypalCheckout'])
-        ->name('nexuscrm.invoice.pay.paypal');
+    Route::get('paypal', [\TheWebsiteGuy\AvalancheCRM\Http\InvoicePaymentController::class, 'paypalCheckout'])
+        ->name('avalanchecrm.invoice.pay.paypal');
 
-    Route::get('gocardless', [\TheWebsiteGuy\NexusCRM\Http\InvoicePaymentController::class, 'gocardlessCheckout'])
-        ->name('nexuscrm.invoice.pay.gocardless');
+    Route::get('gocardless', [\TheWebsiteGuy\AvalancheCRM\Http\InvoicePaymentController::class, 'gocardlessCheckout'])
+        ->name('avalanchecrm.invoice.pay.gocardless');
 
     // PayPal capture callback (after approval)
-    Route::get('paypal/capture', [\TheWebsiteGuy\NexusCRM\Http\InvoicePaymentController::class, 'paypalCapture'])
-        ->name('nexuscrm.invoice.pay.paypal.capture');
+    Route::get('paypal/capture', [\TheWebsiteGuy\AvalancheCRM\Http\InvoicePaymentController::class, 'paypalCapture'])
+        ->name('avalanchecrm.invoice.pay.paypal.capture');
 
     // Success & cancel landing pages
-    Route::get('success', [\TheWebsiteGuy\NexusCRM\Http\InvoicePaymentController::class, 'success'])
-        ->name('nexuscrm.invoice.pay.success');
+    Route::get('success', [\TheWebsiteGuy\AvalancheCRM\Http\InvoicePaymentController::class, 'success'])
+        ->name('avalanchecrm.invoice.pay.success');
 
-    Route::get('cancel', [\TheWebsiteGuy\NexusCRM\Http\InvoicePaymentController::class, 'cancel'])
-        ->name('nexuscrm.invoice.pay.cancel');
+    Route::get('cancel', [\TheWebsiteGuy\AvalancheCRM\Http\InvoicePaymentController::class, 'cancel'])
+        ->name('avalanchecrm.invoice.pay.cancel');
 });
+
+/*
+|--------------------------------------------------------------------------
+| Marketing Email Unsubscribe
+|--------------------------------------------------------------------------
+*/
+Route::get('avalanchecrm/unsubscribe/{token}', [\TheWebsiteGuy\AvalancheCRM\Http\UnsubscribeController::class, 'unsubscribe'])
+    ->middleware('web')
+    ->name('avalanchecrm.unsubscribe');
+
+Route::get('avalanchecrm/resubscribe/{token}', [\TheWebsiteGuy\AvalancheCRM\Http\UnsubscribeController::class, 'resubscribe'])
+    ->middleware('web')
+    ->name('avalanchecrm.resubscribe');

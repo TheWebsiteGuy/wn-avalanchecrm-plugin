@@ -3,13 +3,13 @@
 # ===================================
 
 # Model List Column configuration
-list: $/thewebsiteguy/nexuscrm/models/client/columns.yaml
+list: $/thewebsiteguy/avalanchecrm/models/client/columns.yaml
 
 # Model Class name
-modelClass: TheWebsiteGuy\NexusCRM\Models\Client
+modelClass: TheWebsiteGuy\AvalancheCRM\Models\Client
 
 # List Title
-title: "thewebsiteguy.nexuscrm::lang.models.client.label_plural"
+title: "thewebsiteguy.avalanchecrm::lang.models.client.label_plural"
 
 # Link URL for each record
 recordUrl: winter/user/users/update/:user_id

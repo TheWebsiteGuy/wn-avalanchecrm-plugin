@@ -1,6 +1,6 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Models;
+namespace TheWebsiteGuy\AvalancheCRM\Models;
 
 use Winter\Storm\Database\Model;
 
@@ -12,9 +12,41 @@ class Ticket extends Model
     use \Winter\Storm\Database\Traits\Validation;
 
     /**
+     * After creating a ticket, send confirmation to the client.
+     */
+    public function afterCreate()
+    {
+        if ($this->client) {
+            $this->client->sendNotification('ticket', 'Ticket Created Confirmation');
+        }
+    }
+
+    /**
+     * After saving, detect status changes and notify the client.
+     */
+    public function afterSave()
+    {
+        if ($this->wasRecentlyCreated) {
+            return;
+        }
+
+        if (!$this->client) {
+            return;
+        }
+
+        // Check if the status changed to resolved/closed
+        if ($this->isDirty('status_id')) {
+            $status = $this->status_relation;
+            if ($status && in_array(strtolower($status->name), ['resolved', 'closed'])) {
+                $this->client->sendNotification('ticket', 'Ticket Resolved');
+            }
+        }
+    }
+
+    /**
      * @var string The database table used by the model.
      */
-    public $table = 'thewebsiteguy_nexuscrm_tickets';
+    public $table = 'thewebsiteguy_avalanchecrm_tickets';
 
     /**
      * @var array Guarded fields
@@ -63,20 +95,25 @@ class Ticket extends Model
      * @var array Relations
      */
     public $hasOne = [];
-    public $hasMany = [];
+    public $hasMany = [
+        'replies' => [
+            \TheWebsiteGuy\AvalancheCRM\Models\TicketReply::class,
+            'order' => 'created_at asc',
+        ],
+    ];
     public $hasOneThrough = [];
     public $hasManyThrough = [];
     public $belongsTo = [
-        'client' => [\TheWebsiteGuy\NexusCRM\Models\Client::class],
-        'project' => [\TheWebsiteGuy\NexusCRM\Models\Project::class],
-        'category' => [\TheWebsiteGuy\NexusCRM\Models\TicketCategory::class],
-        'status_relation' => [\TheWebsiteGuy\NexusCRM\Models\TicketStatus::class, 'key' => 'status_id'],
-        'ticket_type' => [\TheWebsiteGuy\NexusCRM\Models\TicketType::class],
+        'client' => [\TheWebsiteGuy\AvalancheCRM\Models\Client::class],
+        'project' => [\TheWebsiteGuy\AvalancheCRM\Models\Project::class],
+        'category' => [\TheWebsiteGuy\AvalancheCRM\Models\TicketCategory::class],
+        'status_relation' => [\TheWebsiteGuy\AvalancheCRM\Models\TicketStatus::class, 'key' => 'status_id'],
+        'ticket_type' => [\TheWebsiteGuy\AvalancheCRM\Models\TicketType::class],
     ];
     public $belongsToMany = [
         'staff' => [
-            \TheWebsiteGuy\NexusCRM\Models\Staff::class,
-            'table' => 'thewebsiteguy_nexuscrm_tickets_staff',
+            \TheWebsiteGuy\AvalancheCRM\Models\Staff::class,
+            'table' => 'thewebsiteguy_avalanchecrm_tickets_staff',
             'key' => 'ticket_id',
             'otherKey' => 'staff_id'
         ]
@@ -102,7 +139,7 @@ class Ticket extends Model
             return;
         }
 
-        $ticketType = \TheWebsiteGuy\NexusCRM\Models\TicketType::find($ticketTypeId);
+        $ticketType = \TheWebsiteGuy\AvalancheCRM\Models\TicketType::find($ticketTypeId);
         if (!$ticketType || !is_array($ticketType->custom_fields)) {
             return;
         }

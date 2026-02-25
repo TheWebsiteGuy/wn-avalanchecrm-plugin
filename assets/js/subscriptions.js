@@ -1,5 +1,5 @@
 /**
- * NexusCRM Subscriptions Component
+ * Avalanche CRM Subscriptions Component
  *
  * Handles modal interactions, payment method selection,
  * plan subscription, plan changes, cancellation,
@@ -114,7 +114,7 @@
     // Intercept the subscribe form submission to handle payment redirects
     $(document).on('ajaxSuccess', '#modal-subscribe form', function (e, context, data) {
         if (handlePaymentRedirect(data)) {
-            // Keep the modal open with a "Redirecting…" message
+            // Keep the modal open with a "Redirectingâ€¦" message
             var $btn = $(this).find('button[type="submit"]');
             var provider = data.stripeRedirectUrl ? 'Stripe' : (data.gcRedirectUrl ? 'GoCardless' : 'PayPal');
             $btn.text('Redirecting to ' + provider + '...').prop('disabled', true);

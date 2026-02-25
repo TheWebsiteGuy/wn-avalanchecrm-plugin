@@ -3,28 +3,28 @@
 # ===================================
 
 # Record name
-name: 'thewebsiteguy.nexuscrm::lang.models.client.label'
+name: 'thewebsiteguy.avalanchecrm::lang.models.client.label'
 
 # Model Form Field configuration
-form: $/thewebsiteguy/nexuscrm/models/client/fields.yaml
+form: $/thewebsiteguy/avalanchecrm/models/client/fields.yaml
 
 # Model Class name
-modelClass: TheWebsiteGuy\NexusCRM\Models\Client
+modelClass: TheWebsiteGuy\AvalancheCRM\Models\Client
 
 # Default redirect location
-defaultRedirect: thewebsiteguy/nexuscrm/clients
+defaultRedirect: thewebsiteguy/avalanchecrm/clients
 
 # Create page
 create:
     title: backend::lang.form.create_title
-    redirect: thewebsiteguy/nexuscrm/clients/update/:id
-    redirectClose: thewebsiteguy/nexuscrm/clients
+    redirect: thewebsiteguy/avalanchecrm/clients/update/:id
+    redirectClose: thewebsiteguy/avalanchecrm/clients
 
 # Update page
 update:
     title: backend::lang.form.update_title
-    redirect: thewebsiteguy/nexuscrm/clients
-    redirectClose: thewebsiteguy/nexuscrm/clients
+    redirect: thewebsiteguy/avalanchecrm/clients
+    redirectClose: thewebsiteguy/avalanchecrm/clients
 
 # Preview page
 preview:

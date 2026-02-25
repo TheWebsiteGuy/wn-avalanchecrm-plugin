@@ -3,16 +3,16 @@
 # ===================================
 
 # Model List Column configuration
-list: $/thewebsiteguy/nexuscrm/models/subscription/columns.yaml
+list: $/thewebsiteguy/avalanchecrm/models/subscription/columns.yaml
 
 # Model Class name
-modelClass: TheWebsiteGuy\NexusCRM\Models\Subscription
+modelClass: TheWebsiteGuy\AvalancheCRM\Models\Subscription
 
 # List Title
-title: 'thewebsiteguy.nexuscrm::lang.models.subscription.label_plural'
+title: 'thewebsiteguy.avalanchecrm::lang.models.subscription.label_plural'
 
 # Link URL for each record
-recordUrl: thewebsiteguy/nexuscrm/subscriptions/update/:id
+recordUrl: thewebsiteguy/avalanchecrm/subscriptions/update/:id
 
 # Message to display if the list is empty
 noRecordsMessage: backend::lang.list.no_records

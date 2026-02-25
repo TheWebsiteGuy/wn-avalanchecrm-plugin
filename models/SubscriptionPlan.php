@@ -1,6 +1,6 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Models;
+namespace TheWebsiteGuy\AvalancheCRM\Models;
 
 use Winter\Storm\Database\Model;
 use Str;
@@ -16,7 +16,7 @@ class SubscriptionPlan extends Model
     /**
      * @var string The database table used by the model.
      */
-    public $table = 'thewebsiteguy_nexuscrm_subscription_plans';
+    public $table = 'thewebsiteguy_avalanchecrm_subscription_plans';
 
     /**
      * @var array Guarded fields
@@ -79,7 +79,7 @@ class SubscriptionPlan extends Model
      * @var array Relations
      */
     public $hasMany = [
-        'subscriptions' => [\TheWebsiteGuy\NexusCRM\Models\Subscription::class, 'key' => 'plan_id']
+        'subscriptions' => [\TheWebsiteGuy\AvalancheCRM\Models\Subscription::class, 'key' => 'plan_id']
     ];
 
     public $hasOne = [];

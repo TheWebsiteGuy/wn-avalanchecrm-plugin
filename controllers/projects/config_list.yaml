@@ -3,16 +3,16 @@
 # ===================================
 
 # Model List Column configuration
-list: $/thewebsiteguy/nexuscrm/models/project/columns.yaml
+list: $/thewebsiteguy/avalanchecrm/models/project/columns.yaml
 
 # Model Class name
-modelClass: TheWebsiteGuy\NexusCRM\Models\Project
+modelClass: TheWebsiteGuy\AvalancheCRM\Models\Project
 
 # List Title
-title: 'thewebsiteguy.nexuscrm::lang.models.project.label_plural'
+title: 'thewebsiteguy.avalanchecrm::lang.models.project.label_plural'
 
 # Link URL for each record
-recordUrl: thewebsiteguy/nexuscrm/projects/update/:id
+recordUrl: thewebsiteguy/avalanchecrm/projects/update/:id
 
 # Message to display if the list is empty
 noRecordsMessage: backend::lang.list.no_records

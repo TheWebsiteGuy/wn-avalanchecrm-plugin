@@ -2,7 +2,7 @@
 
 return [
     'plugin' => [
-        'name' => 'Nexus CRM',
+        'name' => 'Avalanche CRM',
         'description' => 'Comprehensive CRM and Billing for Winter CMS',
     ],
     'permissions' => [
@@ -67,7 +67,7 @@ return [
         ],
         'settings' => [
             'label' => 'Settings',
-            'description' => 'Configure Nexus CRM settings.',
+            'description' => 'Configure Avalanche CRM settings.',
             'company_name' => 'Business Name',
             'company_name_comment' => 'Official name of your business.',
             'company_logo' => 'Company Logo',
@@ -96,7 +96,7 @@ return [
     ],
     'navigation' => [
         'dashboard' => 'Dashboard',
-        'crm' => 'Nexus CRM',
+        'crm' => 'Avalanche CRM',
         'staff' => 'Staff',
         'clients' => 'Clients',
         'projects' => 'Projects',

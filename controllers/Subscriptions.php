@@ -1,6 +1,6 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Controllers;
+namespace TheWebsiteGuy\AvalancheCRM\Controllers;
 
 use Backend\Classes\Controller;
 use Backend\Facades\BackendMenu;
@@ -25,12 +25,19 @@ class Subscriptions extends Controller
      * @var array Permissions required to view this page.
      */
     protected $requiredPermissions = [
-        'thewebsiteguy.nexuscrm.subscriptions.manage_all',
+        'thewebsiteguy.avalanchecrm.subscriptions.manage_all',
     ];
+
+    public function listExtendQuery($query)
+    {
+        if ($status = request()->get('status')) {
+            $query->where('status', $status);
+        }
+    }
 
     public function __construct()
     {
         parent::__construct();
-        BackendMenu::setContext('TheWebsiteGuy.NexusCRM', 'nexuscrm', 'subscriptions');
+        BackendMenu::setContext('TheWebsiteGuy.AvalancheCRM', 'avalanchecrm', 'subscriptions');
     }
 }

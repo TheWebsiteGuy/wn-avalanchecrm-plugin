@@ -2,7 +2,7 @@
 
 return [
     'plugin' => [
-        'name' => 'Nexus CRM',
+        'name' => 'Avalanche CRM',
         'description' => 'Comprehensive CRM and Billing for Winter CMS',
     ],
     'permissions' => [
@@ -67,7 +67,7 @@ return [
         ],
         'settings' => [
             'label' => 'Settings',
-            'description' => 'Configure Nexus CRM settings.',
+            'description' => 'Configure Avalanche CRM settings.',
             'company_name' => 'Business Name',
             'company_name_comment' => 'Official name of your business.',
             'company_logo' => 'Company Logo',
@@ -78,6 +78,14 @@ return [
             'company_email_comment' => 'Public contact email address.',
             'company_phone' => 'Contact Phone',
             'company_phone_comment' => 'Public contact phone number.',
+        ],
+        'campaign' => [
+            'label' => 'Campaign',
+            'label_plural' => 'Campaigns',
+        ],
+        'emailtemplate' => [
+            'label' => 'Email Template',
+            'label_plural' => 'Email Templates',
         ],
     ],
     'statuses' => [
@@ -96,13 +104,16 @@ return [
     ],
     'navigation' => [
         'dashboard' => 'Dashboard',
-        'crm' => 'Nexus CRM',
+        'crm' => 'Avalanche CRM',
         'staff' => 'Staff',
         'clients' => 'Clients',
         'projects' => 'Projects',
         'tickets' => 'Tickets',
         'invoices' => 'Invoices',
         'subscriptions' => 'Subscriptions',
+        'marketing' => 'Marketing',
+        'campaigns' => 'Campaigns',
+        'email_templates' => 'Email Templates',
         'settings' => 'Settings',
     ],
     'messages' => [
@@ -134,6 +145,13 @@ return [
         'task_updated' => 'Task updated successfully.',
         'timer_started' => 'Timer started for ":name".',
         'timer_stopped' => 'Timer stopped. Logged :hours total.',
+        'campaign_already_sent' => 'This campaign has already been sent.',
+        'campaign_sending' => 'This campaign is currently being sent.',
+        'no_eligible_recipients' => 'No eligible recipients found. All clients may have opted out of marketing emails.',
+        'campaign_sent' => 'Campaign sent successfully.',
+        'unsubscribed' => 'You have been unsubscribed from marketing emails.',
+        'resubscribed' => 'You have been re-subscribed to marketing emails.',
+        'invalid_unsubscribe_link' => 'This unsubscribe link is not valid or has expired.',
     ],
     'buttons' => [
         'cancel' => 'Cancel',

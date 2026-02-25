@@ -1,23 +1,23 @@
 <div class="ticket-management-nav-wrapper">
     <div class="ticket-management-nav">
         <div class="nav-container">
-            <a href="<?= Backend::url('thewebsiteguy/nexuscrm/tickets') ?>" 
-               class="nav-btn <?= $this instanceof \TheWebsiteGuy\NexusCRM\Controllers\Tickets ? 'btn-active' : 'btn-inactive' ?>">
+            <a href="<?= Backend::url('thewebsiteguy/avalanchecrm/tickets') ?>" 
+               class="nav-btn <?= $this instanceof \TheWebsiteGuy\AvalancheCRM\Controllers\Tickets ? 'btn-active' : 'btn-inactive' ?>">
                 <i class="oc-icon-ticket"></i>
                 <span>Tickets</span>
             </a>
-            <a href="<?= Backend::url('thewebsiteguy/nexuscrm/ticketcategories') ?>" 
-               class="nav-btn <?= $this instanceof \TheWebsiteGuy\NexusCRM\Controllers\TicketCategories ? 'btn-active' : 'btn-inactive' ?>">
+            <a href="<?= Backend::url('thewebsiteguy/avalanchecrm/ticketcategories') ?>" 
+               class="nav-btn <?= $this instanceof \TheWebsiteGuy\AvalancheCRM\Controllers\TicketCategories ? 'btn-active' : 'btn-inactive' ?>">
                 <i class="oc-icon-tags"></i>
                 <span>Categories</span>
             </a>
-            <a href="<?= Backend::url('thewebsiteguy/nexuscrm/ticketstatuses') ?>" 
-               class="nav-btn <?= $this instanceof \TheWebsiteGuy\NexusCRM\Controllers\TicketStatuses ? 'btn-active' : 'btn-inactive' ?>">
+            <a href="<?= Backend::url('thewebsiteguy/avalanchecrm/ticketstatuses') ?>" 
+               class="nav-btn <?= $this instanceof \TheWebsiteGuy\AvalancheCRM\Controllers\TicketStatuses ? 'btn-active' : 'btn-inactive' ?>">
                 <i class="oc-icon-check-circle"></i>
                 <span>Statuses</span>
             </a>
-            <a href="<?= Backend::url('thewebsiteguy/nexuscrm/tickettypes') ?>" 
-               class="nav-btn <?= $this instanceof \TheWebsiteGuy\NexusCRM\Controllers\TicketTypes ? 'btn-active' : 'btn-inactive' ?>">
+            <a href="<?= Backend::url('thewebsiteguy/avalanchecrm/tickettypes') ?>" 
+               class="nav-btn <?= $this instanceof \TheWebsiteGuy\AvalancheCRM\Controllers\TicketTypes ? 'btn-active' : 'btn-inactive' ?>">
                 <i class="oc-icon-file-text-o"></i>
                 <span>Ticket Types</span>
             </a>

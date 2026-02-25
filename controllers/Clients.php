@@ -1,6 +1,6 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Controllers;
+namespace TheWebsiteGuy\AvalancheCRM\Controllers;
 
 use Backend\Classes\Controller;
 use Backend\Facades\BackendMenu;
@@ -25,7 +25,7 @@ class Clients extends Controller
      * @var array Permissions required to view this page.
      */
     protected $requiredPermissions = [
-        'thewebsiteguy.nexuscrm.clients.manage_all',
+        'thewebsiteguy.avalanchecrm.clients.manage_all',
     ];
 
     public function listExtendQuery($query)

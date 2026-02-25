@@ -1,0 +1,120 @@
+<?php
+
+namespace TheWebsiteGuy\AvalancheCRM\Controllers;
+
+use Backend\Classes\Controller;
+use Backend\Facades\BackendMenu;
+use TheWebsiteGuy\AvalancheCRM\Models\EmailTemplate;
+
+/**
+ * Email Templates Backend Controller
+ */
+class EmailTemplates extends Controller
+{
+    /**
+     * @var array Behaviors that are implemented by this controller.
+     */
+    public $implement = [
+        \Backend\Behaviors\FormController::class,
+        \Backend\Behaviors\ListController::class,
+    ];
+
+    /**
+     * @var array Permissions required to view this page.
+     */
+    protected $requiredPermissions = [
+        'thewebsiteguy.avalanchecrm.emailtemplates.manage_all',
+    ];
+
+    /**
+     * Category definitions with metadata.
+     */
+    protected function getCategoryDefinitions(): array
+    {
+        return [
+            'marketing' => [
+                'label'       => 'Marketing',
+                'icon'        => 'icon-bullhorn',
+                'color'       => '#8e44ad',
+                'description' => 'Email templates for marketing campaigns, newsletters and promotional offers.',
+            ],
+            'client' => [
+                'label'       => 'Client Notifications',
+                'icon'        => 'icon-user',
+                'color'       => '#27ae60',
+                'description' => 'Welcome messages, account updates and general client communications.',
+            ],
+            'project' => [
+                'label'       => 'Project Notifications',
+                'icon'        => 'icon-briefcase',
+                'color'       => '#17a2b8',
+                'description' => 'Project creation, status update and completion notifications.',
+            ],
+            'ticket' => [
+                'label'       => 'Ticket Notifications',
+                'icon'        => 'icon-ticket',
+                'color'       => '#6f42c1',
+                'description' => 'Support ticket creation, reply and resolution notifications.',
+            ],
+            'invoice' => [
+                'label'       => 'Invoice Notifications',
+                'icon'        => 'icon-file-text-o',
+                'color'       => '#fd7e14',
+                'description' => 'Invoice delivery, payment confirmations and overdue reminders.',
+            ],
+            'subscription' => [
+                'label'       => 'Subscription Notifications',
+                'icon'        => 'icon-refresh',
+                'color'       => '#2980b9',
+                'description' => 'Subscription activation, renewal reminders and cancellation notices.',
+            ],
+        ];
+    }
+
+    /**
+     * Index page â€” category dashboard with full list.
+     */
+    public function index()
+    {
+        $this->asExtension('ListController')->index();
+
+        $definitions = $this->getCategoryDefinitions();
+        $categories = [];
+
+        foreach ($definitions as $key => $def) {
+            $templates = EmailTemplate::where('category', $key)
+                ->orderBy('name')
+                ->get();
+
+            $categories[$key] = array_merge($def, [
+                'count'     => $templates->count(),
+                'templates' => $templates,
+            ]);
+        }
+
+        $this->vars['categories'] = $categories;
+    }
+
+    /**
+     * Pre-select category when creating a template from a category card.
+     */
+    public function formExtendFields($form)
+    {
+        if ($form->context === 'create' && ($cat = request()->get('category'))) {
+            $options = (new EmailTemplate)->getCategoryOptions();
+            if (array_key_exists($cat, $options)) {
+                $form->getField('category')->value = $cat;
+            }
+        }
+    }
+
+    /**
+     * Filter the template list by category when requested via URL.
+     */
+    public function listExtendQuery($query)
+    {
+        if ($category = request()->get('category')) {
+            $query->where('category', $category);
+        }
+    }
+}

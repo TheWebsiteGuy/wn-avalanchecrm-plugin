@@ -1,6 +1,6 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Controllers;
+namespace TheWebsiteGuy\AvalancheCRM\Controllers;
 
 use Backend\Classes\Controller;
 use Backend\Facades\BackendMenu;
@@ -25,13 +25,13 @@ class Staff extends Controller
      * @var array Permissions required to view this page.
      */
     protected $requiredPermissions = [
-        'thewebsiteguy.nexuscrm.staff.manage_all',
+        'thewebsiteguy.avalanchecrm.staff.manage_all',
     ];
 
     public function __construct()
     {
         parent::__construct();
-        BackendMenu::setContext('TheWebsiteGuy.NexusCRM', 'nexuscrm', 'staff');
+        BackendMenu::setContext('TheWebsiteGuy.AvalancheCRM', 'avalanchecrm', 'staff');
     }
 
     public function listExtendQuery($query)

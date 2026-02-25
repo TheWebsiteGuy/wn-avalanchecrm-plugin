@@ -1,5 +1,5 @@
 <?php
-$statuses = (new \TheWebsiteGuy\NexusCRM\Models\Task)->getStatusOptions();
+$statuses = (new \TheWebsiteGuy\AvalancheCRM\Models\Task)->getStatusOptions();
 ?>
 
 <div class="kanban-row">

@@ -1,11 +1,11 @@
 <?php
 
-namespace TheWebsiteGuy\NexusCRM\Controllers;
+namespace TheWebsiteGuy\AvalancheCRM\Controllers;
 
 use Backend\Classes\Controller;
 use Backend\Facades\BackendMenu;
-use TheWebsiteGuy\NexusCRM\Models\Invoice;
-use TheWebsiteGuy\NexusCRM\Classes\InvoicePdf;
+use TheWebsiteGuy\AvalancheCRM\Models\Invoice;
+use TheWebsiteGuy\AvalancheCRM\Classes\InvoicePdf;
 
 /**
  * Invoices Backend Controller
@@ -29,12 +29,19 @@ class Invoices extends Controller
      * @var array Permissions required to view this page.
      */
     protected $requiredPermissions = [
-        'thewebsiteguy.nexuscrm.invoices.manage_all',
+        'thewebsiteguy.avalanchecrm.invoices.manage_all',
     ];
+
+    public function listExtendQuery($query)
+    {
+        if ($status = request()->get('status')) {
+            $query->where('status', $status);
+        }
+    }
 
     /**
      * Download invoice as PDF (backend).
-     * URL: backend/thewebsiteguy/nexuscrm/invoices/pdf/{id}
+     * URL: backend/thewebsiteguy/avalanchecrm/invoices/pdf/{id}
      */
     public function pdf($invoiceId = null)
     {

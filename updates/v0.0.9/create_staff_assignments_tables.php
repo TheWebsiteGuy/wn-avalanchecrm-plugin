@@ -12,16 +12,16 @@ return new class extends Migration {
      */
     public function up()
     {
-        if (!Schema::hasTable('thewebsiteguy_nexuscrm_projects_staff')) {
-            Schema::create('thewebsiteguy_nexuscrm_projects_staff', function (Blueprint $table) {
+        if (!Schema::hasTable('thewebsiteguy_avalanchecrm_projects_staff')) {
+            Schema::create('thewebsiteguy_avalanchecrm_projects_staff', function (Blueprint $table) {
                 $table->integer('project_id')->unsigned();
                 $table->integer('user_id')->unsigned(); // Backend User
                 $table->primary(['project_id', 'user_id'], 'project_staff_primary');
             });
         }
 
-        if (!Schema::hasTable('thewebsiteguy_nexuscrm_tickets_staff')) {
-            Schema::create('thewebsiteguy_nexuscrm_tickets_staff', function (Blueprint $table) {
+        if (!Schema::hasTable('thewebsiteguy_avalanchecrm_tickets_staff')) {
+            Schema::create('thewebsiteguy_avalanchecrm_tickets_staff', function (Blueprint $table) {
                 $table->integer('ticket_id')->unsigned();
                 $table->integer('user_id')->unsigned(); // Backend User
                 $table->primary(['ticket_id', 'user_id'], 'ticket_staff_primary');
@@ -36,7 +36,7 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('thewebsiteguy_nexuscrm_projects_staff');
-        Schema::dropIfExists('thewebsiteguy_nexuscrm_tickets_staff');
+        Schema::dropIfExists('thewebsiteguy_avalanchecrm_projects_staff');
+        Schema::dropIfExists('thewebsiteguy_avalanchecrm_tickets_staff');
     }
 };

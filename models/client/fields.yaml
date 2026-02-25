@@ -17,3 +17,12 @@ fields:
     company:
         label: Company
         span: right
+
+tabs:
+    fields:
+        marketing_opt_out:
+            label: Opted out of marketing emails
+            tab: Marketing
+            type: switch
+            default: false
+            comment: When enabled, this client will not receive any marketing campaign emails.

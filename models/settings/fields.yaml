@@ -4,47 +4,47 @@
 
 tabs:
     fields:
-        # ── Company Details ───────────────────────────────────────
+        # â”€â”€ Company Details â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         company_name:
-            label: thewebsiteguy.nexuscrm::lang.models.settings.company_name
+            label: thewebsiteguy.avalanchecrm::lang.models.settings.company_name
             tab: Company
             type: text
             span: left
-            comment: thewebsiteguy.nexuscrm::lang.models.settings.company_name_comment
+            comment: thewebsiteguy.avalanchecrm::lang.models.settings.company_name_comment
 
         company_logo:
-            label: thewebsiteguy.nexuscrm::lang.models.settings.company_logo
+            label: thewebsiteguy.avalanchecrm::lang.models.settings.company_logo
             tab: Company
             type: fileupload
             mode: image
             imageHeight: 100
             imageWidth: 100
             span: right
-            comment: thewebsiteguy.nexuscrm::lang.models.settings.company_logo_comment
+            comment: thewebsiteguy.avalanchecrm::lang.models.settings.company_logo_comment
 
         company_address:
-            label: thewebsiteguy.nexuscrm::lang.models.settings.company_address
+            label: thewebsiteguy.avalanchecrm::lang.models.settings.company_address
             tab: Company
             type: textarea
             size: small
             span: full
-            comment: thewebsiteguy.nexuscrm::lang.models.settings.company_address_comment
+            comment: thewebsiteguy.avalanchecrm::lang.models.settings.company_address_comment
 
         company_email:
-            label: thewebsiteguy.nexuscrm::lang.models.settings.company_email
+            label: thewebsiteguy.avalanchecrm::lang.models.settings.company_email
             tab: Company
             type: text
             span: left
-            comment: thewebsiteguy.nexuscrm::lang.models.settings.company_email_comment
+            comment: thewebsiteguy.avalanchecrm::lang.models.settings.company_email_comment
 
         company_phone:
-            label: thewebsiteguy.nexuscrm::lang.models.settings.company_phone
+            label: thewebsiteguy.avalanchecrm::lang.models.settings.company_phone
             tab: Company
             type: text
             span: right
-            comment: thewebsiteguy.nexuscrm::lang.models.settings.company_phone_comment
+            comment: thewebsiteguy.avalanchecrm::lang.models.settings.company_phone_comment
 
-        # ── Theme Colors ──────────────────────────────────────────
+        # â”€â”€ Theme Colors â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         theme_color_primary:
             label: Primary
             tab: Theme
@@ -159,7 +159,7 @@ tabs:
             type: text
             default: "$"
             span: right
-            comment: e.g. $, €, £
+            comment: e.g. $, â‚¬, Â£
 
         # Stripe / Card Fields
         stripe_enabled:
@@ -174,7 +174,7 @@ tabs:
             tab: Card (Stripe)
             type: text
             span: left
-            comment: Found in your Stripe dashboard under Developers → API Keys.
+            comment: Found in your Stripe dashboard under Developers â†’ API Keys.
             trigger:
                 action: show
                 field: stripe_enabled
@@ -185,7 +185,7 @@ tabs:
             tab: Card (Stripe)
             type: text
             span: right
-            comment: Keep this private — never expose it on the frontend.
+            comment: Keep this private â€” never expose it on the frontend.
             trigger:
                 action: show
                 field: stripe_enabled
@@ -196,7 +196,7 @@ tabs:
             tab: Card (Stripe)
             type: text
             span: full
-            comment: Found in Stripe dashboard under Developers → Webhooks. Used to verify incoming webhook events.
+            comment: Found in Stripe dashboard under Developers â†’ Webhooks. Used to verify incoming webhook events.
             trigger:
                 action: show
                 field: stripe_enabled
@@ -229,7 +229,7 @@ tabs:
             tab: Direct Debit
             type: text
             span: right
-            comment: Found in GoCardless dashboard under Developers → API Keys.
+            comment: Found in GoCardless dashboard under Developers â†’ API Keys.
             trigger:
                 action: show
                 field: gocardless_enabled
@@ -240,7 +240,7 @@ tabs:
             tab: Direct Debit
             type: text
             span: left
-            comment: Used to verify incoming GoCardless webhook signatures. Found under Developers → Webhooks.
+            comment: Used to verify incoming GoCardless webhook signatures. Found under Developers â†’ Webhooks.
             trigger:
                 action: show
                 field: gocardless_enabled
@@ -284,7 +284,7 @@ tabs:
             tab: PayPal
             type: text
             span: right
-            comment: Keep this private — never expose it on the frontend.
+            comment: Keep this private â€” never expose it on the frontend.
             trigger:
                 action: show
                 field: paypal_enabled
