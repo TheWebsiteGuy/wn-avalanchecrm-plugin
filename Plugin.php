@@ -134,7 +134,16 @@ class Plugin extends PluginBase
 
             $model->bindEvent('model.afterSave', function () use ($model) {
                 // Always sync email and name to associated Staff if they exist
-                if ($staff = $model->staff) {
+                $staff = $model->staff;
+                $isStaff = $model->groups()->where('code', 'staff')->exists() || request()->input('is_staff');
+
+                if (!$staff && $isStaff) {
+                    $staff = new \TheWebsiteGuy\AvalancheCRM\Models\Staff();
+                    $staff->user_id = $model->id;
+                    $model->setRelation('staff', $staff);
+                }
+
+                if ($staff) {
                     if ($staffData = post('staff')) {
                         $staff->fill($staffData);
                     }
@@ -144,15 +153,22 @@ class Plugin extends PluginBase
                 }
 
                 // Sync for Client
-                if ($client = $model->client) {
+                $client = $model->client;
+                $isClient = $model->groups()->where('code', 'client')->exists() || request()->input('is_client');
+
+                if (!$client && $isClient) {
+                    $client = new \TheWebsiteGuy\AvalancheCRM\Models\Client();
+                    $client->user_id = $model->id;
+                    $model->setRelation('client', $client);
+                }
+
+                if ($client) {
                     $client->name = trim(($model->name ?? '') . ' ' . ($model->surname ?? '')) ?: $model->email;
                     $client->email = $model->email;
                     $client->save();
-                }
-                // Save marketing opt-out preference for clients
-                if ($marketingData = post('client_marketing')) {
-                    $client = $model->client;
-                    if ($client) {
+
+                    // Save marketing opt-out preference for clients
+                    if ($marketingData = post('client_marketing')) {
                         $client->marketing_opt_out = !empty($marketingData['marketing_opt_out']);
                         $client->save();
                     }
