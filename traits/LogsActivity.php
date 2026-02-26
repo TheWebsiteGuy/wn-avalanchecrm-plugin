@@ -16,13 +16,31 @@ trait LogsActivity
         });
 
         static::updated(function ($model) {
-            $model->logActivity('Updated');
+            $attributes = $model->getChanges();
+
+            // Ignore if no changes or only updated_at changed
+            unset($attributes['updated_at']);
+            if (empty($attributes)) {
+                return;
+            }
+
+            $changes = [];
+            foreach ($attributes as $key => $newValue) {
+                $changes[$key] = [
+                    'old' => $model->getOriginal($key),
+                    'new' => $newValue
+                ];
+            }
+
+            $model->logActivity('Updated', null, ['changes' => $changes]);
         });
+
 
         static::deleted(function ($model) {
             $model->logActivity('Deleted');
         });
     }
+
 
     /**
      * Log a custom activity

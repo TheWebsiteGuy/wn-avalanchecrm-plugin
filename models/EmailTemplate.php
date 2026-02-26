@@ -7,6 +7,8 @@ use Winter\Storm\Database\Model;
 class EmailTemplate extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
+    use \TheWebsiteGuy\AvalancheCRM\Traits\LogsActivity;
+
 
     public $table = 'thewebsiteguy_avalanchecrm_email_templates';
 
@@ -36,11 +38,11 @@ class EmailTemplate extends Model
     public function getCategoryOptions(): array
     {
         return [
-            'marketing'    => 'Marketing',
-            'client'       => 'Client Notifications',
-            'project'      => 'Project Notifications',
-            'ticket'       => 'Ticket Notifications',
-            'invoice'      => 'Invoice Notifications',
+            'marketing' => 'Marketing',
+            'client' => 'Client Notifications',
+            'project' => 'Project Notifications',
+            'ticket' => 'Ticket Notifications',
+            'invoice' => 'Invoice Notifications',
             'subscription' => 'Subscription Notifications',
         ];
     }

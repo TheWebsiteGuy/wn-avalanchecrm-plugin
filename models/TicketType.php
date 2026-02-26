@@ -10,6 +10,8 @@ use Winter\Storm\Database\Model;
 class TicketType extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
+    use \TheWebsiteGuy\AvalancheCRM\Traits\LogsActivity;
+
 
     /**
      * @var string The database table used by the model.

@@ -183,4 +183,13 @@ class Ticket extends Model
             $fields->{$fieldName} = $config;
         }
     }
+
+    /**
+     * Get display name for logging
+     */
+    protected function getActivityName()
+    {
+        return sprintf('Ticket #%s: %s', $this->id, $this->subject);
+    }
 }
+

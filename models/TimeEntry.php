@@ -13,6 +13,8 @@ use Carbon\Carbon;
 class TimeEntry extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
+    use \TheWebsiteGuy\AvalancheCRM\Traits\LogsActivity;
+
 
     public $table = 'thewebsiteguy_avalanchecrm_time_entries';
 
@@ -28,7 +30,7 @@ class TimeEntry extends Model
     ];
 
     public $rules = [
-        'task_id'    => 'required',
+        'task_id' => 'required',
         'started_at' => 'required',
     ];
 
@@ -77,4 +79,19 @@ class TimeEntry extends Model
             return "{$minutes}m";
         }
     }
+
+    /**
+     * Get display name for logging
+     */
+    protected function getActivityName()
+    {
+        $name = 'Time Entry';
+
+        if ($this->task) {
+            $name .= sprintf(' (Task: %s)', $this->task->title);
+        }
+
+        return $name;
+    }
 }
+

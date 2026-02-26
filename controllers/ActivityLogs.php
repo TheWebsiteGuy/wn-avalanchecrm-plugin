@@ -18,10 +18,59 @@ class ActivityLogs extends Controller
 
     public $requiredPermissions = ['thewebsiteguy.avalanchecrm.*'];
 
+    /**
+     * @var string Current category filter
+     */
+    protected $categoryFilter = null;
+
     public function __construct()
     {
         parent::__construct();
 
         BackendMenu::setContext('TheWebsiteGuy.AvalancheCRM', 'avalanchecrm', 'logs');
     }
+
+    public function index()
+    {
+        $this->pageTitle = 'Activity Log Overview';
+    }
+
+    public function category($category = null)
+    {
+        $this->categoryFilter = $category;
+        $this->pageTitle = 'Activity Logs: ' . ($category ? ucfirst($category) : 'All');
+
+        return $this->asExtension('ListController')->index();
+    }
+
+    public function listExtendQuery($query)
+    {
+        if (!$this->categoryFilter || $this->categoryFilter === 'all') {
+            return;
+        }
+
+        $modules = [];
+        switch ($this->categoryFilter) {
+            case 'projects':
+                $modules = ['Projects', 'Tasks', 'TimeEntries'];
+                break;
+            case 'support':
+                $modules = ['Tickets', 'TicketReplies', 'TicketCategories', 'TicketStatuses', 'TicketTypes'];
+                break;
+            case 'billing':
+                $modules = ['Invoices', 'Invoices', 'Subscriptions', 'SubscriptionPlans', 'Transactions'];
+                break;
+            case 'entities':
+                $modules = ['Staff', 'Clients'];
+                break;
+            case 'marketing':
+                $modules = ['Campaigns', 'EmailTemplates'];
+                break;
+        }
+
+        if (!empty($modules)) {
+            $query->whereIn('module', $modules);
+        }
+    }
 }
+

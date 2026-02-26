@@ -91,4 +91,19 @@ class TicketReply extends Model
 
         return ucfirst($this->author_type);
     }
+
+    /**
+     * Get display name for logging
+     */
+    protected function getActivityName()
+    {
+        $name = 'Reply';
+
+        if ($this->ticket) {
+            $name .= sprintf(' (Ticket #%s: %s)', $this->ticket->id, $this->ticket->subject);
+        }
+
+        return $name;
+    }
 }
+

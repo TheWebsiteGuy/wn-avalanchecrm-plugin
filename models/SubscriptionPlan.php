@@ -12,6 +12,8 @@ class SubscriptionPlan extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
     use \Winter\Storm\Database\Traits\Sortable;
+    use \TheWebsiteGuy\AvalancheCRM\Traits\LogsActivity;
+
 
     /**
      * @var string The database table used by the model.

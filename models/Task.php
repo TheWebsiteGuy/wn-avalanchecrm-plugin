@@ -227,4 +227,19 @@ class Task extends Model
 
         return max(0, now()->diffInSeconds($this->timer_started_at));
     }
+
+    /**
+     * Get display name for logging
+     */
+    protected function getActivityName()
+    {
+        $name = sprintf('Task: %s', $this->title);
+
+        if ($this->project) {
+            $name .= sprintf(' (Project: %s)', $this->project->name);
+        }
+
+        return $name;
+    }
 }
+

@@ -502,8 +502,9 @@ class Plugin extends PluginBase
                         'icon' => 'icon-list',
                         'url' => Backend::url('thewebsiteguy/avalanchecrm/activitylogs'),
                         'permissions' => ['thewebsiteguy.avalanchecrm.*'],
-                        'order' => 600,
+                        'order' => 999,
                     ],
+
                 ]
             ],
 
