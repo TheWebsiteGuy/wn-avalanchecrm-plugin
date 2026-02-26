@@ -10,6 +10,7 @@ use Winter\User\Models\UserGroup;
 use Winter\User\Controllers\Users as UsersController;
 use Backend\Models\User as BackendUserModel;
 use Event;
+use TheWebsiteGuy\AvalancheCRM\Models\Settings;
 
 /**
  * Avalanche CRM Plugin Information File
@@ -241,36 +242,78 @@ class Plugin extends PluginBase
             $isClient = $widget->model->groups()->where('code', 'client')->exists() || request()->input('is_client');
 
             if ($isClient) {
-                $widget->addTabFields([
-                    'client_marketing' => [
+                $settings = Settings::instance();
+                $fields = [];
+
+                if ($settings->enable_marketing) {
+                    $fields['client_marketing'] = [
                         'tab' => 'Marketing',
                         'type' => 'partial',
                         'path' => '$/thewebsiteguy/avalanchecrm/views/user_tabs/_marketing.htm'
-                    ],
-                    'client_tickets' => [
+                    ];
+                }
+
+                if ($settings->enable_tickets) {
+                    $fields['client_tickets'] = [
                         'tab' => 'Tickets',
                         'type' => 'partial',
                         'path' => '$/thewebsiteguy/avalanchecrm/views/user_tabs/_tickets.htm'
-                    ],
-                    'client_projects' => [
+                    ];
+                }
+
+                if ($settings->enable_projects) {
+                    $fields['client_projects'] = [
                         'tab' => 'Projects',
                         'type' => 'partial',
                         'path' => '$/thewebsiteguy/avalanchecrm/views/user_tabs/_projects.htm'
-                    ],
-                    'client_invoices' => [
+                    ];
+                }
+
+                if ($settings->enable_invoices) {
+                    $fields['client_invoices'] = [
                         'tab' => 'Invoices',
                         'type' => 'partial',
                         'path' => '$/thewebsiteguy/avalanchecrm/views/user_tabs/_invoices.htm'
-                    ],
-                    'client_subscriptions' => [
+                    ];
+                }
+
+                if ($settings->enable_subscriptions) {
+                    $fields['client_subscriptions'] = [
                         'tab' => 'Subscriptions',
                         'type' => 'partial',
                         'path' => '$/thewebsiteguy/avalanchecrm/views/user_tabs/_subscriptions.htm'
-                    ],
-                ]);
+                    ];
+                }
+
+                $widget->addTabFields($fields);
             }
         });
 
+        // Conditionally hide navigation items
+        Event::listen('backend.menu.extendItems', function ($manager) {
+            $settings = Settings::instance();
+
+            if (!$settings->enable_projects) {
+                $manager->removeSideMenuItem('TheWebsiteGuy.AvalancheCRM', 'avalanchecrm', 'projects');
+            }
+
+            if (!$settings->enable_tickets) {
+                $manager->removeSideMenuItem('TheWebsiteGuy.AvalancheCRM', 'avalanchecrm', 'tickets');
+            }
+
+            if (!$settings->enable_invoices) {
+                $manager->removeSideMenuItem('TheWebsiteGuy.AvalancheCRM', 'avalanchecrm', 'invoices');
+            }
+
+            if (!$settings->enable_subscriptions) {
+                $manager->removeSideMenuItem('TheWebsiteGuy.AvalancheCRM', 'avalanchecrm', 'subscriptions');
+            }
+
+            if (!$settings->enable_marketing) {
+                $manager->removeSideMenuItem('TheWebsiteGuy.AvalancheCRM', 'avalanchecrm', 'campaigns');
+                $manager->removeSideMenuItem('TheWebsiteGuy.AvalancheCRM', 'avalanchecrm', 'templates');
+            }
+        });
     }
 
     /**

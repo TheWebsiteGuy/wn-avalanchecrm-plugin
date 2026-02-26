@@ -83,7 +83,19 @@ class EmailTemplates extends Controller
         $definitions = $this->getCategoryDefinitions();
         $categories = [];
 
+        $settings = \TheWebsiteGuy\AvalancheCRM\Models\Settings::instance();
         foreach ($definitions as $key => $def) {
+            if ($key === 'marketing' && !$settings->enable_marketing)
+                continue;
+            if ($key === 'project' && !$settings->enable_projects)
+                continue;
+            if ($key === 'ticket' && !$settings->enable_tickets)
+                continue;
+            if ($key === 'invoice' && !$settings->enable_invoices)
+                continue;
+            if ($key === 'subscription' && !$settings->enable_subscriptions)
+                continue;
+
             $templates = EmailTemplate::where('category', $key)
                 ->orderBy('name')
                 ->get();

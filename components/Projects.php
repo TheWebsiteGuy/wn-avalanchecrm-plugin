@@ -94,6 +94,11 @@ class Projects extends ComponentBase
      */
     public function onRun()
     {
+        $settings = Settings::instance();
+        if (!$settings->enable_projects) {
+            return Redirect::to('/');
+        }
+
         $this->addCss('/plugins/thewebsiteguy/avalanchecrm/assets/css/projects.css');
 
         $this->page['themeStyles'] = \TheWebsiteGuy\AvalancheCRM\Classes\ThemeStyles::render();

@@ -6,6 +6,7 @@ use Winter\User\Facades\Auth;
 use Cms\Classes\ComponentBase;
 use TheWebsiteGuy\AvalancheCRM\Models\Client;
 use TheWebsiteGuy\AvalancheCRM\Models\Invoice;
+use TheWebsiteGuy\AvalancheCRM\Models\Settings;
 
 /**
  * Dashboard Component
@@ -44,6 +45,8 @@ class Dashboard extends ComponentBase
                 $this->prepareStats();
             }
         }
+
+        $this->page['crmSettings'] = Settings::instance();
     }
 
     protected function prepareStats()

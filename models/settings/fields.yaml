@@ -4,17 +4,22 @@
 
 tabs:
     fields:
-        # â”€â”€ Company Details â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        # ─── GENERAL TAB ─────────────────────────────────────────────
+        general_branding_section:
+            label: Branding & Identity
+            type: section
+            tab: General
+
         company_name:
             label: thewebsiteguy.avalanchecrm::lang.models.settings.company_name
-            tab: Company
+            tab: General
             type: text
             span: left
             comment: thewebsiteguy.avalanchecrm::lang.models.settings.company_name_comment
 
         company_logo:
             label: thewebsiteguy.avalanchecrm::lang.models.settings.company_logo
-            tab: Company
+            tab: General
             type: fileupload
             mode: image
             imageHeight: 100
@@ -24,7 +29,7 @@ tabs:
 
         company_address:
             label: thewebsiteguy.avalanchecrm::lang.models.settings.company_address
-            tab: Company
+            tab: General
             type: textarea
             size: small
             span: full
@@ -32,22 +37,26 @@ tabs:
 
         company_email:
             label: thewebsiteguy.avalanchecrm::lang.models.settings.company_email
-            tab: Company
+            tab: General
             type: text
             span: left
             comment: thewebsiteguy.avalanchecrm::lang.models.settings.company_email_comment
 
         company_phone:
             label: thewebsiteguy.avalanchecrm::lang.models.settings.company_phone
-            tab: Company
+            tab: General
             type: text
             span: right
             comment: thewebsiteguy.avalanchecrm::lang.models.settings.company_phone_comment
 
-        # â”€â”€ Theme Colors â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        theme_colors_section:
+            label: Theme appearance
+            type: section
+            tab: General
+
         theme_color_primary:
             label: Primary
-            tab: Theme
+            tab: General
             type: colorpicker
             default: "#4a6cf7"
             span: auto
@@ -55,7 +64,7 @@ tabs:
 
         theme_color_success:
             label: Success
-            tab: Theme
+            tab: General
             type: colorpicker
             default: "#28a745"
             span: auto
@@ -63,7 +72,7 @@ tabs:
 
         theme_color_warning:
             label: Warning
-            tab: Theme
+            tab: General
             type: colorpicker
             default: "#d97706"
             span: auto
@@ -71,7 +80,7 @@ tabs:
 
         theme_color_danger:
             label: Danger
-            tab: Theme
+            tab: General
             type: colorpicker
             default: "#dc2626"
             span: auto
@@ -79,31 +88,83 @@ tabs:
 
         theme_color_info:
             label: Info
-            tab: Theme
+            tab: General
             type: colorpicker
             default: "#2563eb"
             span: auto
             comment: "Informational alerts, open / sent badges."
 
-        # Subscriptions
+        # ─── FEATURES TAB ────────────────────────────────────────────
+        features_section:
+            label: CRM Features & Modules
+            type: section
+            tab: Features
+
+        enable_projects:
+            label: Enable Projects
+            tab: Features
+            type: switch
+            default: true
+            span: left
+
+        enable_tickets:
+            label: Enable Tickets
+            tab: Features
+            type: switch
+            default: true
+            span: right
+
+        enable_marketing:
+            label: Enable Marketing
+            tab: Features
+            type: switch
+            default: true
+            span: left
+
         enable_subscriptions:
             label: Enable Subscriptions
-            tab: Subscriptions
+            tab: Features
             type: switch
             default: true
-            span: full
+            span: right
 
-        # Invoices
         enable_invoices:
             label: Enable Invoices
-            tab: Invoices
+            tab: Features
             type: switch
             default: true
-            span: full
+            span: left
+
+        # ─── INVOICING TAB ──────────────────────────────────────────
+        invoicing_details_section:
+            label: Currency & Region
+            type: section
+            tab: Invoicing
+
+        currency_code:
+            label: Currency Code
+            tab: Invoicing
+            type: text
+            default: "USD"
+            span: left
+            comment: e.g. USD, EUR, GBP
+
+        currency_symbol:
+            label: Currency Symbol
+            tab: Invoicing
+            type: text
+            default: "$"
+            span: right
+            comment: e.g. $, €, £
+
+        invoice_config_section:
+            label: Invoice Configuration
+            type: section
+            tab: Invoicing
 
         invoice_prefix:
             label: Invoice Prefix
-            tab: Invoices
+            tab: Invoicing
             type: text
             default: "INV"
             span: left
@@ -111,7 +172,7 @@ tabs:
 
         invoice_number_format:
             label: Number Format
-            tab: Invoices
+            tab: Invoicing
             type: dropdown
             default: "prefix-date-seq"
             span: right
@@ -124,7 +185,7 @@ tabs:
 
         invoice_number_padding:
             label: Sequence Padding
-            tab: Invoices
+            tab: Invoicing
             type: dropdown
             default: "4"
             span: left
@@ -138,43 +199,31 @@ tabs:
 
         invoice_next_number:
             label: Next Invoice Number
-            tab: Invoices
+            tab: Invoicing
             type: number
             default: 1
             span: right
             comment: "The next sequential number to use. Automatically increments after each invoice."
 
-        # Currency Settings
-        currency_code:
-            label: Currency Code
-            tab: Currency
-            type: text
-            default: "USD"
-            span: left
-            comment: e.g. USD, EUR, GBP
+        # ─── PAYMENTS TAB ────────────────────────────────────────────
+        payment_stripe_section:
+            label: Stripe (Card Payments)
+            type: section
+            tab: Payments
 
-        currency_symbol:
-            label: Currency Symbol
-            tab: Currency
-            type: text
-            default: "$"
-            span: right
-            comment: e.g. $, â‚¬, Â£
-
-        # Stripe / Card Fields
         stripe_enabled:
             label: Enable Card Payments (Stripe)
-            tab: Card (Stripe)
+            tab: Payments
             type: switch
             span: full
             comment: Accept credit and debit card payments via Stripe.
 
         stripe_public_key:
             label: Publishable Key
-            tab: Card (Stripe)
+            tab: Payments
             type: text
             span: left
-            comment: Found in your Stripe dashboard under Developers â†’ API Keys.
+            comment: Found in your Stripe dashboard under Developers → API Keys.
             trigger:
                 action: show
                 field: stripe_enabled
@@ -182,10 +231,10 @@ tabs:
 
         stripe_secret_key:
             label: Secret Key
-            tab: Card (Stripe)
+            tab: Payments
             type: text
             span: right
-            comment: Keep this private â€” never expose it on the frontend.
+            comment: Keep this private — never expose it on the frontend.
             trigger:
                 action: show
                 field: stripe_enabled
@@ -193,26 +242,30 @@ tabs:
 
         stripe_webhook_secret:
             label: Webhook Signing Secret
-            tab: Card (Stripe)
+            tab: Payments
             type: text
             span: full
-            comment: Found in Stripe dashboard under Developers â†’ Webhooks. Used to verify incoming webhook events.
+            comment: Found in Stripe dashboard under Developers → Webhooks. Used to verify incoming webhook events.
             trigger:
                 action: show
                 field: stripe_enabled
                 condition: checked
 
-        # Direct Debit (GoCardless) Fields
+        payment_gocardless_section:
+            label: GoCardless (Direct Debit)
+            type: section
+            tab: Payments
+
         gocardless_enabled:
             label: Enable Direct Debit (GoCardless)
-            tab: Direct Debit
+            tab: Payments
             type: switch
             span: full
             comment: Collect recurring bank payments via GoCardless.
 
         gocardless_environment:
             label: Environment
-            tab: Direct Debit
+            tab: Payments
             type: dropdown
             span: left
             options:
@@ -226,10 +279,10 @@ tabs:
 
         gocardless_access_token:
             label: Access Token
-            tab: Direct Debit
+            tab: Payments
             type: text
             span: right
-            comment: Found in GoCardless dashboard under Developers â†’ API Keys.
+            comment: Found in GoCardless dashboard under Developers → API Keys.
             trigger:
                 action: show
                 field: gocardless_enabled
@@ -237,26 +290,30 @@ tabs:
 
         gocardless_webhook_secret:
             label: Webhook Endpoint Secret
-            tab: Direct Debit
+            tab: Payments
             type: text
             span: left
-            comment: Used to verify incoming GoCardless webhook signatures. Found under Developers â†’ Webhooks.
+            comment: Used to verify incoming GoCardless webhook signatures. Found under Developers → Webhooks.
             trigger:
                 action: show
                 field: gocardless_enabled
                 condition: checked
 
-        # PayPal Fields
+        payment_paypal_section:
+            label: PayPal
+            type: section
+            tab: Payments
+
         paypal_enabled:
             label: Enable PayPal
-            tab: PayPal
+            tab: Payments
             type: switch
             span: full
             comment: Accept payments via PayPal accounts.
 
         paypal_mode:
             label: Mode
-            tab: PayPal
+            tab: Payments
             type: dropdown
             span: left
             options:
@@ -270,7 +327,7 @@ tabs:
 
         paypal_client_id:
             label: Client ID
-            tab: PayPal
+            tab: Payments
             type: text
             span: left
             comment: Found in PayPal Developer dashboard under My Apps & Credentials.
@@ -281,10 +338,10 @@ tabs:
 
         paypal_secret:
             label: Client Secret
-            tab: PayPal
+            tab: Payments
             type: text
             span: right
-            comment: Keep this private â€” never expose it on the frontend.
+            comment: Keep this private — never expose it on the frontend.
             trigger:
                 action: show
                 field: paypal_enabled
@@ -292,7 +349,7 @@ tabs:
 
         paypal_webhook_id:
             label: Webhook ID
-            tab: PayPal
+            tab: Payments
             type: text
             span: left
             comment: "The Webhook ID from PayPal Developer dashboard. Used to verify webhook signatures."

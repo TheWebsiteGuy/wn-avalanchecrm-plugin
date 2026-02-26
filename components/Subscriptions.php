@@ -80,6 +80,11 @@ class Subscriptions extends ComponentBase
      */
     public function onRun()
     {
+        $settings = Settings::instance();
+        if (!$settings->enable_subscriptions) {
+            return Redirect::to('/');
+        }
+
         $this->addCss('/plugins/thewebsiteguy/avalanchecrm/assets/css/subscriptions.css');
         $this->addJs('/plugins/thewebsiteguy/avalanchecrm/assets/js/subscriptions.js');
 

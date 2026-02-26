@@ -31,6 +31,9 @@ class Campaigns extends Controller
     public function __construct()
     {
         parent::__construct();
+        if (!\TheWebsiteGuy\AvalancheCRM\Models\Settings::instance()->enable_marketing) {
+            throw new \Winter\Storm\Exception\ApplicationException('Marketing is currently disabled in CRM settings.');
+        }
         BackendMenu::setContext('TheWebsiteGuy.AvalancheCRM', 'avalanchecrm', 'campaigns');
     }
 
