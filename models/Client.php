@@ -16,6 +16,8 @@ use TheWebsiteGuy\AvalancheCRM\Models\Campaign;
 class Client extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
+    use \TheWebsiteGuy\AvalancheCRM\Traits\LogsActivity;
+
 
     /**
      * @var string The database table used by the model.

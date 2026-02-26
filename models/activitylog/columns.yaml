@@ -1,0 +1,37 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+  created_at:
+    label: Date
+    type: datetime
+    format: Y-m-d H:i:s
+    sortOrder: desc
+
+  module:
+    label: Module
+    type: text
+    searchable: true
+
+  action:
+    label: Action
+    type: text
+    searchable: true
+
+  message:
+    label: Message
+    type: text
+    searchable: true
+
+  user:
+    label: Staff (User)
+    relation: user
+    select: login
+    searchable: true
+
+  client:
+    label: Client
+    relation: client
+    select: name
+    searchable: true

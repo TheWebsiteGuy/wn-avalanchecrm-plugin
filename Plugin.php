@@ -497,8 +497,16 @@ class Plugin extends PluginBase
                         'url' => Backend::url('thewebsiteguy/avalanchecrm/emailtemplates'),
                         'permissions' => ['thewebsiteguy.avalanchecrm.marketing.*'],
                     ],
+                    'logs' => [
+                        'label' => 'Activity Logs',
+                        'icon' => 'icon-list',
+                        'url' => Backend::url('thewebsiteguy/avalanchecrm/activitylogs'),
+                        'permissions' => ['thewebsiteguy.avalanchecrm.*'],
+                        'order' => 600,
+                    ],
                 ]
             ],
+
         ];
     }
 

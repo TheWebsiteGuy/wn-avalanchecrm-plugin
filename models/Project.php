@@ -13,6 +13,8 @@ use Winter\Storm\Support\Facades\Mail;
 class Project extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
+    use \TheWebsiteGuy\AvalancheCRM\Traits\LogsActivity;
+
 
     /**
      * @var string The database table used by the model.
@@ -116,8 +118,10 @@ class Project extends Model
 
         if ($this->isDirty('status')) {
             $newStatus = $this->status;
+            $this->logActivity('Status Changed', sprintf('Project status changed to "%s"', ucfirst($newStatus)));
 
             if (in_array($newStatus, ['completed', 'complete', 'finished'])) {
+
                 $this->notifyClients('project', 'Project Completed');
             } else {
                 $this->notifyClients('project', 'Project Status Update');
@@ -142,8 +146,8 @@ class Project extends Model
     {
         return [
             'non_billable' => 'Non-Billable',
-            'hourly'       => 'Hourly',
-            'fixed'        => 'Fixed Price',
+            'hourly' => 'Hourly',
+            'fixed' => 'Fixed Price',
         ];
     }
 

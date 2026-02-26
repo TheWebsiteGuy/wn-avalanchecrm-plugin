@@ -10,6 +10,8 @@ use Winter\Storm\Database\Model;
 class Ticket extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
+    use \TheWebsiteGuy\AvalancheCRM\Traits\LogsActivity;
+
 
     /**
      * After creating a ticket, send confirmation to the client.
@@ -37,7 +39,11 @@ class Ticket extends Model
         // Check if the status changed to resolved/closed
         if ($this->isDirty('status_id')) {
             $status = $this->status_relation;
+            if ($status) {
+                $this->logActivity('Status Changed', sprintf('Ticket status changed to "%s"', $status->name));
+            }
             if ($status && in_array(strtolower($status->name), ['resolved', 'closed'])) {
+
                 $this->client->sendNotification('ticket', 'Ticket Resolved');
             }
         }

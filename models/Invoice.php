@@ -14,17 +14,19 @@ use Winter\Storm\Database\Model;
 class Invoice extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
+    use \TheWebsiteGuy\AvalancheCRM\Traits\LogsActivity;
+
 
     // Ã¢â€â‚¬Ã¢â€â‚¬ Internal (admin) status constants Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
     const INTERNAL_DRAFT = 'draft';
-    const INTERNAL_SENT  = 'sent';
+    const INTERNAL_SENT = 'sent';
 
     // Ã¢â€â‚¬Ã¢â€â‚¬ Client-facing payment status constants Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
     const STATUS_OUTSTANDING = 'outstanding';
-    const STATUS_DUE         = 'due';
-    const STATUS_OVERDUE     = 'overdue';
-    const STATUS_CANCELLED   = 'cancelled';
-    const STATUS_PAID        = 'paid';
+    const STATUS_DUE = 'due';
+    const STATUS_OVERDUE = 'overdue';
+    const STATUS_CANCELLED = 'cancelled';
+    const STATUS_PAID = 'paid';
 
     /**
      * @var string The database table used by the model.
@@ -109,12 +111,12 @@ class Invoice extends Model
     {
         $settings = \TheWebsiteGuy\AvalancheCRM\Models\Settings::instance();
 
-        $prefix  = trim($settings->invoice_prefix ?: 'INV');
-        $format  = $settings->invoice_number_format ?: 'prefix-date-seq';
+        $prefix = trim($settings->invoice_prefix ?: 'INV');
+        $format = $settings->invoice_number_format ?: 'prefix-date-seq';
         $padding = (int) ($settings->invoice_number_padding ?: 4);
         $nextNum = (int) ($settings->invoice_next_number ?: 1);
 
-        $seq  = str_pad($nextNum, $padding, '0', STR_PAD_LEFT);
+        $seq = str_pad($nextNum, $padding, '0', STR_PAD_LEFT);
         $date = date('Ymd');
 
         switch ($format) {
@@ -175,7 +177,7 @@ class Invoice extends Model
     {
         return [
             self::INTERNAL_DRAFT => 'Draft',
-            self::INTERNAL_SENT  => 'Sent',
+            self::INTERNAL_SENT => 'Sent',
         ];
     }
 
@@ -186,10 +188,10 @@ class Invoice extends Model
     {
         return [
             self::STATUS_OUTSTANDING => 'Outstanding',
-            self::STATUS_DUE         => 'Due',
-            self::STATUS_OVERDUE     => 'Overdue',
-            self::STATUS_CANCELLED   => 'Cancelled',
-            self::STATUS_PAID        => 'Paid',
+            self::STATUS_DUE => 'Due',
+            self::STATUS_OVERDUE => 'Overdue',
+            self::STATUS_CANCELLED => 'Cancelled',
+            self::STATUS_PAID => 'Paid',
         ];
     }
 

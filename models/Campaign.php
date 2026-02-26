@@ -11,6 +11,8 @@ use Carbon\Carbon;
 class Campaign extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
+    use \TheWebsiteGuy\AvalancheCRM\Traits\LogsActivity;
+
 
     public $table = 'thewebsiteguy_avalanchecrm_campaigns';
 

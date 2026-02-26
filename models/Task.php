@@ -11,6 +11,8 @@ class Task extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
     use \Winter\Storm\Database\Traits\Sortable;
+    use \TheWebsiteGuy\AvalancheCRM\Traits\LogsActivity;
+
 
     /**
      * @var string The database table used by the model.
@@ -31,11 +33,11 @@ class Task extends Model
      * @var array Attributes to be cast to native types
      */
     protected $casts = [
-        'is_billable'    => 'boolean',
-        'is_invoiced'    => 'boolean',
-        'timer_running'  => 'boolean',
-        'hours'          => 'float',
-        'hourly_rate'    => 'float',
+        'is_billable' => 'boolean',
+        'is_invoiced' => 'boolean',
+        'timer_running' => 'boolean',
+        'hours' => 'float',
+        'hourly_rate' => 'float',
     ];
 
     /**
