@@ -1,3 +1,4 @@
+<?php $settings = \TheWebsiteGuy\AvalancheCRM\Models\Settings::instance(); ?>
 <div class="layout-row min-height-0">
     <div class="layout-cell">
         <div class="padded-container">
@@ -6,31 +7,47 @@
                     <span class="dash-stat-number"><?= $totalClients ?></span>
                     <span class="dash-stat-label">Clients</span>
                 </a>
-                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/projects') ?>?status=active"
-                    class="dash-stat">
-                    <span class="dash-stat-number"><?= $activeProjects ?></span>
-                    <span class="dash-stat-label">Active Projects</span>
-                </a>
-                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/tickets') ?>?status=open"
-                    class="dash-stat">
-                    <span class="dash-stat-number"><?= $openTickets ?></span>
-                    <span class="dash-stat-label">Open Tickets</span>
-                </a>
-                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/invoices') ?>?status=outstanding"
-                    class="dash-stat">
-                    <span class="dash-stat-number"><?= $unpaidInvoices ?></span>
-                    <span class="dash-stat-label">Unpaid Invoices</span>
-                </a>
-                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/subscriptions') ?>?status=active"
-                    class="dash-stat">
-                    <span class="dash-stat-number"><?= $activeSubscriptions ?></span>
-                    <span class="dash-stat-label">Subscriptions</span>
-                </a>
-                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/tasks') ?>?status=todo"
-                    class="dash-stat">
-                    <span class="dash-stat-number"><?= $pendingTasks ?></span>
-                    <span class="dash-stat-label">Pending Tasks</span>
-                </a>
+
+                <?php if ($settings->enable_projects): ?>
+                    <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/projects') ?>?status=active"
+                        class="dash-stat">
+                        <span class="dash-stat-number"><?= $activeProjects ?></span>
+                        <span class="dash-stat-label">Active Projects</span>
+                    </a>
+                <?php endif; ?>
+
+                <?php if ($settings->enable_tickets): ?>
+                    <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/tickets') ?>?status=open"
+                        class="dash-stat">
+                        <span class="dash-stat-number"><?= $openTickets ?></span>
+                        <span class="dash-stat-label">Open Tickets</span>
+                    </a>
+                <?php endif; ?>
+
+                <?php if ($settings->enable_invoices): ?>
+                    <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/invoices') ?>?status=outstanding"
+                        class="dash-stat">
+                        <span class="dash-stat-number"><?= $unpaidInvoices ?></span>
+                        <span class="dash-stat-label">Unpaid Invoices</span>
+                    </a>
+                <?php endif; ?>
+
+                <?php if ($settings->enable_subscriptions): ?>
+                    <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/subscriptions') ?>?status=active"
+                        class="dash-stat">
+                        <span class="dash-stat-number"><?= $activeSubscriptions ?></span>
+                        <span class="dash-stat-label">Subscriptions</span>
+                    </a>
+                <?php endif; ?>
+
+                <?php if ($settings->enable_projects): ?>
+                    <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/tasks') ?>?status=todo"
+                        class="dash-stat">
+                        <span class="dash-stat-number"><?= $pendingTasks ?></span>
+                        <span class="dash-stat-label">Pending Tasks</span>
+                    </a>
+                <?php endif; ?>
+
                 <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/staff') ?>" class="dash-stat">
                     <span class="dash-stat-number"><?= $totalStaff ?></span>
                     <span class="dash-stat-label">Staff</span>
@@ -73,110 +90,123 @@
                 </div>
 
                 <!-- Projects Card -->
-                <div class="dashboard-card border-warning">
-                    <div class="card-header">
-                        <i class="icon-briefcase"></i>
-                        <h4>Projects</h4>
-                    </div>
-                    <div class="card-body">
-                        <p>Track project progress, tasks and deliverables.</p>
-                        <div class="card-actions">
-                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/projects') ?>"
-                                class="btn btn-sm btn-primary">Manage Projects</a>
-                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/projects/create') ?>"
-                                class="btn btn-sm btn-secondary">New Project</a>
+                <?php if ($settings->enable_projects): ?>
+                    <div class="dashboard-card border-warning">
+                        <div class="card-header">
+                            <i class="icon-briefcase"></i>
+                            <h4>Projects</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>Track project progress, tasks and deliverables.</p>
+                            <div class="card-actions">
+                                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/projects') ?>"
+                                    class="btn btn-sm btn-primary">Manage Projects</a>
+                                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/projects/create') ?>"
+                                    class="btn btn-sm btn-secondary">New Project</a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                <?php endif; ?>
 
                 <!-- Tickets Card -->
-                <div class="dashboard-card border-danger">
-                    <div class="card-header">
-                        <i class="icon-ticket"></i>
-                        <h4>Tickets</h4>
-                    </div>
-                    <div class="card-body">
-                        <p>Monitor and respond to client support requests.</p>
-                        <div class="card-actions">
-                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/tickets') ?>"
-                                class="btn btn-sm btn-primary">All Tickets</a>
-                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/tickets/create') ?>"
-                                class="btn btn-sm btn-secondary">New Ticket</a>
+                <?php if ($settings->enable_tickets): ?>
+                    <div class="dashboard-card border-danger">
+                        <div class="card-header">
+                            <i class="icon-ticket"></i>
+                            <h4>Tickets</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>Monitor and respond to client support requests.</p>
+                            <div class="card-actions">
+                                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/tickets') ?>"
+                                    class="btn btn-sm btn-primary">All Tickets</a>
+                                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/tickets/create') ?>"
+                                    class="btn btn-sm btn-secondary">New Ticket</a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                <?php endif; ?>
 
                 <!-- Invoices Card -->
-                <div class="dashboard-card border-primary">
-                    <div class="card-header">
-                        <i class="icon-file-text-o"></i>
-                        <h4>Invoices</h4>
-                    </div>
-                    <div class="card-body">
-                        <p>Generate and manage billing and payments.</p>
-                        <div class="card-actions">
-                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/invoices') ?>"
-                                class="btn btn-sm btn-primary">All Invoices</a>
-                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/invoices/create') ?>"
-                                class="btn btn-sm btn-secondary">New Invoice</a>
+                <?php if ($settings->enable_invoices): ?>
+                    <div class="dashboard-card border-primary">
+                        <div class="card-header">
+                            <i class="icon-file-text-o"></i>
+                            <h4>Invoices</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>Generate and manage billing and payments.</p>
+                            <div class="card-actions">
+                                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/invoices') ?>"
+                                    class="btn btn-sm btn-primary">All Invoices</a>
+                                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/invoices/create') ?>"
+                                    class="btn btn-sm btn-secondary">New Invoice</a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                <?php endif; ?>
 
                 <!-- Subscriptions Card -->
-                <div class="dashboard-card border-secondary">
-                    <div class="card-header">
-                        <i class="icon-refresh"></i>
-                        <h4>Subscriptions</h4>
-                    </div>
-                    <div class="card-body">
-                        <p>Recurring billing plans and client subscriptions.</p>
-                        <div class="card-actions">
-                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/subscriptions') ?>"
-                                class="btn btn-sm btn-primary">Active Subscriptions</a>
-                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/subscriptionplans') ?>"
-                                class="btn btn-sm btn-secondary">Manage Plans</a>
+                <?php if ($settings->enable_subscriptions): ?>
+                    <div class="dashboard-card border-secondary">
+                        <div class="card-header">
+                            <i class="icon-refresh"></i>
+                            <h4>Subscriptions</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>Recurring billing plans and client subscriptions.</p>
+                            <div class="card-actions">
+                                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/subscriptions') ?>"
+                                    class="btn btn-sm btn-primary">Active Subscriptions</a>
+                                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/subscriptionplans') ?>"
+                                    class="btn btn-sm btn-secondary">Manage Plans</a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                <?php endif; ?>
 
                 <!-- Campaigns Card -->
-                <div class="dashboard-card border-marketing">
-                    <div class="card-header">
-                        <i class="icon-bullhorn"></i>
-                        <h4>Campaigns</h4>
-                    </div>
-                    <div class="card-body">
-                        <p>Create and send email campaigns to your clients.</p>
-                        <div class="card-actions">
-                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/campaigns') ?>"
-                                class="btn btn-sm btn-primary">All Campaigns</a>
-                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/campaigns/create') ?>"
-                                class="btn btn-sm btn-secondary">New Campaign</a>
+                <?php if ($settings->enable_marketing): ?>
+                    <div class="dashboard-card border-marketing">
+                        <div class="card-header">
+                            <i class="icon-bullhorn"></i>
+                            <h4>Campaigns</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>Create and send email campaigns to your clients.</p>
+                            <div class="card-actions">
+                                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/campaigns') ?>"
+                                    class="btn btn-sm btn-primary">All Campaigns</a>
+                                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/campaigns/create') ?>"
+                                    class="btn btn-sm btn-secondary">New Campaign</a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                <?php endif; ?>
 
                 <!-- Email Templates Card -->
-                <div class="dashboard-card border-template">
-                    <div class="card-header">
-                        <i class="icon-file-code-o"></i>
-                        <h4>Email Templates</h4>
-                    </div>
-                    <div class="card-body">
-                        <p>Design reusable email templates for your campaigns.</p>
-                        <div class="card-actions">
-                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/emailtemplates') ?>"
-                                class="btn btn-sm btn-primary">All Templates</a>
-                            <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/emailtemplates/create') ?>"
-                                class="btn btn-sm btn-secondary">New Template</a>
+                <?php if ($settings->enable_marketing): ?>
+                    <div class="dashboard-card border-template">
+                        <div class="card-header">
+                            <i class="icon-file-code-o"></i>
+                            <h4>Email Templates</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>Design reusable email templates for your campaigns.</p>
+                            <div class="card-actions">
+                                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/emailtemplates') ?>"
+                                    class="btn btn-sm btn-primary">All Templates</a>
+                                <a href="<?= \Backend\Facades\Backend::url('thewebsiteguy/avalanchecrm/emailtemplates/create') ?>"
+                                    class="btn btn-sm btn-secondary">New Template</a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </div>
+
 
 <style>
     .dashboard-stats-bar {

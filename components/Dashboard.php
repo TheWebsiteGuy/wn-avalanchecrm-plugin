@@ -51,32 +51,43 @@ class Dashboard extends ComponentBase
 
     protected function prepareStats()
     {
-        // Tickets: status name not 'Closed'
-        $this->stats['tickets'] = [
-            'total' => $this->client->tickets()->count(),
-            'open' => $this->client->tickets()->whereHas('status_relation', function ($query) {
-                $query->where('name', '!=', 'Closed');
-            })->count(),
-        ];
+        $settings = Settings::instance();
 
-        // Invoices: visible to client and not 'Paid' or 'Cancelled'
-        $this->stats['invoices'] = [
-            'total' => $this->client->invoices()->clientVisible()->count(),
-            'unpaid' => $this->client->invoices()->clientVisible()
-                ->whereNotIn('status', [Invoice::STATUS_PAID, Invoice::STATUS_CANCELLED])
-                ->count(),
-        ];
+        // Tickets
+        if ($settings->enable_tickets) {
+            $this->stats['tickets'] = [
+                'total' => $this->client->tickets()->count(),
+                'open' => $this->client->tickets()->whereHas('status_relation', function ($query) {
+                    $query->where('name', '!=', 'Closed');
+                })->count(),
+            ];
+        }
 
-        // Projects: status 'active' or 'pending'
-        $this->stats['projects'] = [
-            'total' => $this->client->projects()->count(),
-            'active' => $this->client->projects()->whereIn('status', ['active', 'pending', 'in_progress'])->count(),
-        ];
+        // Invoices
+        if ($settings->enable_invoices) {
+            $this->stats['invoices'] = [
+                'total' => $this->client->invoices()->clientVisible()->count(),
+                'unpaid' => $this->client->invoices()->clientVisible()
+                    ->whereNotIn('status', [Invoice::STATUS_PAID, Invoice::STATUS_CANCELLED])
+                    ->count(),
+            ];
+        }
 
-        // Subscriptions: status 'active'
-        $this->stats['subscriptions'] = [
-            'total' => $this->client->subscriptions()->count(),
-            'active' => $this->client->subscriptions()->where('status', 'active')->count(),
-        ];
+        // Projects
+        if ($settings->enable_projects) {
+            $this->stats['projects'] = [
+                'total' => $this->client->projects()->count(),
+                'active' => $this->client->projects()->whereIn('status', ['active', 'pending', 'in_progress'])->count(),
+            ];
+        }
+
+        // Subscriptions
+        if ($settings->enable_subscriptions) {
+            $this->stats['subscriptions'] = [
+                'total' => $this->client->subscriptions()->count(),
+                'active' => $this->client->subscriptions()->where('status', 'active')->count(),
+            ];
+        }
     }
+
 }
